@@ -1,0 +1,26 @@
+name: grc-integrity
+
+# Compliance-as-code: every push regenerates the artifacts from data/, re-performs the
+# assessment tests, verifies every workbook formula, and fails on any broken cross-reference.
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Regenerate and verify (engine, tests, build, metrics, formulas, integrity)
+        run: python tools/run_all.py
+      - name: Unit tests
+        run: pytest -q
+      - name: Generated artifacts are committed and current
+        run: git diff --exit-code -- . ':(exclude)*.xlsx'
