@@ -1,0 +1,99 @@
+# Business requirements (REQ-###): the "why" behind each control.
+# Sources: SHCA Contract Security Addendum (CSA, fictional), HIPAA Security Rule (45 CFR 164),
+# customer BAAs/MSAs (fictional terms), SOC 2 commitments, internal policy.
+- id: REQ-001
+  source: SHCA Contract Security Addendum §2.1
+  type: Contractual
+  requirement: Maintain security controls aligned to the NIST SP 800-53 Rev. 5 Moderate baseline for systems that store, process, or transmit agency data.
+- id: REQ-002
+  source: SHCA CSA §2.4
+  type: Contractual
+  requirement: Deliver a security assessment report and POA&M at least 90 days before go-live, then quarterly. No High POA&M item may be older than 90 days at go-live.
+- id: REQ-003
+  source: SHCA CSA §3.2
+  type: Contractual
+  requirement: Enforce multi-factor authentication for all privileged access and all remote access to systems handling agency data.
+- id: REQ-004
+  source: SHCA CSA §3.3
+  type: Contractual
+  requirement: Disable access for terminated personnel within 24 hours. Recertify privileged access quarterly and all access at least annually.
+- id: REQ-005
+  source: SHCA CSA §4.1
+  type: Contractual
+  requirement: Retain audit logs for systems handling agency data for at least 12 months, with at least 90 days immediately searchable.
+- id: REQ-006
+  source: SHCA CSA §5.2
+  type: Contractual
+  requirement: Report security incidents involving agency data to SHCA within 24 hours of discovery. Test incident response capability annually.
+- id: REQ-007
+  source: SHCA CSA §6.1
+  type: Contractual
+  requirement: Store, process, and access agency data only within the United States. No offshore access, including by subcontractors.
+- id: REQ-008
+  source: SHCA CSA §6.3
+  type: Contractual
+  requirement: Flow security requirements down to subcontractors handling agency data. Keep a subcontractor inventory, and obtain SHCA approval before a subcontractor accesses agency data.
+- id: REQ-009
+  source: SHCA CSA §7.1
+  type: Contractual
+  requirement: "Remediate vulnerabilities within: Critical 15 days, High 30 days, Moderate 90 days."
+- id: REQ-010
+  source: SHCA CSA §7.4
+  type: Contractual
+  requirement: Use only vendor-supported software (OS, databases, runtimes) for components that process agency data, or document compensating controls approved by SHCA.
+- id: REQ-011
+  source: SHCA CSA §8.1
+  type: Contractual
+  requirement: Maintain backups of agency data. Test restoration and the contingency plan at least annually.
+- id: REQ-012
+  source: HIPAA 45 CFR 164.308(a)(1)(ii)(A)-(B)
+  type: Regulatory
+  requirement: Conduct an accurate and thorough risk analysis, and implement security measures that reduce risks to a reasonable and appropriate level.
+- id: REQ-013
+  source: HIPAA 45 CFR 164.308(a)(3)(ii)(C)
+  type: Regulatory
+  requirement: Implement procedures for terminating access to ePHI when workforce employment or engagement ends.
+- id: REQ-014
+  source: HIPAA 45 CFR 164.308(a)(4)(ii)(B)-(C)
+  type: Regulatory
+  requirement: Implement policies for authorizing, establishing, documenting, reviewing, and modifying access to ePHI.
+- id: REQ-015
+  source: HIPAA 45 CFR 164.308(a)(5)(i)
+  type: Regulatory
+  requirement: Implement a security awareness and training program for all workforce members.
+- id: REQ-016
+  source: HIPAA 45 CFR 164.308(a)(6)(ii)
+  type: Regulatory
+  requirement: Identify and respond to suspected or known security incidents, mitigate harmful effects, and document incidents and outcomes.
+- id: REQ-017
+  source: HIPAA 45 CFR 164.308(a)(7)(ii)(A),(B),(D)
+  type: Regulatory
+  requirement: Maintain a data backup plan and a disaster recovery plan, with testing and revision procedures.
+- id: REQ-018
+  source: HIPAA 45 CFR 164.308(b)(1); 164.314(a)
+  type: Regulatory
+  requirement: Obtain satisfactory assurances (business associate agreements) from subcontractors that create, receive, maintain, or transmit ePHI.
+- id: REQ-019
+  source: HIPAA 45 CFR 164.312(b)
+  type: Regulatory
+  requirement: Implement mechanisms that record and examine activity in information systems containing ePHI (audit controls).
+- id: REQ-020
+  source: HIPAA 45 CFR 164.312(d)
+  type: Regulatory
+  requirement: Verify that a person or entity seeking access to ePHI is the one claimed (person or entity authentication).
+- id: REQ-021
+  source: HIPAA 45 CFR 164.312(a)(2)(iv), (e)(1)
+  type: Regulatory
+  requirement: Protect ePHI with encryption at rest where reasonable and appropriate, and guard against unauthorized access during transmission.
+- id: REQ-022
+  source: Customer BAAs/MSAs (standard Wrenfield paper)
+  type: Contractual
+  requirement: Notify customers of breaches of unsecured PHI within 5 business days of discovery. Answer annual security questionnaires. Allow customer audits.
+- id: REQ-023
+  source: SOC 2 system description commitments (CC6.1–CC6.3, CC8.1)
+  type: Commitment
+  requirement: Restrict logical access by role, approve and remove access in a timely way, review access periodically, and authorize changes before deployment.
+- id: REQ-024
+  source: Wrenfield Information Security Policy ISP-001 v4.0 and Risk Appetite Statement (Board-approved 2025-10-21)
+  type: Internal
+  requirement: Manage cybersecurity risk within Board-approved appetite. No Critical risk may be accepted, and High risks need CEO acceptance.

@@ -1,0 +1,26 @@
+# Engagement-wide constants. Every script reads dates and thresholds from here,
+# so the whole project re-computes consistently if a value changes.
+organization: Wrenfield Health, Inc. (fictional)
+system: WCP-PROD
+engagement: Simulated NIST SP 800-53 Rev. 5 security control assessment
+catalog: NIST SP 800-53 Rev. 5, Release 5.2.0 (2025-08-27)
+status_date: 2026-09-18          # "as of" date for all metrics, aging, overdue flags
+access_snapshot_date: 2026-06-30
+evidence_period_start: 2026-01-01
+evidence_period_end: 2026-06-30
+poam_baseline_date: 2026-08-07
+thresholds:
+  inactivity_days: 90             # ACP-002 §5.6
+  credential_max_age_days: 365    # IA-5 standard for static secrets
+  deprovision_sla_hours: 24       # SHCA CSA §3.3 / ACP-002 §5.3
+  github_max_owners: 3
+separate_admin_required:          # ACP-002 §5.4 (AC-6(2))
+  - [AWS wcp-prod, AdministratorAccess]
+  - [Okta, Super Administrator]
+poam_sla_days: {Critical: 30, High: 90, Moderate: 180, Low: 365}
+vuln_sla_days: {Critical: 15, High: 30, Moderate: 90}
+risk_bands:                       # score >= min -> band (evaluated top-down)
+  - {band: Critical, min: 20}
+  - {band: High, min: 10}
+  - {band: Moderate, min: 5}
+  - {band: Low, min: 1}
