@@ -1,0 +1,19 @@
+{
+  "weeks": 26,
+  "performed": 19,
+  "effective": 17,
+  "not_performed_weeks": [
+    "2026-W07",
+    "2026-W08",
+    "2026-W14",
+    "2026-W15",
+    "2026-W19",
+    "2026-W23",
+    "2026-W24"
+  ],
+  "incomplete_weeks": [
+    "2026-W11",
+    "2026-W21"
+  ],
+  "effective_pct": 65
+}

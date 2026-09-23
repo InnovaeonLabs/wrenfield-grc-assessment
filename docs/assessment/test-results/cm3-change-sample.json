@@ -1,0 +1,13 @@
+{
+  "population": 212,
+  "sample": 25,
+  "sample_seed": 20260618,
+  "exceptions": 3,
+  "exception_ids": [
+    "CHG-2026-0288",
+    "CHG-2026-0356",
+    "CHG-2026-0412"
+  ],
+  "emergency_in_sample": 3,
+  "emergency_exceptions": 2
+}

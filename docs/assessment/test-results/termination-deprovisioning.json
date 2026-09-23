@@ -1,0 +1,17 @@
+{
+  "population": 19,
+  "final_pay_refs_present": 19,
+  "within_sla": 16,
+  "late": 1,
+  "not_deactivated": 2,
+  "deactivated": 17,
+  "local_accounts_active_for_terminated": [
+    "mfeld-admin"
+  ],
+  "late_or_missing": [
+    "E1142 Fatima Qureshi (Late, 209.4h)",
+    "E1053 Dana Whitlock (Not deactivated)",
+    "C2001 Victor Osei (Not deactivated)"
+  ],
+  "within_sla_pct": 84
+}

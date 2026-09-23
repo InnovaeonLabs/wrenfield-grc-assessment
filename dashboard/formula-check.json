@@ -1,0 +1,30 @@
+{
+  "formulas_evaluated": 1232,
+  "errors": 0,
+  "dashboard_mismatches": 0,
+  "dashboard_values": {
+    "MET-01": 61,
+    "MET-02": 60,
+    "MET-03": 31,
+    "MET-03a": 0.52,
+    "MET-04a": 31,
+    "MET-04b": 27,
+    "MET-04c": 2,
+    "MET-05": 27,
+    "MET-06": 19,
+    "MET-06a": 11,
+    "MET-07": 4,
+    "MET-08": 2,
+    "MET-08a": 1,
+    "MET-09": 7,
+    "MET-10": 20,
+    "MET-10a": 28,
+    "MET-11": 12,
+    "MET-11a": 3,
+    "MET-11b": 9,
+    "MET-11c": 14,
+    "MET-12": 0.86,
+    "MET-13a": 14,
+    "MET-13b": 0
+  }
+}

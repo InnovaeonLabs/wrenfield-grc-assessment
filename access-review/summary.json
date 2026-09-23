@@ -1,0 +1,282 @@
+{
+  "snapshot_date": "2026-06-30",
+  "entitlement_rows_reviewed": 106,
+  "identities_reviewed": 53,
+  "human_identities": 37,
+  "systems": [
+    "AWS wcp-prod",
+    "GitHub",
+    "Ledgerline",
+    "Okta",
+    "PeopleHub",
+    "Quarrystone portal",
+    "Security tooling (EDR)",
+    "Security tooling (SIEM)",
+    "wcp-core-db",
+    "wf-sftp-01"
+  ],
+  "privileged_rows": 37,
+  "phi_rows": 31,
+  "flagged_rows": 29,
+  "flags_by_type": {
+    "F-BASELINE": {
+      "count": 8,
+      "meaning": "Privileged or PHI access not in role baseline"
+    },
+    "F-CONTRACT": {
+      "count": 2,
+      "meaning": "Contract end date passed but worker active"
+    },
+    "F-DAILYADMIN": {
+      "count": 6,
+      "meaning": "Privileged role on daily-use account (separate admin account required)"
+    },
+    "F-DUP": {
+      "count": 2,
+      "meaning": "Possible duplicate identity (same person, multiple accounts)"
+    },
+    "F-INACTIVE": {
+      "count": 6,
+      "meaning": "No use in > 90 days"
+    },
+    "F-MFA": {
+      "count": 3,
+      "meaning": "MFA not enforced (not enrolled / exemption group)"
+    },
+    "F-SHARED": {
+      "count": 1,
+      "meaning": "Shared account (no individual accountability)"
+    },
+    "F-SOD": {
+      "count": 2,
+      "meaning": "Segregation-of-duties conflict"
+    },
+    "F-SVC-OWNER": {
+      "count": 2,
+      "meaning": "Service account has no documented owner"
+    },
+    "F-SVC-ROTATION": {
+      "count": 3,
+      "meaning": "Credential older than 365 days"
+    },
+    "F-TERM": {
+      "count": 8,
+      "meaning": "Worker terminated in HR but access active"
+    },
+    "F-TRANSFER": {
+      "count": 1,
+      "meaning": "Access from prior role retained after transfer"
+    }
+  },
+  "exception_rows": 28,
+  "exceptions": 20,
+  "false_positive_rows": 1,
+  "exceptions_detail": {
+    "AR-EX-01": {
+      "rows": 2,
+      "accounts": [
+        "dwhitlock"
+      ],
+      "finding": "FIND-001",
+      "status": "Completed",
+      "issue": "Terminated employee (2026-05-22) still enabled in Okta"
+    },
+    "AR-EX-02": {
+      "rows": 2,
+      "accounts": [
+        "vosei"
+      ],
+      "finding": "FIND-001",
+      "status": "Completed",
+      "issue": "Terminated contractor (engagement ended 2026-06-05) still enabled; Okta sign-in on 2026-06-09 after end date"
+    },
+    "AR-EX-03": {
+      "rows": 1,
+      "accounts": [
+        "mfeld-admin"
+      ],
+      "finding": "FIND-001",
+      "status": "Completed",
+      "issue": "Local AWS IAM user of employee terminated 2026-03-27 still active (console password + access key); outside Okta de-provisioning"
+    },
+    "AR-EX-04": {
+      "rows": 1,
+      "accounts": [
+        "pbrennan"
+      ],
+      "finding": "FIND-001",
+      "status": "Completed",
+      "issue": "Former employee (terminated 2025-11-14) retains Quarrystone portal account (local auth; not federated to Okta)"
+    },
+    "AR-EX-05": {
+      "rows": 1,
+      "accounts": [
+        "dokonkwo"
+      ],
+      "finding": "FIND-003",
+      "status": "Completed",
+      "issue": "AdministratorAccess in production not required for Software Engineer role; 2024 migration grant never removed"
+    },
+    "AR-EX-06": {
+      "rows": 1,
+      "accounts": [
+        "bnguyen"
+      ],
+      "finding": "FIND-003",
+      "status": "Completed",
+      "issue": "AdministratorAccess in production not required for Data Engineer role"
+    },
+    "AR-EX-07": {
+      "rows": 1,
+      "accounts": [
+        "bnguyen"
+      ],
+      "finding": "FIND-003",
+      "status": "Completed",
+      "issue": "Write access to the PHI primary database is not required for Data Engineer role (backfill finished 2025-07)"
+    },
+    "AR-EX-08": {
+      "rows": 2,
+      "accounts": [
+        "glindqvist",
+        "hlarsen"
+      ],
+      "finding": "FIND-003",
+      "status": "Completed",
+      "issue": "GitHub org owners (5) exceed the approved maximum of 3; owner role not required for VP Engineering"
+    },
+    "AR-EX-09": {
+      "rows": 1,
+      "accounts": [
+        "kbrandt"
+      ],
+      "finding": "FIND-003",
+      "status": "Completed",
+      "issue": "Okta Super Administrator is not part of the IT Manager role and is held on a daily-use account"
+    },
+    "AR-EX-10": {
+      "rows": 2,
+      "accounts": [
+        "lbaptiste",
+        "twierzbicki"
+      ],
+      "finding": "FIND-003",
+      "status": "In Progress",
+      "issue": "Production AdministratorAccess used from a daily-use account (ACP-002 \u00a75.4 requires a separate admin account)"
+    },
+    "AR-EX-11": {
+      "rows": 3,
+      "accounts": [
+        "kbrandt",
+        "mcole",
+        "svc-vulnscan"
+      ],
+      "finding": "FIND-002",
+      "status": "Completed",
+      "issue": "Member of MFA-Exempt-Legacy group; MFA not enforced (user also held Okta Super Administrator)"
+    },
+    "AR-EX-12": {
+      "rows": 2,
+      "accounts": [
+        "rgupta2"
+      ],
+      "finding": "FIND-004",
+      "status": "Completed",
+      "issue": "Duplicate identity: legacy contractor account from before conversion to employee (2025-04-01); unused since 2025-03-28"
+    },
+    "AR-EX-13": {
+      "rows": 1,
+      "accounts": [
+        "cfernandes"
+      ],
+      "finding": "FIND-004",
+      "status": "Completed",
+      "issue": "Transferred from Support to Data Engineering on 2026-02-16 but kept PHI support access from prior role; used on 2026-05-14 (after transfer)"
+    },
+    "AR-EX-14": {
+      "rows": 1,
+      "accounts": [
+        "sparks"
+      ],
+      "finding": "FIND-004",
+      "status": "Completed",
+      "issue": "No use in 240 days (inactive > 90-day threshold)"
+    },
+    "AR-EX-15": {
+      "rows": 1,
+      "accounts": [
+        "awu"
+      ],
+      "finding": "FIND-006",
+      "status": "Completed",
+      "issue": "Contract end date (2026-05-31) passed in PeopleHub while the contractor was still engaged; manager confirmed extension and SOW amendment pending"
+    },
+    "AR-EX-16": {
+      "rows": 1,
+      "accounts": [
+        "awu"
+      ],
+      "finding": "FIND-006",
+      "status": "Completed",
+      "issue": "PHI production access not required for the QA role (QA uses staging with synthetic data)"
+    },
+    "AR-EX-17": {
+      "rows": 2,
+      "accounts": [
+        "jmercer"
+      ],
+      "finding": "FIND-007",
+      "status": "Risk Accepted",
+      "issue": "SoD conflict SOD-01: Vendor Master Maintain + Payment Approver (<= $25k)"
+    },
+    "AR-EX-18": {
+      "rows": 1,
+      "accounts": [
+        "svc-quarrystone-sftp"
+      ],
+      "finding": "FIND-005",
+      "status": "Completed",
+      "issue": "Service account has no documented owner; SSH key not rotated in over 365 days"
+    },
+    "AR-EX-19": {
+      "rows": 1,
+      "accounts": [
+        "svc-reporting-etl"
+      ],
+      "finding": "FIND-005",
+      "status": "Completed",
+      "issue": "IAM user with a static access key over 365 days old; creator terminated; no documented owner"
+    },
+    "AR-EX-20": {
+      "rows": 1,
+      "accounts": [
+        "ironpeak-soc"
+      ],
+      "finding": "FIND-005",
+      "status": "Completed",
+      "issue": "Shared vendor login to EDR console; containment actions not attributable to an individual"
+    }
+  },
+  "exceptions_by_finding": {
+    "FIND-001": 4,
+    "FIND-003": 6,
+    "FIND-002": 1,
+    "FIND-004": 3,
+    "FIND-006": 2,
+    "FIND-007": 1,
+    "FIND-005": 3
+  },
+  "exceptions_closed": 18,
+  "exceptions_risk_accepted": 1,
+  "exceptions_open": 1,
+  "decisions": {
+    "Retain": 75,
+    "Revoke": 12,
+    "Retain with exception": 3,
+    "Modify": 13,
+    "Retain (time-bound)": 3
+  },
+  "github_owner_count": 5,
+  "github_owner_max": 3,
+  "exception_rate_pct": 26
+}

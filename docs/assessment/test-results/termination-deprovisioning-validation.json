@@ -1,0 +1,11 @@
+{
+  "population": 7,
+  "within_sla": 7,
+  "max_lag_hours": 0.5,
+  "automated_tickets": 5,
+  "job_runs_reviewed": 5,
+  "job_exceptions_total": 0,
+  "iam_users_remaining": [
+    "aws-breakglass"
+  ]
+}

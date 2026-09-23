@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" width="640" height="280" role="img" aria-label="Open findings over time">
+<style>
+  .surface { fill: #fcfcfb; } .ink { fill: #0b0b0b; } .ink2 { fill: #52514e; } .muted { fill: #898781; }
+  .grid { stroke: #e1e0d9; } .axis { stroke: #c3c2b7; }
+  .s1 { fill: #2a78d6; } .s2 { fill: #eb6834; } .s3 { fill: #1baf7a; }
+  .l1 { stroke: #2a78d6; } .l2 { stroke: #eb6834; } .gap { stroke: #fcfcfb; }
+  text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  @media (prefers-color-scheme: dark) {
+    .surface { fill: #1a1a19; } .ink { fill: #ffffff; } .ink2 { fill: #c3c2b7; }
+    .grid { stroke: #2c2c2a; } .axis { stroke: #383835; }
+    .s1 { fill: #3987e5; } .s2 { fill: #d95926; } .s3 { fill: #199e70; }
+    .l1 { stroke: #3987e5; } .l2 { stroke: #d95926; } .gap { stroke: #1a1a19; }
+  }
+</style>
+<rect class="surface" width="640" height="280" rx="8"/>
+<text class="ink" x="16" y="24" font-size="15" font-weight="600">Open findings over time</text>
+<text class="ink2" x="16" y="42" font-size="11">Weekly. A finding leaves the count only at validated closure (or formal risk acceptance)</text>
+<line class="grid" x1="44" x2="550" y1="236.0" y2="236.0" stroke-width="1"/><text class="muted" x="38" y="239.0" font-size="10" text-anchor="end">0</text>
+<line class="grid" x1="44" x2="550" y1="191.5" y2="191.5" stroke-width="1"/><text class="muted" x="38" y="194.5" font-size="10" text-anchor="end">5</text>
+<line class="grid" x1="44" x2="550" y1="147.0" y2="147.0" stroke-width="1"/><text class="muted" x="38" y="150.0" font-size="10" text-anchor="end">10</text>
+<line class="grid" x1="44" x2="550" y1="102.5" y2="102.5" stroke-width="1"/><text class="muted" x="38" y="105.5" font-size="10" text-anchor="end">15</text>
+<line class="grid" x1="44" x2="550" y1="58.0" y2="58.0" stroke-width="1"/><text class="muted" x="38" y="61.0" font-size="10" text-anchor="end">20</text>
+<line class="axis" x1="254.8" x2="254.8" y1="58" y2="236" stroke-width="1"/><text class="muted" x="257.8" y="68" font-size="9">Draft report</text>
+<line class="axis" x1="297.0" x2="297.0" y1="58" y2="236" stroke-width="1"/><text class="muted" x="300.0" y="80" font-size="9">POA&amp;M baseline</text>
+<polyline class="l1" fill="none" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="44.0,182.6 86.2,147.0 128.3,102.5 170.5,75.8 212.7,75.8 254.8,75.8 297.0,75.8 339.2,84.7 381.3,84.7 423.5,84.7 465.7,93.6 507.8,120.3 550.0,138.1"/>
+<circle class="s1 gap" cx="44.0" cy="182.6" r="4" stroke-width="2" data-tip="2026-06-26: 6 all open findings"><title>2026-06-26: 6 all open findings</title></circle>
+<circle class="s1 gap" cx="86.2" cy="147.0" r="4" stroke-width="2" data-tip="2026-07-03: 10 all open findings"><title>2026-07-03: 10 all open findings</title></circle>
+<circle class="s1 gap" cx="128.3" cy="102.5" r="4" stroke-width="2" data-tip="2026-07-10: 15 all open findings"><title>2026-07-10: 15 all open findings</title></circle>
+<circle class="s1 gap" cx="170.5" cy="75.8" r="4" stroke-width="2" data-tip="2026-07-17: 18 all open findings"><title>2026-07-17: 18 all open findings</title></circle>
+<circle class="s1 gap" cx="212.7" cy="75.8" r="4" stroke-width="2" data-tip="2026-07-24: 18 all open findings"><title>2026-07-24: 18 all open findings</title></circle>
+<circle class="s1 gap" cx="254.8" cy="75.8" r="4" stroke-width="2" data-tip="2026-07-31: 18 all open findings"><title>2026-07-31: 18 all open findings</title></circle>
+<circle class="s1 gap" cx="297.0" cy="75.8" r="4" stroke-width="2" data-tip="2026-08-07: 18 all open findings"><title>2026-08-07: 18 all open findings</title></circle>
+<circle class="s1 gap" cx="339.2" cy="84.7" r="4" stroke-width="2" data-tip="2026-08-14: 17 all open findings"><title>2026-08-14: 17 all open findings</title></circle>
+<circle class="s1 gap" cx="381.3" cy="84.7" r="4" stroke-width="2" data-tip="2026-08-21: 17 all open findings"><title>2026-08-21: 17 all open findings</title></circle>
+<circle class="s1 gap" cx="423.5" cy="84.7" r="4" stroke-width="2" data-tip="2026-08-28: 17 all open findings"><title>2026-08-28: 17 all open findings</title></circle>
+<circle class="s1 gap" cx="465.7" cy="93.6" r="4" stroke-width="2" data-tip="2026-09-04: 16 all open findings"><title>2026-09-04: 16 all open findings</title></circle>
+<circle class="s1 gap" cx="507.8" cy="120.3" r="4" stroke-width="2" data-tip="2026-09-11: 13 all open findings"><title>2026-09-11: 13 all open findings</title></circle>
+<circle class="s1 gap" cx="550.0" cy="138.1" r="4" stroke-width="2" data-tip="2026-09-18: 11 all open findings"><title>2026-09-18: 11 all open findings</title></circle>
+<text class="ink2" x="558.0" y="142.1" font-size="11">11 findings</text>
+<polyline class="l2" fill="none" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="44.0,227.1 86.2,200.4 128.3,191.5 170.5,182.6 212.7,182.6 254.8,182.6 297.0,182.6 339.2,182.6 381.3,182.6 423.5,182.6 465.7,182.6 507.8,200.4 550.0,200.4"/>
+<circle class="s2 gap" cx="44.0" cy="227.1" r="4" stroke-width="2" data-tip="2026-06-26: 1 open high/critical"><title>2026-06-26: 1 open high/critical</title></circle>
+<circle class="s2 gap" cx="86.2" cy="200.4" r="4" stroke-width="2" data-tip="2026-07-03: 4 open high/critical"><title>2026-07-03: 4 open high/critical</title></circle>
+<circle class="s2 gap" cx="128.3" cy="191.5" r="4" stroke-width="2" data-tip="2026-07-10: 5 open high/critical"><title>2026-07-10: 5 open high/critical</title></circle>
+<circle class="s2 gap" cx="170.5" cy="182.6" r="4" stroke-width="2" data-tip="2026-07-17: 6 open high/critical"><title>2026-07-17: 6 open high/critical</title></circle>
+<circle class="s2 gap" cx="212.7" cy="182.6" r="4" stroke-width="2" data-tip="2026-07-24: 6 open high/critical"><title>2026-07-24: 6 open high/critical</title></circle>
+<circle class="s2 gap" cx="254.8" cy="182.6" r="4" stroke-width="2" data-tip="2026-07-31: 6 open high/critical"><title>2026-07-31: 6 open high/critical</title></circle>
+<circle class="s2 gap" cx="297.0" cy="182.6" r="4" stroke-width="2" data-tip="2026-08-07: 6 open high/critical"><title>2026-08-07: 6 open high/critical</title></circle>
+<circle class="s2 gap" cx="339.2" cy="182.6" r="4" stroke-width="2" data-tip="2026-08-14: 6 open high/critical"><title>2026-08-14: 6 open high/critical</title></circle>
+<circle class="s2 gap" cx="381.3" cy="182.6" r="4" stroke-width="2" data-tip="2026-08-21: 6 open high/critical"><title>2026-08-21: 6 open high/critical</title></circle>
+<circle class="s2 gap" cx="423.5" cy="182.6" r="4" stroke-width="2" data-tip="2026-08-28: 6 open high/critical"><title>2026-08-28: 6 open high/critical</title></circle>
+<circle class="s2 gap" cx="465.7" cy="182.6" r="4" stroke-width="2" data-tip="2026-09-04: 6 open high/critical"><title>2026-09-04: 6 open high/critical</title></circle>
+<circle class="s2 gap" cx="507.8" cy="200.4" r="4" stroke-width="2" data-tip="2026-09-11: 4 open high/critical"><title>2026-09-11: 4 open high/critical</title></circle>
+<circle class="s2 gap" cx="550.0" cy="200.4" r="4" stroke-width="2" data-tip="2026-09-18: 4 open high/critical"><title>2026-09-18: 4 open high/critical</title></circle>
+<text class="ink2" x="558.0" y="204.4" font-size="11">4 High+</text>
+<text class="muted" x="44.0" y="252" font-size="10" text-anchor="middle">06-26</text>
+<text class="muted" x="297.0" y="252" font-size="10" text-anchor="middle">08-07</text>
+<text class="muted" x="550.0" y="252" font-size="10" text-anchor="middle">09-18</text>
+<line class="axis" x1="44" x2="550" y1="236" y2="236" stroke-width="1"/>
+<rect class="s1" x="44" y="264" width="10" height="3" rx="1"/><text class="ink2" x="58" y="269" font-size="11">All open findings</text><rect class="s2" x="184" y="264" width="10" height="3" rx="1"/><text class="ink2" x="198" y="269" font-size="11">Open High/Critical</text>
+</svg>

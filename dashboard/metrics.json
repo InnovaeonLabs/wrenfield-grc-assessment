@@ -1,0 +1,360 @@
+{
+  "status_date": "2026-09-18",
+  "controls": {
+    "in_scope": 61,
+    "assessed": 60,
+    "satisfied": 31,
+    "other_than_satisfied": 29,
+    "not_applicable": 1,
+    "satisfied_pct": 52,
+    "validated_status": {
+      "Implemented": 31,
+      "Partially Implemented": 27,
+      "Not Applicable": 1,
+      "Not Implemented": 1,
+      "Planned": 1
+    },
+    "owner_status_changed": 27,
+    "evidence_level": {
+      "Design": 12,
+      "Operating Effectiveness": 30,
+      "Implementation": 19
+    },
+    "by_family": {
+      "AC": {
+        "Satisfied": 2,
+        "Other Than Satisfied": 8,
+        "Not Assessed": 1
+      },
+      "AT": {
+        "Other Than Satisfied": 1,
+        "Satisfied": 1
+      },
+      "AU": {
+        "Satisfied": 2,
+        "Other Than Satisfied": 2
+      },
+      "CA": {
+        "Satisfied": 4
+      },
+      "CM": {
+        "Satisfied": 2,
+        "Other Than Satisfied": 2
+      },
+      "CP": {
+        "Satisfied": 2,
+        "Other Than Satisfied": 2
+      },
+      "IA": {
+        "Satisfied": 2,
+        "Other Than Satisfied": 3
+      },
+      "IR": {
+        "Other Than Satisfied": 1,
+        "Satisfied": 3
+      },
+      "MP": {
+        "Satisfied": 1
+      },
+      "PE": {
+        "Satisfied": 1
+      },
+      "PL": {
+        "Other Than Satisfied": 1
+      },
+      "PM": {
+        "Satisfied": 1
+      },
+      "PS": {
+        "Satisfied": 1,
+        "Other Than Satisfied": 3
+      },
+      "RA": {
+        "Satisfied": 4
+      },
+      "SA": {
+        "Other Than Satisfied": 2
+      },
+      "SC": {
+        "Other Than Satisfied": 1,
+        "Satisfied": 3
+      },
+      "SI": {
+        "Other Than Satisfied": 1,
+        "Satisfied": 2
+      },
+      "SR": {
+        "Other Than Satisfied": 2
+      }
+    }
+  },
+  "findings": {
+    "total": 19,
+    "by_severity": {
+      "Critical": 0,
+      "High": 7,
+      "Moderate": 10,
+      "Low": 2
+    },
+    "by_status": {
+      "Closed": 7,
+      "In Progress": 9,
+      "Risk Accepted": 1,
+      "Delayed": 1,
+      "Completed \u2013 Pending Validation": 1
+    },
+    "open": 11,
+    "open_high_critical": 4,
+    "open_high_ids": [
+      "FIND-003",
+      "FIND-010",
+      "FIND-011",
+      "FIND-016"
+    ],
+    "observations": 6
+  },
+  "poam": {
+    "total": 19,
+    "closed_validated": 7,
+    "overdue": [
+      "POAM-009",
+      "POAM-018"
+    ],
+    "slipped": [
+      "POAM-011"
+    ],
+    "beyond_sla": [
+      "POAM-011"
+    ],
+    "risk_accepted": [
+      "POAM-007"
+    ],
+    "late_milestones": 5,
+    "median_days_identified_to_validated_closure": 66,
+    "full_lifecycle_closures": [
+      "FIND-001",
+      "FIND-002",
+      "FIND-005",
+      "FIND-006",
+      "FIND-008",
+      "FIND-012",
+      "FIND-013"
+    ]
+  },
+  "access_review": {
+    "entitlement_rows_reviewed": 106,
+    "privileged_rows": 37,
+    "phi_rows": 31,
+    "flagged_rows": 29,
+    "exceptions": 20,
+    "exception_rows": 28,
+    "false_positive_rows": 1,
+    "exceptions_closed": 18,
+    "exceptions_risk_accepted": 1,
+    "exceptions_open": 1,
+    "exception_rate_pct": 26
+  },
+  "vendor": {
+    "tier12_total": 14,
+    "tier12_current": 9,
+    "vr_total": 12,
+    "vr_by_severity": {
+      "Critical": 1,
+      "High": 2,
+      "Moderate": 7,
+      "Low": 2
+    },
+    "vr_critical_high": 3,
+    "deep_assessment": "VEN-004 Quarrystone Analytics (fictional)",
+    "treatment": "Mitigate (conditional continuation) + partial Transfer"
+  },
+  "evidence": {
+    "total": 78,
+    "by_status": {
+      "Accepted": 58,
+      "Insufficient": 5,
+      "Requested": 2,
+      "Closed": 9,
+      "Under Review": 2,
+      "Rework Required": 1,
+      "Received": 1
+    },
+    "complete": 67,
+    "completion_pct": 86,
+    "insufficient": 5,
+    "overdue_outstanding": [
+      "EVID-051"
+    ]
+  },
+  "risks": {
+    "total": 18,
+    "inherent_bands": {
+      "Critical": 6,
+      "High": 11,
+      "Moderate": 1,
+      "Low": 0
+    },
+    "current_bands": {
+      "Critical": 0,
+      "High": 14,
+      "Moderate": 3,
+      "Low": 1
+    },
+    "residual_bands": {
+      "Critical": 0,
+      "High": 0,
+      "Moderate": 15,
+      "Low": 3
+    },
+    "asof_bands": {
+      "Critical": 0,
+      "High": 11,
+      "Moderate": 5,
+      "Low": 2
+    },
+    "top5_asof": [
+      {
+        "id": "RISK-001",
+        "title": "Privileged cloud or identity admin account misused or compromised",
+        "score": 15,
+        "band": "High",
+        "fieldwork": "15 High",
+        "residual": "8 Moderate",
+        "owner": "Samir Haddad (CTO)",
+        "status": "Treatment in progress"
+      },
+      {
+        "id": "RISK-010",
+        "title": "PHI exposure through the analytics vendor (Quarrystone)",
+        "score": 15,
+        "band": "High",
+        "fieldwork": "15 High",
+        "residual": "8 Moderate",
+        "owner": "Dr. Miriam Castell (VP Clinical Analytics)",
+        "status": "Treatment in progress"
+      },
+      {
+        "id": "RISK-005",
+        "title": "Inability to detect or investigate PHI access",
+        "score": 12,
+        "band": "High",
+        "fieldwork": "12 High",
+        "residual": "6 Moderate",
+        "owner": "Alicia Moreno (CISO)",
+        "status": "Treatment in progress"
+      },
+      {
+        "id": "RISK-006",
+        "title": "Exploitation of unremediated vulnerabilities",
+        "score": 12,
+        "band": "High",
+        "fieldwork": "12 High",
+        "residual": "8 Moderate",
+        "owner": "Grace Lindqvist (VP Engineering)",
+        "status": "Treatment in progress"
+      },
+      {
+        "id": "RISK-007",
+        "title": "Compromise of unsupported legacy components in the PHI path",
+        "score": 12,
+        "band": "High",
+        "fieldwork": "12 High",
+        "residual": "4 Low",
+        "owner": "Samir Haddad (CTO)",
+        "status": "Treatment in progress (delayed)"
+      }
+    ]
+  },
+  "dashboard_crosscheck": {
+    "MET-01": 61,
+    "MET-02": 60,
+    "MET-03": 31,
+    "MET-03a": 0.52,
+    "MET-04a": 31,
+    "MET-04b": 27,
+    "MET-04c": 2,
+    "MET-05": 27,
+    "MET-06": 19,
+    "MET-06a": 11,
+    "MET-07": 4,
+    "MET-08": 2,
+    "MET-08a": 1,
+    "MET-09": 7,
+    "MET-10": 20,
+    "MET-10a": 28,
+    "MET-11": 12,
+    "MET-11a": 3,
+    "MET-11b": 9,
+    "MET-11c": 14,
+    "MET-12": 0.86,
+    "MET-13a": 14,
+    "MET-13b": 0
+  },
+  "open_findings_series": [
+    {
+      "date": "2026-06-26",
+      "open": 6,
+      "open_high": 1
+    },
+    {
+      "date": "2026-07-03",
+      "open": 10,
+      "open_high": 4
+    },
+    {
+      "date": "2026-07-10",
+      "open": 15,
+      "open_high": 5
+    },
+    {
+      "date": "2026-07-17",
+      "open": 18,
+      "open_high": 6
+    },
+    {
+      "date": "2026-07-24",
+      "open": 18,
+      "open_high": 6
+    },
+    {
+      "date": "2026-07-31",
+      "open": 18,
+      "open_high": 6
+    },
+    {
+      "date": "2026-08-07",
+      "open": 18,
+      "open_high": 6
+    },
+    {
+      "date": "2026-08-14",
+      "open": 17,
+      "open_high": 6
+    },
+    {
+      "date": "2026-08-21",
+      "open": 17,
+      "open_high": 6
+    },
+    {
+      "date": "2026-08-28",
+      "open": 17,
+      "open_high": 6
+    },
+    {
+      "date": "2026-09-04",
+      "open": 16,
+      "open_high": 6
+    },
+    {
+      "date": "2026-09-11",
+      "open": 13,
+      "open_high": 4
+    },
+    {
+      "date": "2026-09-18",
+      "open": 11,
+      "open_high": 4
+    }
+  ]
+}

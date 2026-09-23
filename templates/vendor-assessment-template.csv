@@ -1,0 +1,2 @@
+﻿Question ID,Security Domain,Requirement,Vendor Response,Evidence,Assessor Evaluation,Risk Identified,Severity,Recommendation,Owner,Status,Vendor Finding
+VQ-16,Breach notification,Notify Wrenfield of security incidents affecting its data within 24 hours of discovery,BAA: 'without unreasonable delay and no later than 30 days',BAA §4.2,Unsatisfactory,Breach notification term of 30 days,High,"Amend BAA to 24h notice of suspected or confirmed incidents affecting Wrenfield data, with defined content and updates",Theo Anand (General Counsel),In negotiation (redline v3),VR-002

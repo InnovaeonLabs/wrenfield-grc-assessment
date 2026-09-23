@@ -1,0 +1,16 @@
+{
+  "population": 61,
+  "critical": 9,
+  "high": 52,
+  "breached": 14,
+  "breached_pct": 23,
+  "remediated_late": 8,
+  "open_past_sla": 6,
+  "open_past_sla_critical": 2,
+  "median_days_to_remediate": 14,
+  "open_assets": [
+    "legacy-reports",
+    "notify-worker",
+    "wf-sftp-01"
+  ]
+}

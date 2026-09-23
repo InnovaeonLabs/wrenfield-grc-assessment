@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WCP-PROD Assessment Dashboard</title>
+<style>
+:root { color-scheme: light; --page:#f9f9f7; --surface:#fcfcfb; --ink:#0b0b0b; --ink2:#52514e; --muted:#898781; --line:#e1e0d9; --accent:#1F4E5A; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { color-scheme: dark; --page:#0d0d0d; --surface:#1a1a19; --ink:#ffffff; --ink2:#c3c2b7; --line:#2c2c2a; --accent:#7fb7c4; } }
+:root[data-theme="dark"] { color-scheme: dark; --page:#0d0d0d; --surface:#1a1a19; --ink:#ffffff; --ink2:#c3c2b7; --line:#2c2c2a; --accent:#7fb7c4; }
+body { margin:0; background:var(--page); color:var(--ink); font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 1320px; margin: 0 auto; padding: 24px 16px 48px; }
+h1 { font-size: 22px; margin: 0 0 4px; } h2 { font-size: 16px; margin: 28px 0 10px; color: var(--accent); }
+.sub { color: var(--ink2); font-size: 13px; margin-bottom: 18px; }
+.tiles { display:grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+.tl { font-size: 12px; color: var(--ink2); } .tv { font-size: 30px; font-weight: 600; margin: 4px 0; } .ts { font-size: 11px; color: var(--muted); }
+.charts { display:grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 12px; }
+.charts svg { width: 100%; height: auto; border: 1px solid var(--line); border-radius: 10px; }
+table { width:100%; border-collapse: collapse; background: var(--surface); font-size: 12.5px; }
+th, td { text-align:left; padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--ink2); font-weight: 600; } td:first-child { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.note { font-size: 12px; color: var(--ink2); }
+#tip { position: fixed; pointer-events: none; background: var(--ink); color: var(--page); font-size: 12px; padding: 6px 8px; border-radius: 6px; display:none; max-width: 320px; }
+@media (max-width: 520px) { .charts { grid-template-columns: 1fr; } .tv { font-size: 24px; } }
+</style></head>
+<body><main>
+<h1>WCP-PROD Security Control Assessment: Executive Dashboard</h1>
+<div class="sub">Wrenfield Health (fictional) · simulated NIST SP 800-53 Rev. 5 (Release 5.2.0) assessment · status date 2026-09-18 · every number computed from <code>data/</code> by <code>tools/metrics.py</code> (definitions: metric-definitions.md)</div>
+<div class="tiles"><div class="tile"><div class="tl">Controls satisfied</div><div class="tv">31 / 60</div><div class="ts">52% of assessed · 27 owner-stated statuses corrected</div></div><div class="tile"><div class="tl">Open findings</div><div class="tv">11</div><div class="ts">4 High/Critical open · 19 total</div></div><div class="tile"><div class="tl">POA&amp;M validated closed</div><div class="tv">7 / 19</div><div class="ts">2 overdue · 1 slipped · median 66 days to close</div></div><div class="tile"><div class="tl">Evidence completion</div><div class="tv">86%</div><div class="ts">67 of 78 accepted/closed · 5 insufficient</div></div><div class="tile"><div class="tl">Access-review exceptions</div><div class="tv">20</div><div class="ts">18 closed · 1 accepted · 1 open · 106 entitlements</div></div><div class="tile"><div class="tl">Tier 1–2 vendors current</div><div class="tv">9 / 14</div><div class="ts">12 VR findings · 3 Critical/High</div></div></div>
+<h2>Where the program stands</h2>
+<div class="charts"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 494" width="660" height="494" role="img" aria-label="Control assessment results by family">
+<style>
+  .surface { fill: #fcfcfb; } .ink { fill: #0b0b0b; } .ink2 { fill: #52514e; } .muted { fill: #898781; }
+  .grid { stroke: #e1e0d9; } .axis { stroke: #c3c2b7; }
+  .s1 { fill: #2a78d6; } .s2 { fill: #eb6834; } .s3 { fill: #1baf7a; }
+  .l1 { stroke: #2a78d6; } .l2 { stroke: #eb6834; } .gap { stroke: #fcfcfb; }
+  text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  @media (prefers-color-scheme: dark) {
+    .surface { fill: #1a1a19; } .ink { fill: #ffffff; } .ink2 { fill: #c3c2b7; }
+    .grid { stroke: #2c2c2a; } .axis { stroke: #383835; }
+    .s1 { fill: #3987e5; } .s2 { fill: #d95926; } .s3 { fill: #199e70; }
+    .l1 { stroke: #3987e5; } .l2 { stroke: #d95926; } .gap { stroke: #1a1a19; }
+  }
+</style>
+<rect class="surface" width="660" height="494" rx="8"/>
+<text class="ink" x="16" y="24" font-size="15" font-weight="600">Control results by family</text>
+<text class="ink2" x="16" y="42" font-size="11">31 of 60 assessed controls Satisfied · AC-18 Not Applicable (excluded)</text>
+<rect class="s1" x="410" y="14" width="10" height="10" rx="2"/><text class="ink2" x="425" y="23" font-size="11">Satisfied</text>
+<rect class="s2" x="495" y="14" width="10" height="10" rx="2"/><text class="ink2" x="510" y="23" font-size="11">Other Than Satisfied</text>
+<line class="grid" x1="190.0" x2="190.0" y1="52" y2="454" stroke-width="1"/>
+<text class="muted" x="190.0" y="470" font-size="10" text-anchor="middle">0</text>
+<line class="grid" x1="272.0" x2="272.0" y1="52" y2="454" stroke-width="1"/>
+<text class="muted" x="272.0" y="470" font-size="10" text-anchor="middle">2</text>
+<line class="grid" x1="354.0" x2="354.0" y1="52" y2="454" stroke-width="1"/>
+<text class="muted" x="354.0" y="470" font-size="10" text-anchor="middle">4</text>
+<line class="grid" x1="436.0" x2="436.0" y1="52" y2="454" stroke-width="1"/>
+<text class="muted" x="436.0" y="470" font-size="10" text-anchor="middle">6</text>
+<line class="grid" x1="518.0" x2="518.0" y1="52" y2="454" stroke-width="1"/>
+<text class="muted" x="518.0" y="470" font-size="10" text-anchor="middle">8</text>
+<line class="grid" x1="600.0" x2="600.0" y1="52" y2="454" stroke-width="1"/>
+<text class="muted" x="600.0" y="470" font-size="10" text-anchor="middle">10</text>
+<text class="ink2" x="182" y="73.0" font-size="11" text-anchor="end">AC · Access Control</text>
+<path class="s1" d="M190.0,62.0 H272.0 Q272.0,62.0 272.0,62.0 V76.0 Q272.0,76.0 272.0,76.0 H190.0 Z" data-tip="AC: 2 Satisfied"><title>AC: 2 Satisfied</title></path>
+<path class="s2" d="M274.0,62.0 H596.0 Q600.0,62.0 600.0,66.0 V72.0 Q600.0,76.0 596.0,76.0 H274.0 Z" data-tip="AC: 8 Other Than Satisfied"><title>AC: 8 Other Than Satisfied</title></path>
+<text class="ink2" x="606.0" y="73.0" font-size="10">2/10</text>
+<text class="ink2" x="182" y="95.0" font-size="11" text-anchor="end">IA · Identification &amp; Auth</text>
+<path class="s1" d="M190.0,84.0 H272.0 Q272.0,84.0 272.0,84.0 V98.0 Q272.0,98.0 272.0,98.0 H190.0 Z" data-tip="IA: 2 Satisfied"><title>IA: 2 Satisfied</title></path>
+<path class="s2" d="M274.0,84.0 H391.0 Q395.0,84.0 395.0,88.0 V94.0 Q395.0,98.0 391.0,98.0 H274.0 Z" data-tip="IA: 3 Other Than Satisfied"><title>IA: 3 Other Than Satisfied</title></path>
+<text class="ink2" x="401.0" y="95.0" font-size="10">2/5</text>
+<text class="ink2" x="182" y="117.0" font-size="11" text-anchor="end">AU · Audit &amp; Accountability</text>
+<path class="s1" d="M190.0,106.0 H272.0 Q272.0,106.0 272.0,106.0 V120.0 Q272.0,120.0 272.0,120.0 H190.0 Z" data-tip="AU: 2 Satisfied"><title>AU: 2 Satisfied</title></path>
+<path class="s2" d="M274.0,106.0 H350.0 Q354.0,106.0 354.0,110.0 V116.0 Q354.0,120.0 350.0,120.0 H274.0 Z" data-tip="AU: 2 Other Than Satisfied"><title>AU: 2 Other Than Satisfied</title></path>
+<text class="ink2" x="360.0" y="117.0" font-size="10">2/4</text>
+<text class="ink2" x="182" y="139.0" font-size="11" text-anchor="end">CA · Assessment &amp; Monitoring</text>
+<path class="s1" d="M190.0,128.0 H350.0 Q354.0,128.0 354.0,132.0 V138.0 Q354.0,142.0 350.0,142.0 H190.0 Z" data-tip="CA: 4 Satisfied"><title>CA: 4 Satisfied</title></path>
+<text class="ink2" x="360.0" y="139.0" font-size="10">4/4</text>
+<text class="ink2" x="182" y="161.0" font-size="11" text-anchor="end">CM · Configuration Mgmt</text>
+<path class="s1" d="M190.0,150.0 H272.0 Q272.0,150.0 272.0,150.0 V164.0 Q272.0,164.0 272.0,164.0 H190.0 Z" data-tip="CM: 2 Satisfied"><title>CM: 2 Satisfied</title></path>
+<path class="s2" d="M274.0,150.0 H350.0 Q354.0,150.0 354.0,154.0 V160.0 Q354.0,164.0 350.0,164.0 H274.0 Z" data-tip="CM: 2 Other Than Satisfied"><title>CM: 2 Other Than Satisfied</title></path>
+<text class="ink2" x="360.0" y="161.0" font-size="10">2/4</text>
+<text class="ink2" x="182" y="183.0" font-size="11" text-anchor="end">CP · Contingency Planning</text>
+<path class="s1" d="M190.0,172.0 H272.0 Q272.0,172.0 272.0,172.0 V186.0 Q272.0,186.0 272.0,186.0 H190.0 Z" data-tip="CP: 2 Satisfied"><title>CP: 2 Satisfied</title></path>
+<path class="s2" d="M274.0,172.0 H350.0 Q354.0,172.0 354.0,176.0 V182.0 Q354.0,186.0 350.0,186.0 H274.0 Z" data-tip="CP: 2 Other Than Satisfied"><title>CP: 2 Other Than Satisfied</title></path>
+<text class="ink2" x="360.0" y="183.0" font-size="10">2/4</text>
+<text class="ink2" x="182" y="205.0" font-size="11" text-anchor="end">IR · Incident Response</text>
+<path class="s1" d="M190.0,194.0 H313.0 Q313.0,194.0 313.0,194.0 V208.0 Q313.0,208.0 313.0,208.0 H190.0 Z" data-tip="IR: 3 Satisfied"><title>IR: 3 Satisfied</title></path>
+<path class="s2" d="M315.0,194.0 H350.0 Q354.0,194.0 354.0,198.0 V204.0 Q354.0,208.0 350.0,208.0 H315.0 Z" data-tip="IR: 1 Other Than Satisfied"><title>IR: 1 Other Than Satisfied</title></path>
+<text class="ink2" x="360.0" y="205.0" font-size="10">3/4</text>
+<text class="ink2" x="182" y="227.0" font-size="11" text-anchor="end">PS · Personnel Security</text>
+<path class="s1" d="M190.0,216.0 H231.0 Q231.0,216.0 231.0,216.0 V230.0 Q231.0,230.0 231.0,230.0 H190.0 Z" data-tip="PS: 1 Satisfied"><title>PS: 1 Satisfied</title></path>
+<path class="s2" d="M233.0,216.0 H350.0 Q354.0,216.0 354.0,220.0 V226.0 Q354.0,230.0 350.0,230.0 H233.0 Z" data-tip="PS: 3 Other Than Satisfied"><title>PS: 3 Other Than Satisfied</title></path>
+<text class="ink2" x="360.0" y="227.0" font-size="10">1/4</text>
+<text class="ink2" x="182" y="249.0" font-size="11" text-anchor="end">RA · Risk Assessment</text>
+<path class="s1" d="M190.0,238.0 H350.0 Q354.0,238.0 354.0,242.0 V248.0 Q354.0,252.0 350.0,252.0 H190.0 Z" data-tip="RA: 4 Satisfied"><title>RA: 4 Satisfied</title></path>
+<text class="ink2" x="360.0" y="249.0" font-size="10">4/4</text>
+<text class="ink2" x="182" y="271.0" font-size="11" text-anchor="end">SC · System &amp; Comms Protection</text>
+<path class="s1" d="M190.0,260.0 H313.0 Q313.0,260.0 313.0,260.0 V274.0 Q313.0,274.0 313.0,274.0 H190.0 Z" data-tip="SC: 3 Satisfied"><title>SC: 3 Satisfied</title></path>
+<path class="s2" d="M315.0,260.0 H350.0 Q354.0,260.0 354.0,264.0 V270.0 Q354.0,274.0 350.0,274.0 H315.0 Z" data-tip="SC: 1 Other Than Satisfied"><title>SC: 1 Other Than Satisfied</title></path>
+<text class="ink2" x="360.0" y="271.0" font-size="10">3/4</text>
+<text class="ink2" x="182" y="293.0" font-size="11" text-anchor="end">SI · System &amp; Info Integrity</text>
+<path class="s1" d="M190.0,282.0 H272.0 Q272.0,282.0 272.0,282.0 V296.0 Q272.0,296.0 272.0,296.0 H190.0 Z" data-tip="SI: 2 Satisfied"><title>SI: 2 Satisfied</title></path>
+<path class="s2" d="M274.0,282.0 H309.0 Q313.0,282.0 313.0,286.0 V292.0 Q313.0,296.0 309.0,296.0 H274.0 Z" data-tip="SI: 1 Other Than Satisfied"><title>SI: 1 Other Than Satisfied</title></path>
+<text class="ink2" x="319.0" y="293.0" font-size="10">2/3</text>
+<text class="ink2" x="182" y="315.0" font-size="11" text-anchor="end">AT · Awareness &amp; Training</text>
+<path class="s1" d="M190.0,304.0 H231.0 Q231.0,304.0 231.0,304.0 V318.0 Q231.0,318.0 231.0,318.0 H190.0 Z" data-tip="AT: 1 Satisfied"><title>AT: 1 Satisfied</title></path>
+<path class="s2" d="M233.0,304.0 H268.0 Q272.0,304.0 272.0,308.0 V314.0 Q272.0,318.0 268.0,318.0 H233.0 Z" data-tip="AT: 1 Other Than Satisfied"><title>AT: 1 Other Than Satisfied</title></path>
+<text class="ink2" x="278.0" y="315.0" font-size="10">1/2</text>
+<text class="ink2" x="182" y="337.0" font-size="11" text-anchor="end">SA · Services Acquisition</text>
+<path class="s2" d="M190.0,326.0 H268.0 Q272.0,326.0 272.0,330.0 V336.0 Q272.0,340.0 268.0,340.0 H190.0 Z" data-tip="SA: 2 Other Than Satisfied"><title>SA: 2 Other Than Satisfied</title></path>
+<text class="ink2" x="278.0" y="337.0" font-size="10">0/2</text>
+<text class="ink2" x="182" y="359.0" font-size="11" text-anchor="end">SR · Supply Chain Risk</text>
+<path class="s2" d="M190.0,348.0 H268.0 Q272.0,348.0 272.0,352.0 V358.0 Q272.0,362.0 268.0,362.0 H190.0 Z" data-tip="SR: 2 Other Than Satisfied"><title>SR: 2 Other Than Satisfied</title></path>
+<text class="ink2" x="278.0" y="359.0" font-size="10">0/2</text>
+<text class="ink2" x="182" y="381.0" font-size="11" text-anchor="end">MP · Media Protection</text>
+<path class="s1" d="M190.0,370.0 H227.0 Q231.0,370.0 231.0,374.0 V380.0 Q231.0,384.0 227.0,384.0 H190.0 Z" data-tip="MP: 1 Satisfied"><title>MP: 1 Satisfied</title></path>
+<text class="ink2" x="237.0" y="381.0" font-size="10">1/1</text>
+<text class="ink2" x="182" y="403.0" font-size="11" text-anchor="end">PE · Physical &amp; Environmental</text>
+<path class="s1" d="M190.0,392.0 H227.0 Q231.0,392.0 231.0,396.0 V402.0 Q231.0,406.0 227.0,406.0 H190.0 Z" data-tip="PE: 1 Satisfied"><title>PE: 1 Satisfied</title></path>
+<text class="ink2" x="237.0" y="403.0" font-size="10">1/1</text>
+<text class="ink2" x="182" y="425.0" font-size="11" text-anchor="end">PL · Planning</text>
+<path class="s2" d="M190.0,414.0 H227.0 Q231.0,414.0 231.0,418.0 V424.0 Q231.0,428.0 227.0,428.0 H190.0 Z" data-tip="PL: 1 Other Than Satisfied"><title>PL: 1 Other Than Satisfied</title></path>
+<text class="ink2" x="237.0" y="425.0" font-size="10">0/1</text>
+<text class="ink2" x="182" y="447.0" font-size="11" text-anchor="end">PM · Program Management</text>
+<path class="s1" d="M190.0,436.0 H227.0 Q231.0,436.0 231.0,440.0 V446.0 Q231.0,450.0 227.0,450.0 H190.0 Z" data-tip="PM: 1 Satisfied"><title>PM: 1 Satisfied</title></path>
+<text class="ink2" x="237.0" y="447.0" font-size="10">1/1</text>
+<line class="axis" x1="190" x2="190" y1="52" y2="454" stroke-width="1"/>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 194" width="640" height="194" role="img" aria-label="Findings by severity and status">
+<style>
+  .surface { fill: #fcfcfb; } .ink { fill: #0b0b0b; } .ink2 { fill: #52514e; } .muted { fill: #898781; }
+  .grid { stroke: #e1e0d9; } .axis { stroke: #c3c2b7; }
+  .s1 { fill: #2a78d6; } .s2 { fill: #eb6834; } .s3 { fill: #1baf7a; }
+  .l1 { stroke: #2a78d6; } .l2 { stroke: #eb6834; } .gap { stroke: #fcfcfb; }
+  text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  @media (prefers-color-scheme: dark) {
+    .surface { fill: #1a1a19; } .ink { fill: #ffffff; } .ink2 { fill: #c3c2b7; }
+    .grid { stroke: #2c2c2a; } .axis { stroke: #383835; }
+    .s1 { fill: #3987e5; } .s2 { fill: #d95926; } .s3 { fill: #199e70; }
+    .l1 { stroke: #3987e5; } .l2 { stroke: #d95926; } .gap { stroke: #1a1a19; }
+  }
+</style>
+<rect class="surface" width="640" height="194" rx="8"/>
+<text class="ink" x="16" y="24" font-size="15" font-weight="600">Findings by severity and status</text>
+<text class="ink2" x="16" y="42" font-size="11">19 findings · status as of 2026-09-18</text>
+<rect class="s1" x="310" y="14" width="10" height="10" rx="2"/><text class="ink2" x="324" y="23" font-size="11">Closed (validated)</text>
+<rect class="s2" x="430" y="14" width="10" height="10" rx="2"/><text class="ink2" x="444" y="23" font-size="11">Open</text>
+<rect class="s3" x="490" y="14" width="10" height="10" rx="2"/><text class="ink2" x="504" y="23" font-size="11">Risk accepted</text>
+<text class="ink2" x="82" y="75" font-size="12" text-anchor="end">High</text>
+<path class="s1" d="M90.0,62.0 H229.0 Q229.0,62.0 229.0,62.0 V78.0 Q229.0,78.0 229.0,78.0 H90.0 Z" data-tip="High: 3 closed (validated)"><title>High: 3 closed (validated)</title></path>
+<path class="s2" d="M231.0,62.0 H415.0 Q419.0,62.0 419.0,66.0 V74.0 Q419.0,78.0 415.0,78.0 H231.0 Z" data-tip="High: 4 open"><title>High: 4 open</title></path>
+<text class="ink2" x="425.0" y="75" font-size="11">7</text>
+<text class="ink2" x="82" y="109" font-size="12" text-anchor="end">Moderate</text>
+<path class="s1" d="M90.0,96.0 H276.0 Q276.0,96.0 276.0,96.0 V112.0 Q276.0,112.0 276.0,112.0 H90.0 Z" data-tip="Moderate: 4 closed (validated)"><title>Moderate: 4 closed (validated)</title></path>
+<path class="s2" d="M278.0,96.0 H511.0 Q511.0,96.0 511.0,96.0 V112.0 Q511.0,112.0 511.0,112.0 H278.0 Z" data-tip="Moderate: 5 open"><title>Moderate: 5 open</title></path>
+<path class="s3" d="M513.0,96.0 H556.0 Q560.0,96.0 560.0,100.0 V108.0 Q560.0,112.0 556.0,112.0 H513.0 Z" data-tip="Moderate: 1 risk accepted"><title>Moderate: 1 risk accepted</title></path>
+<text class="ink2" x="566.0" y="109" font-size="11">10</text>
+<text class="ink2" x="82" y="143" font-size="12" text-anchor="end">Low</text>
+<path class="s2" d="M90.0,130.0 H180.0 Q184.0,130.0 184.0,134.0 V142.0 Q184.0,146.0 180.0,146.0 H90.0 Z" data-tip="Low: 2 open"><title>Low: 2 open</title></path>
+<text class="ink2" x="190.0" y="143" font-size="11">2</text>
+<line class="axis" x1="90" x2="90" y1="56" y2="152" stroke-width="1"/>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" width="640" height="280" role="img" aria-label="Open findings over time">
+<style>
+  .surface { fill: #fcfcfb; } .ink { fill: #0b0b0b; } .ink2 { fill: #52514e; } .muted { fill: #898781; }
+  .grid { stroke: #e1e0d9; } .axis { stroke: #c3c2b7; }
+  .s1 { fill: #2a78d6; } .s2 { fill: #eb6834; } .s3 { fill: #1baf7a; }
+  .l1 { stroke: #2a78d6; } .l2 { stroke: #eb6834; } .gap { stroke: #fcfcfb; }
+  text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  @media (prefers-color-scheme: dark) {
+    .surface { fill: #1a1a19; } .ink { fill: #ffffff; } .ink2 { fill: #c3c2b7; }
+    .grid { stroke: #2c2c2a; } .axis { stroke: #383835; }
+    .s1 { fill: #3987e5; } .s2 { fill: #d95926; } .s3 { fill: #199e70; }
+    .l1 { stroke: #3987e5; } .l2 { stroke: #d95926; } .gap { stroke: #1a1a19; }
+  }
+</style>
+<rect class="surface" width="640" height="280" rx="8"/>
+<text class="ink" x="16" y="24" font-size="15" font-weight="600">Open findings over time</text>
+<text class="ink2" x="16" y="42" font-size="11">Weekly. A finding leaves the count only at validated closure (or formal risk acceptance)</text>
+<line class="grid" x1="44" x2="550" y1="236.0" y2="236.0" stroke-width="1"/><text class="muted" x="38" y="239.0" font-size="10" text-anchor="end">0</text>
+<line class="grid" x1="44" x2="550" y1="191.5" y2="191.5" stroke-width="1"/><text class="muted" x="38" y="194.5" font-size="10" text-anchor="end">5</text>
+<line class="grid" x1="44" x2="550" y1="147.0" y2="147.0" stroke-width="1"/><text class="muted" x="38" y="150.0" font-size="10" text-anchor="end">10</text>
+<line class="grid" x1="44" x2="550" y1="102.5" y2="102.5" stroke-width="1"/><text class="muted" x="38" y="105.5" font-size="10" text-anchor="end">15</text>
+<line class="grid" x1="44" x2="550" y1="58.0" y2="58.0" stroke-width="1"/><text class="muted" x="38" y="61.0" font-size="10" text-anchor="end">20</text>
+<line class="axis" x1="254.8" x2="254.8" y1="58" y2="236" stroke-width="1"/><text class="muted" x="257.8" y="68" font-size="9">Draft report</text>
+<line class="axis" x1="297.0" x2="297.0" y1="58" y2="236" stroke-width="1"/><text class="muted" x="300.0" y="80" font-size="9">POA&amp;M baseline</text>
+<polyline class="l1" fill="none" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="44.0,182.6 86.2,147.0 128.3,102.5 170.5,75.8 212.7,75.8 254.8,75.8 297.0,75.8 339.2,84.7 381.3,84.7 423.5,84.7 465.7,93.6 507.8,120.3 550.0,138.1"/>
+<circle class="s1 gap" cx="44.0" cy="182.6" r="4" stroke-width="2" data-tip="2026-06-26: 6 all open findings"><title>2026-06-26: 6 all open findings</title></circle>
+<circle class="s1 gap" cx="86.2" cy="147.0" r="4" stroke-width="2" data-tip="2026-07-03: 10 all open findings"><title>2026-07-03: 10 all open findings</title></circle>
+<circle class="s1 gap" cx="128.3" cy="102.5" r="4" stroke-width="2" data-tip="2026-07-10: 15 all open findings"><title>2026-07-10: 15 all open findings</title></circle>
+<circle class="s1 gap" cx="170.5" cy="75.8" r="4" stroke-width="2" data-tip="2026-07-17: 18 all open findings"><title>2026-07-17: 18 all open findings</title></circle>
+<circle class="s1 gap" cx="212.7" cy="75.8" r="4" stroke-width="2" data-tip="2026-07-24: 18 all open findings"><title>2026-07-24: 18 all open findings</title></circle>
+<circle class="s1 gap" cx="254.8" cy="75.8" r="4" stroke-width="2" data-tip="2026-07-31: 18 all open findings"><title>2026-07-31: 18 all open findings</title></circle>
+<circle class="s1 gap" cx="297.0" cy="75.8" r="4" stroke-width="2" data-tip="2026-08-07: 18 all open findings"><title>2026-08-07: 18 all open findings</title></circle>
+<circle class="s1 gap" cx="339.2" cy="84.7" r="4" stroke-width="2" data-tip="2026-08-14: 17 all open findings"><title>2026-08-14: 17 all open findings</title></circle>
+<circle class="s1 gap" cx="381.3" cy="84.7" r="4" stroke-width="2" data-tip="2026-08-21: 17 all open findings"><title>2026-08-21: 17 all open findings</title></circle>
+<circle class="s1 gap" cx="423.5" cy="84.7" r="4" stroke-width="2" data-tip="2026-08-28: 17 all open findings"><title>2026-08-28: 17 all open findings</title></circle>
+<circle class="s1 gap" cx="465.7" cy="93.6" r="4" stroke-width="2" data-tip="2026-09-04: 16 all open findings"><title>2026-09-04: 16 all open findings</title></circle>
+<circle class="s1 gap" cx="507.8" cy="120.3" r="4" stroke-width="2" data-tip="2026-09-11: 13 all open findings"><title>2026-09-11: 13 all open findings</title></circle>
+<circle class="s1 gap" cx="550.0" cy="138.1" r="4" stroke-width="2" data-tip="2026-09-18: 11 all open findings"><title>2026-09-18: 11 all open findings</title></circle>
+<text class="ink2" x="558.0" y="142.1" font-size="11">11 findings</text>
+<polyline class="l2" fill="none" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="44.0,227.1 86.2,200.4 128.3,191.5 170.5,182.6 212.7,182.6 254.8,182.6 297.0,182.6 339.2,182.6 381.3,182.6 423.5,182.6 465.7,182.6 507.8,200.4 550.0,200.4"/>
+<circle class="s2 gap" cx="44.0" cy="227.1" r="4" stroke-width="2" data-tip="2026-06-26: 1 open high/critical"><title>2026-06-26: 1 open high/critical</title></circle>
+<circle class="s2 gap" cx="86.2" cy="200.4" r="4" stroke-width="2" data-tip="2026-07-03: 4 open high/critical"><title>2026-07-03: 4 open high/critical</title></circle>
+<circle class="s2 gap" cx="128.3" cy="191.5" r="4" stroke-width="2" data-tip="2026-07-10: 5 open high/critical"><title>2026-07-10: 5 open high/critical</title></circle>
+<circle class="s2 gap" cx="170.5" cy="182.6" r="4" stroke-width="2" data-tip="2026-07-17: 6 open high/critical"><title>2026-07-17: 6 open high/critical</title></circle>
+<circle class="s2 gap" cx="212.7" cy="182.6" r="4" stroke-width="2" data-tip="2026-07-24: 6 open high/critical"><title>2026-07-24: 6 open high/critical</title></circle>
+<circle class="s2 gap" cx="254.8" cy="182.6" r="4" stroke-width="2" data-tip="2026-07-31: 6 open high/critical"><title>2026-07-31: 6 open high/critical</title></circle>
+<circle class="s2 gap" cx="297.0" cy="182.6" r="4" stroke-width="2" data-tip="2026-08-07: 6 open high/critical"><title>2026-08-07: 6 open high/critical</title></circle>
+<circle class="s2 gap" cx="339.2" cy="182.6" r="4" stroke-width="2" data-tip="2026-08-14: 6 open high/critical"><title>2026-08-14: 6 open high/critical</title></circle>
+<circle class="s2 gap" cx="381.3" cy="182.6" r="4" stroke-width="2" data-tip="2026-08-21: 6 open high/critical"><title>2026-08-21: 6 open high/critical</title></circle>
+<circle class="s2 gap" cx="423.5" cy="182.6" r="4" stroke-width="2" data-tip="2026-08-28: 6 open high/critical"><title>2026-08-28: 6 open high/critical</title></circle>
+<circle class="s2 gap" cx="465.7" cy="182.6" r="4" stroke-width="2" data-tip="2026-09-04: 6 open high/critical"><title>2026-09-04: 6 open high/critical</title></circle>
+<circle class="s2 gap" cx="507.8" cy="200.4" r="4" stroke-width="2" data-tip="2026-09-11: 4 open high/critical"><title>2026-09-11: 4 open high/critical</title></circle>
+<circle class="s2 gap" cx="550.0" cy="200.4" r="4" stroke-width="2" data-tip="2026-09-18: 4 open high/critical"><title>2026-09-18: 4 open high/critical</title></circle>
+<text class="ink2" x="558.0" y="204.4" font-size="11">4 High+</text>
+<text class="muted" x="44.0" y="252" font-size="10" text-anchor="middle">06-26</text>
+<text class="muted" x="297.0" y="252" font-size="10" text-anchor="middle">08-07</text>
+<text class="muted" x="550.0" y="252" font-size="10" text-anchor="middle">09-18</text>
+<line class="axis" x1="44" x2="550" y1="236" y2="236" stroke-width="1"/>
+<rect class="s1" x="44" y="264" width="10" height="3" rx="1"/><text class="ink2" x="58" y="269" font-size="11">All open findings</text><rect class="s2" x="184" y="264" width="10" height="3" rx="1"/><text class="ink2" x="198" y="269" font-size="11">Open High/Critical</text>
+</svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 330" width="640" height="330" role="img" aria-label="Risk heat maps: current versus residual">
+<style>
+  .surface { fill: #fcfcfb; } .ink { fill: #0b0b0b; } .ink2 { fill: #52514e; } .muted { fill: #898781; }
+  .grid { stroke: #e1e0d9; } .axis { stroke: #c3c2b7; }
+  .s1 { fill: #2a78d6; } .s2 { fill: #eb6834; } .s3 { fill: #1baf7a; }
+  .l1 { stroke: #2a78d6; } .l2 { stroke: #eb6834; } .gap { stroke: #fcfcfb; }
+  text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  @media (prefers-color-scheme: dark) {
+    .surface { fill: #1a1a19; } .ink { fill: #ffffff; } .ink2 { fill: #c3c2b7; }
+    .grid { stroke: #2c2c2a; } .axis { stroke: #383835; }
+    .s1 { fill: #3987e5; } .s2 { fill: #d95926; } .s3 { fill: #199e70; }
+    .l1 { stroke: #3987e5; } .l2 { stroke: #d95926; } .gap { stroke: #1a1a19; }
+  }
+</style>
+<rect class="surface" width="640" height="330" rx="8"/>
+<text class="ink" x="16" y="24" font-size="15" font-weight="600">Enterprise risk: current (as tested) vs residual (target)</text>
+<text class="ink2" x="16" y="42" font-size="11">Cell = likelihood × impact; number = count of the 18 risks; color = rating band (label in cell)</text>
+<text class="ink" x="160.0" y="62" font-size="12" font-weight="600" text-anchor="middle">Current</text>
+<rect x="61" y="71" width="38" height="38" rx="3" fill="#fab219" fill-opacity="0.16" data-tip="Current: L5 × I1 = 5 (Moderate); no risks"><title>Current: L5 × I1 = 5 (Moderate); no risks</title></rect>
+<rect x="101" y="71" width="38" height="38" rx="3" fill="#ec835a" fill-opacity="0.16" data-tip="Current: L5 × I2 = 10 (High); no risks"><title>Current: L5 × I2 = 10 (High); no risks</title></rect>
+<rect x="141" y="71" width="38" height="38" rx="3" fill="#ec835a" fill-opacity="0.16" data-tip="Current: L5 × I3 = 15 (High); no risks"><title>Current: L5 × I3 = 15 (High); no risks</title></rect>
+<rect x="181" y="71" width="38" height="38" rx="3" fill="#d03b3b" fill-opacity="0.16" data-tip="Current: L5 × I4 = 20 (Critical); no risks"><title>Current: L5 × I4 = 20 (Critical); no risks</title></rect>
+<rect x="221" y="71" width="38" height="38" rx="3" fill="#d03b3b" fill-opacity="0.16" data-tip="Current: L5 × I5 = 25 (Critical); no risks"><title>Current: L5 × I5 = 25 (Critical); no risks</title></rect>
+<text class="muted" x="52" y="94.0" font-size="10" text-anchor="end">5</text>
+<rect x="61" y="111" width="38" height="38" rx="3" fill="#0ca30c" fill-opacity="0.16" data-tip="Current: L4 × I1 = 4 (Low); no risks"><title>Current: L4 × I1 = 4 (Low); no risks</title></rect>
+<rect x="101" y="111" width="38" height="38" rx="3" fill="#fab219" fill-opacity="0.16" data-tip="Current: L4 × I2 = 8 (Moderate); no risks"><title>Current: L4 × I2 = 8 (Moderate); no risks</title></rect>
+<rect x="141" y="111" width="38" height="38" rx="3" fill="#ec835a" fill-opacity="0.85" data-tip="Current: L4 × I3 = 12 (High); RISK-004"><title>Current: L4 × I3 = 12 (High); RISK-004</title></rect>
+<text x="160.0" y="135.0" font-size="14" font-weight="600" text-anchor="middle" fill="#0b0b0b">1</text>
+<rect x="181" y="111" width="38" height="38" rx="3" fill="#ec835a" fill-opacity="0.85" data-tip="Current: L4 × I4 = 16 (High); RISK-002"><title>Current: L4 × I4 = 16 (High); RISK-002</title></rect>
+<text x="200.0" y="135.0" font-size="14" font-weight="600" text-anchor="middle" fill="#0b0b0b">1</text>
+<rect x="221" y="111" width="38" height="38" rx="3" fill="#d03b3b" fill-opacity="0.16" data-tip="Current: L4 × I5 = 20 (Critical); no risks"><title>Current: L4 × I5 = 20 (Critical); no risks</title></rect>
+<text class="muted" x="52" y="134.0" font-size="10" text-anchor="end">4</text>
+<rect x="61" y="151" width="38" height="38" rx="3" fill="#0ca30c" fill-opacity="0.16" data-tip="Current: L3 × I1 = 3 (Low); no risks"><title>Current: L3 × I1 = 3 (Low); no risks</title></rect>
+<rect x="101" y="151" width="38" height="38" rx="3" fill="#fab219" fill-opacity="0.16" data-tip="Current: L3 × I2 = 6 (Moderate); no risks"><title>Current: L3 × I2 = 6 (Moderate); no risks</title></rect>
+<rect x="141" y="151" width="38" height="38" rx="3" fill="#fab219" fill-opacity="0.85" data-tip="Current: L3 × I3 = 9 (Moderate); RISK-015"><title>Current: L3 × I3 = 9 (Moderate); RISK-015</title></rect>
+<text x="160.0" y="175.0" font-size="14" font-weight="600" text-anchor="middle" fill="#0b0b0b">1</text>
+<rect x="181" y="151" width="38" height="38" rx="3" fill="#ec835a" fill-opacity="0.85" data-tip="Current: L3 × I4 = 12 (High); RISK-005, RISK-006, RISK-007, RISK-009, RISK-011, RISK-016, RISK-017"><title>Current: L3 × I4 = 12 (High); RISK-005, RISK-006, RISK-007, RISK-009, RISK-011, RISK-016, RISK-017</title></rect>
+<text x="200.0" y="175.0" font-size="14" font-weight="600" text-anchor="middle" fill="#0b0b0b">7</text>
+<rect x="221" y="151" width="38" height="38" rx="3" fill="#ec835a" fill-opacity="0.85" data-tip="Current: L3 × I5 = 15 (High); RISK-001, RISK-003, RISK-010"><title>Current: L3 × I5 = 15 (High); RISK-001, RISK-003, RISK-010</title></rect>
+<text x="240.0" y="175.0" font-size="14" font-weight="600" text-anchor="middle" fill="#0b0b0b">3</text>
+<text class="muted" x="52" y="174.0" font-size="10" text-anchor="end">3</text>
+<rect x="61" y="191" width="38" height="38" rx="3" fill="#0ca30c" fill-opacity="0.16" data-tip="Current: L2 × I1 = 2 (Low); no risks"><title>Current: L2 × I1 = 2 (Low); no risks</title></rect>
+<rect x="101" y="191" width="38" height="38" rx="3" fill="#0ca30c" fill-opacity="0.85" data-tip="Current: L2 × I2 = 4 (Low); RISK-018"><title>Current: L2 × I2 = 4 (Low); RISK-018</title></rect>
+<text x="120.0" y="215.0" font-size="14" font-weight="600" text-anchor="middle" fill="#0b0b0b">1</text>
+<rect x="141" y="191" width="38" height="38" rx="3" fill="#fab219" fill-opacity="0.85" data-tip="Current: L2 × I3 = 6 (Moderate); RISK-013"><title>Current: L2 × I3 = 6 (Moderate); RISK-013</title></rect>
+<text x="160.0" y="215.0" font-size="14" font-weight="600" text-anchor="middle" fill="#0b0b0b">1</text>
+<rect x="181" y="191" width="38" height="38" rx="3" fill="#fab219" fill-opacity="0.85" data-tip="Current: L2 × I4 = 8 (Moderate); RISK-014"><title>Current: L2 × I4 = 8 (Moderate); RISK-014</title></rect>
+<text x="200.0" y="215.0" font-size="14" font-weight="600" text-anchor="middle" fill="#0b0b0b">1</text>
+<rect x="221" y="191" width="38" height="38" rx="3" fill="#ec835a" fill-opacity="0.85" data-tip="Current: L2 × I5 = 10 (High); RISK-008, RISK-012"><title>Current: L2 × I5 = 10 (High); RISK-008, RISK-012</title></rect>
+<text x="240.0" y="215.0" font-size="14" font-weight="600" text-anchor="middle" fill="#0b0b0b">2</text>
+<text class="muted" x="52" y="214.0" font-size="10" text-anchor="end">2</text>
+<rect x="61" y="231" width="38" height="38" rx="3" fill="#0ca30c" fill-opacity="0.16" data-tip="Current: L1 × I1 = 1 (Low); no risks"><title>Current: L1 × I1 = 1 (Low); no risks</title></rect>
+<rect x="101" y="231" width="38" height="38" rx="3" fill="#0ca30c" fill-opacity="0.16" data-tip="Current: L1 × I2 = 2 (Low); no risks"><title>Current: L1 × I2 = 2 (Low); no risks</title></rect>
+<rect x="141" y="231" width="38" height="38" rx="3" fill="#0ca30c" fill-opacity="0.16" data-tip="Current: L1 × I3 = 3 (Low); no risks"><title>Current: L1 × I3 = 3 (Low); no risks</title></rect>
+<rect x="181" y="231" width="38" height="38" rx="3" fill="#0ca30c" fill-opacity="0.16" data-tip="Current: L1 × I4 = 4 (Low); no risks"><title>Current: L1 × I4 = 4 (Low); no risks</title></rect>
+<rect x="221" y="231" width="38" height="38" rx="3" fill="#fab219" fill-opacity="0.16" data-tip="Current: L1 × I5 = 5 (Moderate); no risks"><title>Current: L1 × I5 = 5 (Moderate); no risks</title></rect>
+<text class="muted" x="52" y="254.0" font-size="10" text-anchor="end">1</text>
+<text class="muted" x="80.0" y="284" font-size="10" text-anchor="middle">1</text>
+<text class="muted" x="120.0" y="284" font-size="10" text-anchor="middle">2</text>
+<text class="muted" x="160.0" y="284" font-size="10" text-anchor="middle">3</text>
+<text class="muted" x="200.0" y="284" font-size="10" text-anchor="middle">4</text>
+<text class="muted" x="240.0" y="284" font-size="10" text-anchor="middle">5</text>
+<text class="muted" x="160.0" y="300" font-size="10" text-anchor="middle">Impact →</text>
+<text class="muted" x="30" y="170.0" font-size="10" text-anchor="middle" transform="rotate(-90 30 170.0)">Likelihood →</text>
+<text class="ink" x="460.0" y="62" font-size="12" font-weight="600" text-anchor="middle">Residual target</text>
+<rect x="361" y="71" width="38" height="38" rx="3" fill="#fab219" fill-opacity="0.16" data-tip="Residual target: L5 × I1 = 5 (Moderate); no risks"><title>Residual target: L5 × I1 = 5 (Moderate); no risks</title></rect>
+<rect x="401" y="71" width="38" height="38" rx="3" fill="#ec835a" fill-opacity="0.16" data-tip="Residual target: L5 × I2 = 10 (High); no risks"><title>Residual target: L5 × I2 = 10 (High); no risks</title></rect>
+<rect x="441" y="71" width="38" height="38" rx="3" fill="#ec835a" fill-opacity="0.16" data-tip="Residual target: L5 × I3 = 15 (High); no risks"><title>Residual target: L5 × I3 = 15 (High); no risks</title></rect>
+<rect x="481" y="71" width="38" height="38" rx="3" fill="#d03b3b" fill-opacity="0.16" data-tip="Residual target: L5 × I4 = 20 (Critical); no risks"><title>Residual target: L5 × I4 = 20 (Critical); no risks</title></rect>
+<rect x="521" y="71" width="38" height="38" rx="3" fill="#d03b3b" fill-opacity="0.16" data-tip="Residual target: L5 × I5 = 25 (Critical); no risks"><title>Residual target: L5 × I5 = 25 (Critical); no risks</title></rect>
+<text class="muted" x="352" y="94.0" font-size="10" text-anchor="end">5</text>
+<rect x="361" y="111" width="38" height="38" rx="3" fill="#0ca30c" fill-opacity="0.16" data-tip="Residual target: L4 × I1 = 4 (Low); no risks"><title>Residual target: L4 × I1 = 4 (Low); no risks</title></rect>
+<rect x="401" y="111" width="38" height="38" rx="3" fill="#fab219" fill-opacity="0.16" data-tip="Residual target: L4 × I2 = 8 (Moderate); no risks"><title>Residual target: L4 × I2 = 8 (Moderate); no risks</title></rect>
+<rect x="441" y="111" width="38" height="38" rx="3" fill="#ec835a" fill-opacity="0.16" data-tip="Residual target: L4 × I3 = 12 (High); no risks"><title>Residual target: L4 × I3 = 12 (High); no risks</title></rect>
+<rect x="481" y="111" width="38" height="38" rx="3" fill="#ec835a" fill-opacity="0.16" data-tip="Residual target: L4 × I4 = 16 (High); no risks"><title>Residual target: L4 × I4 = 16 (High); no risks</title></rect>
+<rect x="521" y="111" width="38" height="38" rx="3" fill="#d03b3b" fill-opacity="0.16" data-tip="Residual target: L4 × I5 = 20 (Critical); no risks"><title>Residual target: L4 × I5 = 20 (Critical); no risks</title></rect>
+<text class="muted" x="352" y="134.0" font-size="10" text-anchor="end">4</text>
+<rect x="361" y="151" width="38" height="38" rx="3" fill="#0ca30c" fill-opacity="0.16" data-tip="Residual target: L3 × I1 = 3 (Low); no risks"><title>Residual target: L3 × I1 = 3 (Low); no risks</title></rect>
+<rect x="401" y="151" width="38" height="38" rx="3" fill="#fab219" fill-opacity="0.16" data-tip="Residual target: L3 × I2 = 6 (Moderate); no risks"><title>Residual target: L3 × I2 = 6 (Moderate); no risks</title></rect>
+<rect x="441" y="151" width="38" height="38" rx="3" fill="#fab219" fill-opacity="0.85" data-tip="Residual target: L3 × I3 = 9 (Moderate); RISK-015"><title>Residual target: L3 × I3 = 9 (Moderate); RISK-015</title></rect>
+<text x="460.0" y="175.0" font-size="14" font-weight="600" text-anchor="middle" fill="#0b0b0b">1</text>
+<rect x="481" y="151" width="38" height="38" rx="3" fill="#ec835a" fill-opacity="0.16" data-tip="Residual target: L3 × I4 = 12 (High); no risks"><title>Residual target: L3 × I4 = 12 (High); no risks</title></rect>
+<rect x="521" y="151" width="38" height="38" rx="3" fill="#ec835a" fill-opacity="0.16" data-tip="Residual target: L3 × I5 = 15 (High); no risks"><title>Residual target: L3 × I5 = 15 (High); no risks</title></rect>
+<text class="muted" x="352" y="174.0" font-size="10" text-anchor="end">3</text>
+<rect x="361" y="191" width="38" height="38" rx="3" fill="#0ca30c" fill-opacity="0.16" data-tip="Residual target: L2 × I1 = 2 (Low); no risks"><title>Residual target: L2 × I1 = 2 (Low); no risks</title></rect>
+<rect x="401" y="191" width="38" height="38" rx="3" fill="#0ca30c" fill-opacity="0.85" data-tip="Residual target: L2 × I2 = 4 (Low); RISK-018"><title>Residual target: L2 × I2 = 4 (Low); RISK-018</title></rect>
+<text x="420.0" y="215.0" font-size="14" font-weight="600" text-anchor="middle" fill="#0b0b0b">1</text>
+<rect x="441" y="191" width="38" height="38" rx="3" fill="#fab219" fill-opacity="0.85" data-tip="Residual target: L2 × I3 = 6 (Moderate); RISK-004, RISK-005, RISK-009, RISK-013, RISK-014, RISK-016"><title>Residual target: L2 × I3 = 6 (Moderate); RISK-004, RISK-005, RISK-009, RISK-013, RISK-014, RISK-016</title></rect>
+<text x="460.0" y="215.0" font-size="14" font-weight="600" text-anchor="middle" fill="#0b0b0b">6</text>
+<rect x="481" y="191" width="38" height="38" rx="3" fill="#fab219" fill-opacity="0.85" data-tip="Residual target: L2 × I4 = 8 (Moderate); RISK-001, RISK-002, RISK-003, RISK-006, RISK-008, RISK-010, RISK-011, RISK-012"><title>Residual target: L2 × I4 = 8 (Moderate); RISK-001, RISK-002, RISK-003, RISK-006, RISK-008, RISK-010, RISK-011, RISK-012</title></rect>
+<text x="500.0" y="215.0" font-size="14" font-weight="600" text-anchor="middle" fill="#0b0b0b">8</text>
+<rect x="521" y="191" width="38" height="38" rx="3" fill="#ec835a" fill-opacity="0.16" data-tip="Residual target: L2 × I5 = 10 (High); no risks"><title>Residual target: L2 × I5 = 10 (High); no risks</title></rect>
+<text class="muted" x="352" y="214.0" font-size="10" text-anchor="end">2</text>
+<rect x="361" y="231" width="38" height="38" rx="3" fill="#0ca30c" fill-opacity="0.16" data-tip="Residual target: L1 × I1 = 1 (Low); no risks"><title>Residual target: L1 × I1 = 1 (Low); no risks</title></rect>
+<rect x="401" y="231" width="38" height="38" rx="3" fill="#0ca30c" fill-opacity="0.16" data-tip="Residual target: L1 × I2 = 2 (Low); no risks"><title>Residual target: L1 × I2 = 2 (Low); no risks</title></rect>
+<rect x="441" y="231" width="38" height="38" rx="3" fill="#0ca30c" fill-opacity="0.16" data-tip="Residual target: L1 × I3 = 3 (Low); no risks"><title>Residual target: L1 × I3 = 3 (Low); no risks</title></rect>
+<rect x="481" y="231" width="38" height="38" rx="3" fill="#0ca30c" fill-opacity="0.85" data-tip="Residual target: L1 × I4 = 4 (Low); RISK-007, RISK-017"><title>Residual target: L1 × I4 = 4 (Low); RISK-007, RISK-017</title></rect>
+<text x="500.0" y="255.0" font-size="14" font-weight="600" text-anchor="middle" fill="#0b0b0b">2</text>
+<rect x="521" y="231" width="38" height="38" rx="3" fill="#fab219" fill-opacity="0.16" data-tip="Residual target: L1 × I5 = 5 (Moderate); no risks"><title>Residual target: L1 × I5 = 5 (Moderate); no risks</title></rect>
+<text class="muted" x="352" y="254.0" font-size="10" text-anchor="end">1</text>
+<text class="muted" x="380.0" y="284" font-size="10" text-anchor="middle">1</text>
+<text class="muted" x="420.0" y="284" font-size="10" text-anchor="middle">2</text>
+<text class="muted" x="460.0" y="284" font-size="10" text-anchor="middle">3</text>
+<text class="muted" x="500.0" y="284" font-size="10" text-anchor="middle">4</text>
+<text class="muted" x="540.0" y="284" font-size="10" text-anchor="middle">5</text>
+<text class="muted" x="460.0" y="300" font-size="10" text-anchor="middle">Impact →</text>
+<text class="muted" x="330" y="170.0" font-size="10" text-anchor="middle" transform="rotate(-90 330 170.0)">Likelihood →</text>
+<rect x="16" y="310" width="10" height="10" rx="2" fill="#d03b3b"/><text class="ink2" x="30" y="319" font-size="11">Critical</text>
+<rect x="106" y="310" width="10" height="10" rx="2" fill="#ec835a"/><text class="ink2" x="120" y="319" font-size="11">High</text>
+<rect x="196" y="310" width="10" height="10" rx="2" fill="#fab219"/><text class="ink2" x="210" y="319" font-size="11">Moderate</text>
+<rect x="286" y="310" width="10" height="10" rx="2" fill="#0ca30c"/><text class="ink2" x="300" y="319" font-size="11">Low</text>
+</svg></div>
+<h2>Top enterprise risks on the status date</h2>
+<table><thead><tr><th>ID</th><th>Risk</th><th>Now</th><th>Residual target</th><th>Owner</th><th>Status</th></tr></thead><tbody><tr><td>RISK-001</td><td>Privileged cloud or identity admin account misused or compromised</td><td>15 High</td><td>8 Moderate</td><td>Samir Haddad (CTO)</td><td>Treatment in progress</td></tr><tr><td>RISK-010</td><td>PHI exposure through the analytics vendor (Quarrystone)</td><td>15 High</td><td>8 Moderate</td><td>Dr. Miriam Castell (VP Clinical Analytics)</td><td>Treatment in progress</td></tr><tr><td>RISK-005</td><td>Inability to detect or investigate PHI access</td><td>12 High</td><td>6 Moderate</td><td>Alicia Moreno (CISO)</td><td>Treatment in progress</td></tr><tr><td>RISK-006</td><td>Exploitation of unremediated vulnerabilities</td><td>12 High</td><td>8 Moderate</td><td>Grace Lindqvist (VP Engineering)</td><td>Treatment in progress</td></tr><tr><td>RISK-007</td><td>Compromise of unsupported legacy components in the PHI path</td><td>12 High</td><td>4 Low</td><td>Samir Haddad (CTO)</td><td>Treatment in progress (delayed)</td></tr></tbody></table>
+<h2>Open findings requiring management attention</h2>
+<table><thead><tr><th>ID</th><th>Finding</th><th>Severity</th><th>POA&amp;M</th><th>Target</th><th>Status</th></tr></thead><tbody><tr><td>FIND-003</td><td>Excessive privileged access and administration from daily-use accounts</td><td>High</td><td>POAM-003</td><td>2026-11-05</td><td>In Progress</td></tr><tr><td>FIND-004</td><td>Access recertification incomplete and ineffective (access creep)</td><td>Moderate</td><td>POAM-004</td><td>2026-10-31</td><td>In Progress</td></tr><tr><td>FIND-009</td><td>Privileged-activity log reviews not consistently performed or documented</td><td>Moderate</td><td>POAM-009</td><td>2026-09-15</td><td>In Progress</td></tr><tr><td>FIND-010</td><td>Vulnerability remediation exceeds contractual SLAs</td><td>High</td><td>POAM-010</td><td>2026-11-05</td><td>In Progress</td></tr><tr><td>FIND-011</td><td>Unsupported software components in the PHI data path</td><td>High</td><td>POAM-011</td><td>2026-12-15</td><td>Delayed</td></tr><tr><td>FIND-014</td><td>Incident response and contingency plans not tested within 12 months</td><td>Moderate</td><td>POAM-014</td><td>2026-11-15</td><td>In Progress</td></tr><tr><td>FIND-015</td><td>Third-party risk monitoring incomplete; no C-SCRM plan</td><td>Moderate</td><td>POAM-015</td><td>2027-02-03</td><td>In Progress</td></tr><tr><td>FIND-016</td><td>Quarrystone Analytics: offshore PHI access, inadequate breach-notification terms, and excessive data sharing</td><td>High</td><td>POAM-016</td><td>2026-11-05</td><td>In Progress</td></tr><tr><td>FIND-017</td><td>System security plan outdated and overstates control implementation</td><td>Low</td><td>POAM-017</td><td>2026-12-15</td><td>In Progress</td></tr><tr><td>FIND-018</td><td>Emergency and console changes bypass approval</td><td>Moderate</td><td>POAM-018</td><td>2026-09-11</td><td>In Progress</td></tr><tr><td>FIND-019</td><td>Security awareness training completion below 100%</td><td>Low</td><td>POAM-019</td><td>2026-09-30</td><td>Completed – Pending Validation</td></tr></tbody></table>
+<p class="note">Portfolio exercise. Fictional organization and synthetic data; not an official assessment, audit, or authorization.</p>
+</main><div id="tip" role="tooltip"></div>
+<script>
+const tip = document.getElementById('tip');
+document.querySelectorAll('[data-tip]').forEach(el => {
+  el.addEventListener('mousemove', e => { tip.textContent = el.dataset.tip; tip.style.display = 'block';
+    tip.style.left = Math.min(e.clientX + 12, window.innerWidth - 330) + 'px'; tip.style.top = (e.clientY + 12) + 'px'; });
+  el.addEventListener('mouseleave', () => tip.style.display = 'none');
+});
+</script></body></html>
