@@ -1,6 +1,6 @@
 # CHECKPOINT: Wrenfield GRC Assessment (portfolio project)
 
-**Status (2026-09-23): v1 COMPLETE.** All 15 phases (0–14) built, generated, and verified. Local git only (not yet pushed).
+**Status (2026-09-23): v1 COMPLETE and PUBLISHED** at https://github.com/InnovaeonLabs/wrenfield-grc-assessment (public, branch `main`). CI (`grc-integrity`) green on GitHub.
 
 ## What this is
 A simulated NIST SP 800-53 Rev. 5 (Release 5.2.0) security control assessment of the fictional healthcare SaaS **Wrenfield Health** (system WCP-PROD), framed as pre-contract readiness for a fictional state Medicaid agency (SHCA). Status date for all metrics: **2026-09-18**.
@@ -24,5 +24,4 @@ pytest -q                 # 7 regression tests
 - CSVs are written with UTF-8 BOM (Excel-friendly). `.gitattributes` enforces LF.
 
 ## Possible next steps
-- Push to GitHub as `InnovaeonLabs/wrenfield-grc-assessment` (README badge and resume bullets already use this name).
 - Optional v2: OSCAL-format SSP/POA&M export; a second vendor deep-dive; a Q4 "continuous monitoring" status update.
