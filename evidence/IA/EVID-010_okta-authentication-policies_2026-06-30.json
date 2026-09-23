@@ -1,0 +1,60 @@
+{
+  "_evidence": {
+    "id": "EVID-010",
+    "description": "Okta authentication policy export (synthetic; structure simplified from an Okta Policies API response)",
+    "exported_by": "nrahman (read-only admin API token scoped to okta.policies.read)",
+    "exported_at": "2026-06-30T15:12:00-04:00",
+    "assessor_note": "Assessor observed the export being generated over screen share and compared rule counts to the admin console (IPE check)."
+  },
+  "global_session_policies": [
+    {
+      "name": "Default Workforce Session Policy",
+      "status": "ACTIVE",
+      "priority": 1,
+      "conditions": {
+        "people": {
+          "groups": { "include": ["Everyone"], "exclude": ["MFA-Exempt-Legacy"] }
+        }
+      },
+      "rules": [
+        {
+          "name": "Require MFA for all sign-ins",
+          "actions": { "signon": { "access": "ALLOW", "requireFactor": true, "factorPromptMode": "SESSION", "maxSessionLifetimeMinutes": 720 } }
+        }
+      ]
+    },
+    {
+      "name": "Legacy Exemption Policy",
+      "status": "ACTIVE",
+      "priority": 2,
+      "created": "2023-05-22T13:04:00Z",
+      "description": "TEMP - scanner integration and MFA outage workaround",
+      "conditions": { "people": { "groups": { "include": ["MFA-Exempt-Legacy"] } } },
+      "rules": [
+        { "name": "Password only", "actions": { "signon": { "access": "ALLOW", "requireFactor": false } } }
+      ]
+    }
+  ],
+  "authentication_policies": [
+    {
+      "name": "Okta Admin Console",
+      "rules": [
+        { "name": "Admins", "constraints": { "knowledge": { "required": true }, "possession": { "required": true } }, "phishing_resistant_required": false }
+      ]
+    },
+    {
+      "name": "AWS IAM Identity Center",
+      "rules": [
+        { "name": "All users", "constraints": { "possession": { "required": true } }, "phishing_resistant_required": false }
+      ]
+    },
+    {
+      "name": "GitHub Enterprise Cloud",
+      "rules": [
+        { "name": "All users", "constraints": { "possession": { "required": true } }, "phishing_resistant_required": false }
+      ]
+    }
+  ],
+  "authenticators_enabled": ["Okta Verify (push with number challenge)", "Okta FastPass", "FIDO2 (WebAuthn)", "Google Authenticator (TOTP)", "Password"],
+  "authenticators_disabled": ["SMS", "Voice call", "Email (as a factor)", "Security question"]
+}

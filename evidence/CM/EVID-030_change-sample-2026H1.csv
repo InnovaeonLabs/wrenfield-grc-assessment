@@ -1,0 +1,26 @@
+change_id,type,title,requested_by,approver,approved_at,deployed_at,peer_review,test_evidence,retro_approval_at,assessor_result
+CHG-2026-0018,Normal,Upgrade EKS managed node group AMI,jkim,twierzbicki,2026-01-08T10:12,2026-01-08T14:30,PR #2211 approved,Staging soak 24h,,Pass
+CHG-2026-0034,Normal,Tighten IAM policy for reporting bucket,jkim-adm,twierzbicki,2026-01-14T09:40,2026-01-15T11:05,PR #2240 approved,Terraform plan attached,,Pass
+CHG-2026-0052,Standard,Rotate TLS certificate (ACM) for api.wcp,lbaptiste,pre-approved (standard),2026-01-20T08:00,2026-01-20T08:22,n/a (standard change),Post-change check attached,,Pass
+CHG-2026-0071,Normal,Care-plan service v4.12 release,sricci,glindqvist,2026-01-27T16:10,2026-01-28T10:00,PR #2268 approved,CI suite green,,Pass
+CHG-2026-0101,Normal,KMS key policy update for DR copy,jkim-adm,twierzbicki,2026-02-04T13:00,2026-02-05T09:30,PR #2291 approved,Terraform plan attached,,Pass
+CHG-2026-0119,Normal,FHIR gateway rate-limit change,dokonkwo,sricci,2026-02-10T11:45,2026-02-11T10:15,PR #2310 approved,Load test attached,,Pass
+CHG-2026-0133,Standard,Quarterly break-glass test (AWS),twierzbicki,pre-approved (standard),2026-02-11T08:00,2026-02-11T14:31,n/a (standard change),Test record attached,,Pass
+CHG-2026-0154,Normal,Notification worker queue scaling,hlarsen,sricci,2026-02-18T15:30,2026-02-19T09:00,PR #2336 approved,CI suite green,,Pass
+CHG-2026-0171,Normal,Aurora minor version upgrade,jkim-adm,twierzbicki,2026-02-24T10:00,2026-02-28T06:00,PR #2349 approved,Staging upgrade record,,Pass
+CHG-2026-0197,Normal,WAF managed rule set update,lbaptiste,twierzbicki,2026-03-03T09:15,2026-03-03T13:40,PR #2371 approved,WAF count-mode 48h,,Pass
+CHG-2026-0215,Normal,Patient app API v3.8 release,sricci,glindqvist,2026-03-10T17:05,2026-03-11T10:00,PR #2390 approved,CI suite green,,Pass
+CHG-2026-0240,Normal,SIEM parser update for Okta logs,ocastillo,amoreno,2026-03-17T12:00,2026-03-17T16:00,PR #118 (sec-infra) approved,Parser test attached,,Pass
+CHG-2026-0262,Normal,Remove unused security group rules,lbaptiste,twierzbicki,2026-03-24T10:30,2026-03-25T09:00,PR #2412 approved,Terraform plan attached,,Pass
+CHG-2026-0288,Emergency,Hotfix: care-task scheduler memory leak,dokonkwo,(verbal: sricci),,2026-04-02T22:14,PR #2431 approved post-deploy,Prod monitoring,2026-04-15T10:20,Exception: retro approval 9 business days after deploy (standard: 2)
+CHG-2026-0301,Normal,Integration engine HL7 mapping update (Lakemont),sricci,glindqvist,2026-04-06T14:00,2026-04-07T10:00,PR #2440 approved,Customer UAT sign-off,,Pass
+CHG-2026-0327,Normal,EKS cluster add-on upgrades,jkim-adm,twierzbicki,2026-04-13T09:00,2026-04-14T06:00,PR #2458 approved,Staging record,,Pass
+CHG-2026-0356,Normal,Care-plan service v4.15 release,sricci,glindqvist,2026-04-14T15:40,2026-04-14T10:02,PR #2466 approved,CI suite green,,Exception: deployed 5h38m before recorded approval
+CHG-2026-0371,Normal,S3 lifecycle rule for device payloads,lbaptiste,twierzbicki,2026-04-21T11:00,2026-04-22T09:30,PR #2477 approved,Terraform plan attached,,Pass
+CHG-2026-0380,Emergency,Hotfix: FHIR auth token refresh bug,hlarsen,(verbal: sricci),,2026-04-30T19:45,PR #2489 approved post-deploy,Prod monitoring,2026-05-01T11:00,Pass (retro approval within 2 business days)
+CHG-2026-0398,Normal,Okta group rule for new Clinical Ops team,nrahman,amoreno,2026-05-05T10:00,2026-05-05T15:00,n/a (IdP config; screenshot + peer check),Peer verification note,,Pass
+CHG-2026-0412,Emergency,Open RDP on wf-sftp-01 for SFTP vendor support session,lbaptiste,(none recorded),,2026-05-19T13:22,none,none,,Exception: no approval and never reverted (see FIND-012)
+CHG-2026-0433,Normal,RPM ingestion schema v2,sricci,glindqvist,2026-05-26T16:00,2026-05-27T10:00,PR #2530 approved,CI suite green,,Pass
+CHG-2026-0459,Normal,Backup vault access policy update,jkim-adm,twierzbicki,2026-06-02T09:00,2026-06-03T09:00,PR #2548 approved,Terraform plan attached,,Pass
+CHG-2026-0480,Normal,Patient app API v3.9 release,sricci,glindqvist,2026-06-09T17:00,2026-06-10T10:00,PR #2561 approved,CI suite green,,Pass
+CHG-2026-0502,Standard,Monthly AMI refresh,jkim,pre-approved (standard),2026-06-16T08:00,2026-06-16T11:10,n/a (standard change),Post-change check attached,,Pass

@@ -1,0 +1,12 @@
+group,login,user_type,department,added_to_group,added_by,stated_reason
+MFA-Exempt-Legacy,svc-vulnscan,Service (person-type),Security,2023-05-22,nrahman,Scanner could not complete MFA
+MFA-Exempt-Legacy,kbrandt,Employee,IT,2023-05-24,kbrandt,MFA outage troubleshooting
+MFA-Exempt-Legacy,svc-confroom,Service (person-type),IT,2023-06-02,kbrandt,Conference-room display sign-in
+MFA-Exempt-Legacy,jsantos,Employee,Sales,2023-09-14,tjohnson,SMS delivery failures abroad
+MFA-Exempt-Legacy,lwright,Employee,Customer Operations,2024-01-08,tjohnson,Lost phone
+MFA-Exempt-Legacy,cmendez,Employee,Clinical Operations,2024-03-19,tjohnson,Shared clinic workstation
+MFA-Exempt-Legacy,abello,Employee,Clinical Operations,2024-03-19,tjohnson,Shared clinic workstation
+MFA-Exempt-Legacy,tbecker,Employee,Sales,2024-11-05,tjohnson,Lost phone
+MFA-Exempt-Legacy,isolberg,Employee,Marketing,2025-02-10,tjohnson,Accessibility accommodation (pending hardware key)
+MFA-Exempt-Legacy,mcole,Employee,People,2025-06-03,tjohnson,Lost phone
+MFA-Exempt-Legacy,htanaka,Employee,Customer Operations,2025-10-21,tjohnson,New phone not enrolled

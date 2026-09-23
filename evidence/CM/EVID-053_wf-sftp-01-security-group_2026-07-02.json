@@ -1,0 +1,33 @@
+{
+  "_evidence": {
+    "id": "EVID-053",
+    "description": "EC2 DescribeSecurityGroups for the wf-sftp-01 security group (synthetic; IPs are RFC 5737 documentation ranges)",
+    "collected": "2026-07-02T10:14:00-04:00",
+    "collected_by": "Assessor (SecurityAudit role)"
+  },
+  "GroupId": "sg-0a1b2c3d4e5f60789",
+  "GroupName": "wf-sftp-01-sg",
+  "VpcId": "vpc-0wcpprod",
+  "IpPermissions": [
+    {"IpProtocol": "tcp", "FromPort": 22, "ToPort": 22,
+     "IpRanges": [
+       {"CidrIp": "192.0.2.10/32", "Description": "Quarrystone SFTP egress"},
+       {"CidrIp": "192.0.2.11/32", "Description": "Quarrystone SFTP egress (secondary)"},
+       {"CidrIp": "198.51.100.20/32", "Description": "Lakemont file drop"},
+       {"CidrIp": "198.51.100.44/32", "Description": "Customer B file drop"},
+       {"CidrIp": "203.0.113.5/32", "Description": "Customer C file drop"},
+       {"CidrIp": "203.0.113.77/32", "Description": "Customer D file drop"}
+     ]},
+    {"IpProtocol": "tcp", "FromPort": 3389, "ToPort": 3389,
+     "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "TEMP vendor support 5/19"}]}
+  ],
+  "security_hub_finding": {
+    "control": "Security groups should not allow unrestricted ingress to high-risk ports",
+    "severity": "HIGH",
+    "first_observed": "2026-05-20T02:11:00Z",
+    "workflow_status": "NEW (never triaged)",
+    "days_open_at_collection": 43
+  },
+  "related_change": "CHG-2026-0412 (emergency; no approval recorded; never reverted)",
+  "windows_security_log_review": "Event ID 4624 LogonType 10 (RemoteInteractive), 2026-05-19 to 2026-07-02: 1 logon from the vendor support session IP on 2026-05-19; 0 from any other external address. 3,412 failed logons (4625) from 211 distinct external IPs (internet brute-force noise), none successful."
+}

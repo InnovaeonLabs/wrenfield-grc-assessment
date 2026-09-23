@@ -1,0 +1,21 @@
+{
+  "_evidence": {
+    "id": "EVID-067",
+    "description": "Audit log retention after remediation (POAM-008 closure evidence; synthetic)",
+    "collected": "2026-09-12",
+    "changes": ["CHG-2026-0702 (S3 lifecycle)", "CHG-2026-0715 (CloudWatch -> Firehose -> log-archive)", "CHG-2026-0716 (SIEM cold archive)"]
+  },
+  "sources": [
+    {"source": "CloudTrail -> s3://wcp-log-archive-cloudtrail", "setting": "Transition to Glacier Instant Retrieval at 90 days; Expiration at 400 days; Object Lock (compliance) 400 days", "meets_12_months": true},
+    {"source": "Application PHI-access audit", "setting": "CloudWatch 90 days (searchable) + subscription filter -> Firehose -> s3://wcp-log-archive-appaudit (400 days, Object Lock)", "meets_12_months": true},
+    {"source": "EKS audit", "setting": "Same pipeline as application audit", "meets_12_months": true},
+    {"source": "SIEM", "setting": "Hot 90 days (searchable) + cold archive 400 days (Athena-queryable)", "meets_12_months": true},
+    {"source": "Aurora activity logs", "setting": "Same pipeline as application audit", "meets_12_months": true}
+  ],
+  "assessor_tests": [
+    {"test": "Oldest CloudTrail object present after the old 180-day rule would have deleted it", "result": "Object dated 2026-03-20 present on 2026-09-17 (181 days)", "pass": true},
+    {"test": "Attempt to delete an archived object with the SRE admin role", "result": "AccessDenied (Object Lock compliance mode)", "pass": true},
+    {"test": "Query app-audit archive for a known PHI view event from 2026-08-28 via Athena", "result": "Event returned with user, patient ID, timestamp", "pass": true}
+  ],
+  "limitation": "A 12-month retention can only be fully demonstrated after 12 months elapse. Closure is based on configuration plus early indicators; the FY27 assessment re-tests the oldest-record date."
+}

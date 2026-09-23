@@ -1,0 +1,400 @@
+# Enterprise cybersecurity risk register (scored with RSK-MTH-001).
+# inherent = no controls; current = existing controls AS TESTED at fieldwork (July 2026);
+# residual = target after planned treatment. Every score carries a written rationale.
+risks:
+- id: RISK-001
+  title: Privileged cloud or identity admin account misused or compromised
+  asset: AWS wcp-prod admin plane, Okta tenant, GitHub org
+  threat: External actor (phishing, session-token theft) or malicious/negligent insider
+  vulnerability: Excess admin grants; admin performed from daily-use accounts; no JIT elevation
+  description: An attacker phishes or steals the session of a user holding production AdministratorAccess, Okta Super Admin, or GitHub owner, then exfiltrates PHI or destroys infrastructure.
+  existing_controls: Okta SSO+MFA for most users; CloudTrail and GuardDuty; MDR 24x7; Vault Lock on backups
+  inherent: [4, 5]
+  current: [3, 5]
+  residual: [2, 4]
+  rationale_inherent: "L4: identity-based intrusion is the dominant cloud attack path. I5: admin reaches all PHI (>50k records) and can cause an outage over 24h."
+  rationale_current: "L3: MFA and monitoring raise attacker effort, but 6 unjustified or daily-account admin assignments existed. I5 unchanged: any admin can still reach everything."
+  rationale_residual: "L2: -adm accounts with phishing-resistant MFA plus approval-gated JIT elevation. I4: time-boxed sessions and Vault Lock limit destructive impact and dwell time, but exfiltration during a session is still possible."
+  treatment: Mitigate
+  mitigation: Remove excess grants; -adm accounts; JIT elevation; GitHub owner cap (POAM-003)
+  owner: Samir Haddad (CTO)
+  target_date: 2026-11-05
+  status: Treatment in progress
+  controls: [AC-6, AC-6(2), AC-6(5), IA-2(1)]
+  findings: [FIND-003]
+  poams: [POAM-003]
+  review_date: 2026-09-18
+- id: RISK-002
+  title: Unauthorized access by former employees or contractors
+  asset: All in-scope systems, including Ledgerline and the vendor portal
+  threat: Former workforce member (disgruntled or careless), or an attacker using an orphaned account
+  vulnerability: Manual de-provisioning; local accounts outside SSO; contractor end dates not enforced
+  description: A departed worker's still-active account is used, by them or by an attacker, to access PHI or financial systems.
+  existing_controls: Okta deactivation by IT ticket; asset recovery at exit
+  inherent: [4, 4]
+  current: [4, 4]
+  residual: [2, 4]
+  rationale_inherent: "L4: turnover of about 38/year plus contractors, and orphaned accounts are a well-known misuse path. I4: AWS admin or PHI DB access affects 500–50,000+ records; limited by role mix."
+  rationale_current: "L4 unchanged: the control failed testing (2 of 19 not disabled, 1 post-termination sign-in, local admin account active 95 days) and earns no credit. I4."
+  rationale_residual: "L2: daily reconciliation job, contractor account expiry, and a local-account inventory, validated 7 of 7. I4 unchanged: a missed account could still reach sensitive data."
+  treatment: Mitigate
+  mitigation: HR-to-Okta reconciliation with auto-ticketing; contractor expiry; local-account cleanup (POAM-001, POAM-006)
+  owner: Alicia Moreno (CISO)
+  target_date: 2026-09-10
+  status: Treated (residual achieved; monitoring)
+  controls: [AC-2, AC-2(1), AC-2(3), PS-4, PS-7]
+  findings: [FIND-001, FIND-006]
+  poams: [POAM-001, POAM-006]
+  review_date: 2026-09-18
+- id: RISK-003
+  title: Account takeover through MFA gaps
+  asset: Okta and all federated systems
+  threat: Credential phishing, password spraying, reuse of breached credentials
+  vulnerability: MFA exemption group (9 humans incl. an Okta Super Admin); IAM user without MFA
+  description: An attacker obtains the password of an MFA-exempt account and signs in directly, inheriting that user's access, including identity administration.
+  existing_controls: Global MFA policy for 97% of users; replay-resistant authenticators; Okta ThreatInsight
+  inherent: [4, 5]
+  current: [3, 5]
+  residual: [2, 4]
+  rationale_inherent: "L4: phishing is the leading initial-access vector. I5: federation reaches AWS prod and PHI."
+  rationale_current: "L3: MFA covers 97%, a partial control. I5: an exempt Okta Super Admin could reach everything."
+  rationale_residual: "L2: no exemptions; phishing-resistant MFA for admins; token theft still possible. I4: least-privilege work narrows what one account reaches."
+  treatment: Mitigate
+  mitigation: Delete the exemption policy; enroll all users; phishing-resistant admin MFA; exception workflow (POAM-002)
+  owner: Alicia Moreno (CISO)
+  target_date: 2026-09-05
+  status: Treated (residual achieved; monitoring)
+  controls: [IA-2(1), IA-2(2), IA-2(8)]
+  findings: [FIND-002]
+  poams: [POAM-002]
+  review_date: 2026-09-18
+- id: RISK-004
+  title: Access creep from ineffective recertification
+  asset: Privileged and PHI entitlements across 9 systems
+  threat: Insider misuse; attacker leveraging over-privileged accounts
+  vulnerability: Rubber-stamp reviews; privileged systems out of review scope; no re-baseline on transfer
+  description: Users accumulate access beyond need over time, increasing the blast radius of any compromise or misuse.
+  existing_controls: Quarterly Okta app certification (limited scope)
+  inherent: [4, 3]
+  current: [4, 3]
+  residual: [2, 3]
+  rationale_inherent: "L4: fast growth, transfers, and contractors make creep near-certain without review. I3: creep usually adds read access; worst credible case is fewer than 500 records."
+  rationale_current: "L4: the review operated but was ineffective (100% approval, key systems excluded), so no credit. I3."
+  rationale_residual: "L2: full-scope campaigns with usage data and flagged items needing rationale. I3."
+  treatment: Mitigate
+  mitigation: Redesign certifications; transfer-triggered review (POAM-004)
+  owner: Alicia Moreno (CISO)
+  target_date: 2026-10-31
+  status: Treatment in progress
+  controls: [AC-6(7), AC-2, PS-5]
+  findings: [FIND-004, FIND-006]
+  poams: [POAM-004]
+  review_date: 2026-09-18
+- id: RISK-005
+  title: Inability to detect or investigate PHI access
+  asset: Audit logs (CloudTrail, application PHI-access audit, SIEM)
+  threat: Undetected insider or attacker activity; late-discovered breach
+  vulnerability: 90–180-day retention; inconsistent privileged-activity review
+  description: Misuse goes unnoticed, or a breach found months later cannot be scoped, forcing presumptive notification of large patient populations.
+  existing_controls: Comprehensive event logging (AU-2); immutable log archive (AU-9); MDR alerting (SI-4)
+  inherent: [3, 4]
+  current: [3, 4]
+  residual: [2, 3]
+  rationale_inherent: "L3: breaches are often discovered after 90+ days. I4: inability to scope means broad notification plus contract breach."
+  rationale_current: "L3: logging is strong, but retention is short and 35% of weekly reviews were missed or incomplete. I4."
+  rationale_residual: "L2: 400-day retention plus a backup reviewer. I3: records now exist to scope and limit notification."
+  treatment: Mitigate
+  mitigation: Extend retention (POAM-008, done); backup reviewer and escalation (POAM-009)
+  owner: Alicia Moreno (CISO)
+  target_date: 2026-10-31
+  status: Treatment in progress
+  controls: [AU-6, AU-11, AU-2, AU-9]
+  findings: [FIND-008, FIND-009]
+  poams: [POAM-008, POAM-009]
+  review_date: 2026-09-18
+- id: RISK-006
+  title: Exploitation of unremediated vulnerabilities
+  asset: Internet-facing services and container workloads
+  threat: Opportunistic exploitation of known CVEs; ransomware affiliates
+  vulnerability: 23% SLA misses; end-of-life runtimes; exception process unused
+  description: An attacker exploits a known, unpatched flaw in a production service or host to gain a foothold.
+  existing_controls: WAF; weekly authenticated scanning; container image scanning; EDR; MDR
+  inherent: [4, 5]
+  current: [3, 4]
+  residual: [2, 4]
+  rationale_inherent: "L4: exploitation of known vulnerabilities is a top initial-access vector. I5: PHI platform compromise."
+  rationale_current: "L3: scanning, WAF, and EDR are effective layers, but 6 items are open past SLA. I4: segmentation (private subnets) limits the blast radius from most workloads."
+  rationale_residual: "L2: SLA adherence with governed exceptions. I4: same architecture."
+  treatment: Mitigate
+  mitigation: Upgrade EOL runtimes; exception process; SLA reporting; tag enforcement (POAM-010)
+  owner: Grace Lindqvist (VP Engineering)
+  target_date: 2026-11-05
+  status: Treatment in progress
+  controls: [RA-5, SI-2, CM-8]
+  findings: [FIND-010]
+  poams: [POAM-010]
+  review_date: 2026-09-18
+- id: RISK-007
+  title: Compromise of unsupported legacy components in the PHI path
+  asset: wf-sftp-01 (Windows 2012 R2), legacy-reports (PostgreSQL 11), notify-worker (Node 16)
+  threat: Exploitation of unpatchable flaws; ransomware
+  vulnerability: No vendor patches; host previously exposed via internet-facing RDP
+  description: An attacker exploits an unpatchable flaw on the legacy SFTP host, which holds the nightly full-PHI extract, and pivots or exfiltrates.
+  existing_controls: EDR; SFTP source allowlist; weekly scanning; SSM-only admin (after FIND-012 fix)
+  inherent: [4, 4]
+  current: [3, 4]
+  residual: [1, 4]
+  rationale_inherent: "L4: unsupported, internet-reachable Windows host. I4: a full-PHI extract sits there transiently (worst credible case is one night's file, bounded)."
+  rationale_current: "L3: RDP closed, allowlist and EDR in place, but no patches. I4."
+  rationale_residual: "L1: components decommissioned (Avoid). I4 kept, because the managed-transfer replacement still moves the same data."
+  treatment: Avoid
+  mitigation: Decommission wf-sftp-01 and legacy-reports; upgrade notify-worker (POAM-011)
+  owner: Samir Haddad (CTO)
+  target_date: 2026-12-15
+  status: Treatment in progress (delayed)
+  controls: [SA-22, SC-7, CM-6, SI-2]
+  findings: [FIND-011, FIND-012]
+  poams: [POAM-011, POAM-012]
+  review_date: 2026-09-18
+- id: RISK-008
+  title: Failed or slow recovery from ransomware or data corruption
+  asset: wcp-core-db and WCP services
+  threat: Ransomware; destructive insider; data corruption
+  vulnerability: Restore never tested (at fieldwork); contingency plan untested
+  description: A destructive event forces recovery, and recovery takes longer than RTO or loses data because the process was never exercised.
+  existing_controls: PITR (35 days); cross-region, cross-account backups with Vault Lock; BC/DR plan
+  inherent: [3, 5]
+  current: [2, 5]
+  residual: [2, 4]
+  rationale_inherent: "L3: healthcare ransomware frequency. I5: outage over 24h for clinical workflows."
+  rationale_current: "L2: strong, immutable backups reduce the chance of an unrecoverable event. I5: recovery time was unproven."
+  rationale_residual: "L2. I4: restore proven at 3h41m (within the 4h RTO); a full contingency exercise is pending (POAM-014)."
+  treatment: Mitigate
+  mitigation: Semi-annual restore tests (POAM-013, done); CP exercise (POAM-014)
+  owner: Samir Haddad (CTO)
+  target_date: 2026-11-15
+  status: Treatment in progress
+  controls: [CP-2, CP-4, CP-9, CP-9(1)]
+  findings: [FIND-013, FIND-014]
+  poams: [POAM-013, POAM-014]
+  review_date: 2026-09-18
+- id: RISK-009
+  title: Delayed or ineffective response to a major incident
+  asset: Incident response capability and notification obligations
+  threat: Major incident (ransomware, large PHI breach) stressing untested processes
+  vulnerability: No IR exercise in 21 months; SHCA 24h path never rehearsed
+  description: During a major incident, unclear roles or notification steps delay containment or cause a missed contractual or regulatory notification deadline.
+  existing_controls: IRP-005 (current); 24x7 MDR; incidents in H1 handled well (IR-4 satisfied)
+  inherent: [3, 4]
+  current: [3, 4]
+  residual: [2, 3]
+  rationale_inherent: "L3: at least one significant incident per year is plausible. I4: missed notification means a contract breach and regulatory scrutiny."
+  rationale_current: "L3: good day-to-day handling, but major-incident paths are untested. I4."
+  rationale_residual: "L2: rehearsed plan with the SHCA step. I3: faster, coordinated response limits impact."
+  treatment: Mitigate
+  mitigation: Ransomware tabletop and plan update (POAM-014)
+  owner: Alicia Moreno (CISO)
+  target_date: 2026-11-15
+  status: Treatment in progress
+  controls: [IR-3, IR-4, IR-6, IR-8]
+  findings: [FIND-014]
+  poams: [POAM-014]
+  review_date: 2026-09-18
+- id: RISK-010
+  title: PHI exposure through the analytics vendor (Quarrystone)
+  asset: Nightly full-PHI extract (about 410k patients) processed by Quarrystone and its subcontractors
+  threat: Vendor or subcontractor breach; unauthorized offshore access; delayed breach notice
+  vulnerability: Offshore subcontractor access; 30-day notice term; excess data fields; stale pentest
+  description: A breach at Quarrystone or its offshore subcontractor exposes Wrenfield PHI, and notice arrives too late for Wrenfield to meet 24h or 5-day obligations.
+  existing_controls: BAA; SOC 2 Type II (unqualified); encryption in transit and at rest; interim suspension of offshore access (2026-07-24)
+  inherent: [4, 5]
+  current: [3, 5]
+  residual: [2, 4]
+  rationale_inherent: "L4: third-party breaches are frequent in healthcare, and an undisclosed offshore party was present. I5: >50k records plus SHCA contract loss."
+  rationale_current: "L3: vendor controls are generally mature (SOC 2, encryption) and offshore access is suspended, but the contract terms are unchanged. I5."
+  rationale_residual: "L2: contractual US-only with technical enforcement, 24h notice, and current pentest. I4: minimized extract (no contact details or free text) reduces the records and sensitivity exposed."
+  treatment: Mitigate
+  mitigation: Contract amendment; data minimization; pentest and retest; monitoring plan (POAM-016). Transfer (partial) through cyber insurance and vendor indemnity.
+  owner: Dr. Miriam Castell (VP Clinical Analytics)
+  target_date: 2026-11-05
+  status: Treatment in progress
+  controls: [SA-9, SR-6, CA-3]
+  findings: [FIND-016, FIND-015]
+  poams: [POAM-016, POAM-015]
+  review_date: 2026-09-18
+- id: RISK-011
+  title: Software or vendor supply-chain compromise
+  asset: CI/CD pipeline, open-source dependencies, vendor integrations
+  threat: Malicious dependency or compromised vendor update or integration
+  vulnerability: No C-SCRM plan; no fourth-party inventory; 5 vendors overdue for review
+  description: A compromised dependency or vendor integration introduces malicious code or access into WCP.
+  existing_controls: Dependency scanning; branch protection and required review; OIDC deploy (no static keys); pinned base images
+  inherent: [3, 5]
+  current: [3, 4]
+  residual: [2, 4]
+  rationale_inherent: "L3: supply-chain attacks are increasing. I5: code execution in the PHI platform."
+  rationale_current: "L3: good pipeline hygiene, but no program-level supply chain risk management. I4: OIDC and least-privilege deploy roles limit what a compromised pipeline can reach."
+  rationale_residual: "L2: C-SCRM plan, current vendor reviews, fourth-party visibility. I4."
+  treatment: Mitigate
+  mitigation: C-SCRM plan; clear the vendor backlog; fourth-party inventory (POAM-015)
+  owner: Beth Kowalski (Vendor Management Lead)
+  target_date: 2027-02-03
+  status: Treatment in progress
+  controls: [SR-2, SR-6, SA-9]
+  findings: [FIND-015]
+  poams: [POAM-015]
+  review_date: 2026-09-18
+- id: RISK-012
+  title: Cloud misconfiguration exposing PHI or admin services
+  asset: AWS wcp-prod network and storage configuration
+  threat: Opportunistic internet scanning; misconfiguration exploited by attackers
+  vulnerability: Console changes bypass IaC; CSPM findings not routed to on-call
+  description: A manual misconfiguration (an open port, a public resource) exposes PHI or an admin interface to the internet.
+  existing_controls: Org-wide S3 Block Public Access (SCP); encryption by default; Security Hub CIS checks; IaC for most resources
+  inherent: [4, 5]
+  current: [2, 5]
+  residual: [2, 4]
+  rationale_inherent: "L4: misconfiguration is a leading cloud breach cause. I5: public PHI exposure."
+  rationale_current: "L2: strong preventive guardrails for data stores (block public access, encryption). The observed exposure was an admin port, not data. I5: remains the worst credible case."
+  rationale_residual: "L2: CSPM routed to on-call plus SCP guardrails on admin ports. I4: guardrails prevent the most severe (data-store) exposures."
+  treatment: Mitigate
+  mitigation: Route CSPM to on-call; admin-port guardrail; emergency change auto-revert (POAM-012, POAM-018)
+  owner: Tomasz Wierzbicki (Director, Platform Engineering)
+  target_date: 2026-09-11
+  status: Treatment in progress
+  controls: [CM-2, CM-6, SC-7, SC-28]
+  findings: [FIND-012]
+  poams: [POAM-012]
+  review_date: 2026-09-18
+- id: RISK-013
+  title: Fraudulent vendor payment through an SoD conflict
+  asset: Ledgerline vendor master and payments
+  threat: Insider fraud or coerced insider (business email compromise)
+  vulnerability: One user holds vendor-master maintenance and payment approval (≤ $25k)
+  description: A user alters vendor bank details and approves payments to an attacker-controlled account.
+  existing_controls: "Compensating: monthly vendor-master change report reviewed by the Controller; callback verification of bank-detail changes; payments over $25k need CFO approval"
+  inherent: [3, 3]
+  current: [2, 3]
+  residual: [2, 3]
+  rationale_inherent: "L3: BEC-driven bank-change fraud is common. I3: bounded by the $25k approval limit and monthly detection (worst credible case $100k–500k over a month)."
+  rationale_current: "L2: the compensating review operated 6 of 6 months, plus callbacks. I3."
+  rationale_residual: "L2. I3: accepted with the compensating control until the roles are split."
+  treatment: Accept
+  mitigation: RACC-001 risk acceptance with compensating control; split roles at AP backfill (POAM-007)
+  owner: Raymond Okafor (CFO)
+  target_date: 2027-03-31
+  status: Accepted (RACC-001, expires 2027-03-31)
+  controls: [AC-5]
+  findings: [FIND-007]
+  poams: [POAM-007]
+  review_date: 2026-09-18
+- id: RISK-014
+  title: Unauthorized or untested changes cause an outage or security regression
+  asset: WCP production configuration
+  threat: Human error under time pressure; unreviewed emergency changes
+  vulnerability: Emergency and console change paths lack enforced approval and revert
+  description: An emergency or console change is made without review and introduces an outage or exposure (FIND-012 is a realized example).
+  existing_controls: PR review and CI for code and IaC; protected deploy environments
+  inherent: [3, 4]
+  current: [2, 4]
+  residual: [2, 3]
+  rationale_inherent: "L3: frequent changes. I4: multi-hour outage or exposure."
+  rationale_current: "L2: 22 of 25 sampled changes were compliant; the pipeline is strong. I4: realized once (FIND-012)."
+  rationale_residual: "L2. I3: console-change alerting and auto-revert shorten the exposure window."
+  treatment: Mitigate
+  mitigation: Retro-approval automation; console-change alerts (POAM-018)
+  owner: Tomasz Wierzbicki (Director, Platform Engineering)
+  target_date: 2026-09-11
+  status: Treatment in progress (overdue)
+  controls: [CM-3]
+  findings: [FIND-018]
+  poams: [POAM-018]
+  review_date: 2026-09-18
+- id: RISK-015
+  title: Phishing and social engineering of the workforce
+  asset: Workforce identities and endpoints
+  threat: Phishing, help-desk social engineering, BEC
+  vulnerability: 9% training non-completion (at fieldwork); human error
+  description: A user is tricked into disclosing credentials, approving a push, or sending PHI or payments to an attacker.
+  existing_controls: MFA with number challenge; email security; phishing simulations (4.3% click rate); help-desk identity verification; EDR
+  inherent: [5, 4]
+  current: [3, 3]
+  residual: [3, 3]
+  rationale_inherent: "L5: phishing attempts are constant. I4: credential compromise leading to PHI access."
+  rationale_current: "L3: layered controls (MFA, filtering, EDR) catch most attempts (INC-2026-0012 shows MFA blocked a successful phish). I3: least privilege and monitoring limit impact."
+  rationale_residual: "L3 and I3 unchanged: training completion is a hygiene fix and does not move the risk. Accepted as within tolerance (Moderate) with an ongoing awareness program."
+  treatment: Accept
+  mitigation: Training enforcement (POAM-019); continue simulations and phishing-resistant MFA rollout
+  owner: Denise Yamamoto (Director of People)
+  target_date: 2026-09-30
+  status: Accepted within tolerance (monitor)
+  controls: [AT-2, AT-3, IA-2(8)]
+  findings: [FIND-019]
+  poams: [POAM-019]
+  review_date: 2026-09-18
+- id: RISK-016
+  title: Loss of SHCA contract or customer trust from unresolved compliance gaps
+  asset: SHCA C3P contract ($23.4M) and top customer relationships (Lakemont)
+  threat: Contract cure notice or termination; customer non-renewal after security review
+  vulnerability: Outdated SSP; open High POA&M items near go-live; vendor conditions unmet
+  description: SHCA or Lakemont judges Wrenfield's remediation insufficient, delaying go-live or leading to termination or non-renewal.
+  existing_controls: This assessment and the POA&M; executive sponsorship; customer communication plan
+  inherent: [3, 5]
+  current: [3, 4]
+  residual: [2, 3]
+  rationale_inherent: "L3: 7 High findings against a 90-day rule. I5: loss of a $23.4M contract or a customer worth 21% of ARR."
+  rationale_current: "L3: strong remediation momentum (7 of 19 closed in 6 weeks), but 3 High items are open with dependencies. I4: SHCA would more likely require a cure plan than terminate."
+  rationale_residual: "L2: High items closed before 2027-01-11, and the SSP is accurate. I3."
+  treatment: Mitigate
+  mitigation: Close High POA&M items before go-live; SSP rewrite (POAM-017); proactive customer update
+  owner: Elena Marsh (CEO)
+  target_date: 2026-12-15
+  status: Treatment in progress
+  controls: [PL-2, CA-5, CA-7]
+  findings: [FIND-017]
+  poams: [POAM-017]
+  review_date: 2026-09-18
+- id: RISK-017
+  title: Service-account credential theft
+  asset: Non-human accounts with static credentials (SFTP push, reporting ETL, vendor logins)
+  threat: Credential theft from hosts or repositories; vendor-side compromise
+  vulnerability: Keys 1.5–3 years old; no owners; a shared vendor login
+  description: A stolen long-lived service credential grants quiet, unmonitored access to PHI extracts.
+  existing_controls: Secrets Manager rotation for DB credentials; OIDC for CI/CD
+  inherent: [3, 4]
+  current: [3, 4]
+  residual: [1, 4]
+  rationale_inherent: "L3: static keys leak through repositories, hosts, and backups. I4: PHI extract access."
+  rationale_current: "L3: modern patterns exist, but the legacy exceptions carry the risk. I4."
+  rationale_residual: "L1: federation and rotation with owners and quarterly attestation. I4: a compromised service identity would still reach the same data."
+  treatment: Mitigate
+  mitigation: Owners, rotation or federation, and named vendor accounts (POAM-005)
+  owner: Alicia Moreno (CISO)
+  target_date: 2026-09-12
+  status: Treated (residual achieved; monitoring)
+  controls: [IA-5, AC-2]
+  findings: [FIND-005]
+  poams: [POAM-005]
+  review_date: 2026-09-18
+- id: RISK-018
+  title: Loss or theft of an endpoint containing PHI
+  asset: About 362 workforce laptops
+  threat: Theft, loss in transit
+  vulnerability: Mobile workforce (60% remote)
+  description: A lost or stolen laptop exposes PHI stored locally.
+  existing_controls: Full-disk encryption (100%); MDM remote wipe; policy against storing PHI locally, with DLP; EDR
+  inherent: [4, 3]
+  current: [2, 2]
+  residual: [2, 2]
+  rationale_inherent: "L4: several devices are lost each year. I3: a local PHI cache could hold under 500 records."
+  rationale_current: "L2: devices are still lost (INC-2026-0063), but FDE means a lost encrypted device is not a breach of unsecured PHI. I2: exposure is internal-only and non-reportable when encryption is verified."
+  rationale_residual: "Unchanged; within appetite."
+  treatment: Accept
+  mitigation: None beyond current controls; annual review
+  owner: Kevin Brandt (IT Manager)
+  target_date: 2027-07-15
+  status: Accepted within appetite (Low)
+  controls: [SC-28, MP-6]
+  findings: []
+  poams: []
+  review_date: 2026-09-18

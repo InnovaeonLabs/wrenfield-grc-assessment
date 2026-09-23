@@ -1,0 +1,4 @@
+rule_id,system,access_a,access_b,risk
+SOD-01,Ledgerline,Vendor Master Maintain,Payment Approver (<= $25k),One person could create a fictitious vendor (or change a vendor's bank details) and approve payment to it
+SOD-02,Ledgerline,AP Clerk,Payment Approver (<= $25k),One person could enter and approve their own invoices
+SOD-03,*,Okta:Super Administrator,Security tooling (SIEM):SIEM Administrator,One person could create an identity and suppress the logs that would reveal it

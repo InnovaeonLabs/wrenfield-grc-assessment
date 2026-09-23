@@ -1,0 +1,439 @@
+# Plan of Action & Milestones. POAM-nnn <-> FIND-nnn. Open date = POA&M baseline (2026-08-07) unless opened
+# earlier for immediate remediation. SLA from open date: Critical 30 / High 90 / Moderate 180 / Low 365.
+# original_target never changes; current_target may change only with a documented, approved reason.
+# Milestones completed before the open date are interim containment actions taken during fieldwork.
+poam:
+- id: POAM-001
+  finding: FIND-001
+  weakness: Terminated workforce retained active access (SSO, local AWS IAM, vendor portal)
+  root_cause: Manual HR-email-to-IT ticketing with no automated trigger; local accounts not in offboarding checklist; contractor end dates not enforced
+  corrective_action: Disable identified accounts; implement daily HR-to-Okta/AWS/portal reconciliation with auto-ticketing; update SOP-IAM-02 with a local-account checklist and 24h SLA
+  owner: Nadia Rahman (IAM Engineer)
+  resources: "IAM Engineer (about 60h); Okta Workflows (existing license); HR ops (4h)"
+  open_date: 2026-08-07
+  original_target: 2026-09-11
+  current_target: 2026-09-11
+  status: Closed
+  milestones:
+  - {id: M1, desc: "Disable 4 identified accounts (AR-EX-01..04); investigate post-termination sign-in (INC-2026-0117)", due: 2026-07-10, status: Done, completed: 2026-07-09}
+  - {id: M2, desc: "Deploy daily HR-to-Okta/AWS IAM/portal reconciliation job with auto-ticketing", due: 2026-08-21, status: Done, completed: 2026-08-03}
+  - {id: M3, desc: "Update SOP-IAM-02 (24h SLA, local-account checklist, vendor portals); train IT", due: 2026-08-28, status: Done, completed: 2026-08-26}
+  - {id: M4, desc: "Assessor validation: re-perform termination test on all terminations since 2026-07-01 + 5 job runs", due: 2026-09-11, status: Done, completed: 2026-09-10}
+  dependencies: Okta Workflows connector to PeopleHub
+  validation_method: "Re-performance: tools/assessment_tests.py termination-validation (7 of 7 within 24h, 0 job exceptions); inspection of IAM credential report (break-glass only)"
+  closure_evidence: [EVID-061, EVID-062, EVID-064, EVID-078]
+  validated_by: Lead assessor
+  closure_date: 2026-09-10
+  residual_risk: "Moderate (RISK-002 residual L2 x I4 = 8)"
+  notes: "Operating sample is small (7); full re-test scheduled for FY27."
+- id: POAM-002
+  finding: FIND-002
+  weakness: MFA exemption group and AWS IAM user without MFA
+  root_cause: Exceptions granted without workflow, expiry, or review; legacy IAM users bypass Okta policy
+  corrective_action: Delete exemption policy and group; enroll all members (hardware key accommodation); convert service users to integrations; require phishing-resistant MFA for admin apps; delete non-break-glass IAM users; add time-bound exception workflow
+  owner: Nadia Rahman (IAM Engineer)
+  resources: "IAM Engineer (about 30h); 12 FIDO2 keys (about $600)"
+  open_date: 2026-08-07
+  original_target: 2026-09-05
+  current_target: 2026-09-05
+  status: Closed
+  milestones:
+  - {id: M1, desc: "Enroll 9 human members in MFA (accommodation for 1)", due: 2026-08-28, status: Done, completed: 2026-08-27}
+  - {id: M2, desc: "Convert svc-vulnscan and svc-confroom to non-interactive integrations", due: 2026-08-28, status: Done, completed: 2026-08-27}
+  - {id: M3, desc: "Delete Legacy Exemption Policy and group; phishing-resistant policy on admin apps (CHG-2026-0731)", due: 2026-09-01, status: Done, completed: 2026-08-28}
+  - {id: M4, desc: "Assessor validation: policy export, group lookup, password-only sign-in attempt, IAM credential report", due: 2026-09-05, status: Done, completed: 2026-09-05}
+  dependencies: Hardware key delivery for accessibility accommodation
+  validation_method: "Inspection of Okta policy export and IAM credential report; re-performance of password-only sign-in with a test account (denied)"
+  closure_evidence: [EVID-063, EVID-064]
+  validated_by: Lead assessor
+  closure_date: 2026-09-05
+  residual_risk: "Moderate (RISK-003 residual L2 x I4 = 8)"
+  notes: ""
+- id: POAM-003
+  finding: FIND-003
+  weakness: Excessive privileged access; administration from daily-use accounts
+  root_cause: Privileged grants without expiry; no privileged-access review before 2026; separate-admin policy never rolled out
+  corrective_action: Remove excess grants; issue -adm accounts with phishing-resistant MFA; implement approval-gated JIT elevation for AWS admin; enforce GitHub owner cap
+  owner: Tomasz Wierzbicki (Director, Platform Engineering)
+  resources: "SRE (about 80h); IAM Engineer (about 20h)"
+  open_date: 2026-08-07
+  original_target: 2026-11-05
+  current_target: 2026-11-05
+  status: In Progress
+  milestones:
+  - {id: M1, desc: "Remove excess grants: AR-EX-05/06/07/08/09", due: 2026-08-21, status: Done, completed: 2026-08-20}
+  - {id: M2, desc: "Issue -adm accounts for remaining admins; remove admin from daily accounts (AR-EX-10)", due: 2026-09-30, status: In Progress, completed: ""}
+  - {id: M3, desc: "Implement JIT elevation (approval + 4h auto-expiry) for AWS AdministratorAccess", due: 2026-10-23, status: In Progress, completed: ""}
+  - {id: M4, desc: "Assessor validation: assignment export + live elevation record with CloudTrail evidence", due: 2026-11-05, status: Not Started, completed: ""}
+  dependencies: IAM Identity Center permission-set redesign; EVID-071 returned as Rework Required (design-only evidence)
+  validation_method: "Inspection of Identity Center/GitHub/Okta admin exports; re-performance: request and observe a JIT elevation, confirm auto-expiry in CloudTrail"
+  closure_evidence: [EVID-075, EVID-076, EVID-077, EVID-071]
+  validated_by: ""
+  closure_date: ""
+  residual_risk: "Moderate target (RISK-001 residual L2 x I4 = 8); currently High"
+  notes: "Evidence EVID-071 rejected: a screenshot of an approval screen shows the design, not that elevation operates."
+- id: POAM-004
+  finding: FIND-004
+  weakness: Access recertification incomplete in scope and ineffective in operation
+  root_cause: Campaign scope limited to Okta app assignments; no usage data or risk flags for reviewers; no transfer trigger
+  corrective_action: Redesign certification to cover all privileged and PHI entitlements on 9 systems with usage and baseline flags; require rationale for approving flagged items; transfer-triggered re-certification
+  owner: Alicia Moreno (CISO)
+  resources: "GRC Manager (about 40h); IAM Engineer (about 30h); review_engine.py reused as the flagging logic"
+  open_date: 2026-08-07
+  original_target: 2026-10-31
+  current_target: 2026-10-31
+  status: In Progress
+  milestones:
+  - {id: M1, desc: "Revoke duplicate, transferred, and inactive access (AR-EX-12/13/14)", due: 2026-07-17, status: Done, completed: 2026-07-14}
+  - {id: M2, desc: "Add transfer trigger to SOP-IAM-02 (re-baseline access within 5 business days)", due: 2026-08-28, status: Done, completed: 2026-08-25}
+  - {id: M3, desc: "Run Q3 privileged certification on new design (EVID-074)", due: 2026-09-30, status: In Progress, completed: ""}
+  - {id: M4, desc: "Assessor validation: review Q3 campaign decisions for flagged items and rationale quality", due: 2026-10-31, status: Not Started, completed: ""}
+  dependencies: Q3 campaign completion by reviewers
+  validation_method: "Inspection of campaign export (population completeness vs entitlement exports; % flagged items with rationale; removals actioned)"
+  closure_evidence: [EVID-061, EVID-074]
+  validated_by: ""
+  closure_date: ""
+  residual_risk: "Moderate (RISK-004 residual L2 x I3 = 6)"
+  notes: ""
+- id: POAM-005
+  finding: FIND-005
+  weakness: Service/shared accounts without owners, stale credentials, shared vendor login
+  root_cause: Service register lacked owner/rotation fields; vendor access set up for convenience
+  corrective_action: Assign owners; rotate or federate stale credentials; named federated accounts for MDR analysts; add owner/rotation fields and quarterly attestation to the register
+  owner: Nadia Rahman (IAM Engineer)
+  resources: "IAM Engineer (about 20h); SRE (about 16h)"
+  open_date: 2026-08-07
+  original_target: 2026-09-12
+  current_target: 2026-09-12
+  status: Closed
+  milestones:
+  - {id: M1, desc: "Assign owners to all 13 non-human accounts; add fields to register", due: 2026-08-21, status: Done, completed: 2026-08-18}
+  - {id: M2, desc: "Rotate svc-quarrystone-sftp key (AR-EX-18)", due: 2026-08-28, status: Done, completed: 2026-08-25}
+  - {id: M3, desc: "Replace ironpeak-soc shared login with 6 named federated accounts (AR-EX-20)", due: 2026-09-04, status: Done, completed: 2026-08-31}
+  - {id: M4, desc: "Migrate svc-reporting-etl to IAM role; delete IAM user (AR-EX-19)", due: 2026-09-11, status: Done, completed: 2026-09-03}
+  - {id: M5, desc: "Assessor validation: register re-test (owner + credential age) and IAM credential report", due: 2026-09-12, status: Done, completed: 2026-09-12}
+  dependencies: Ironpeak MDR SSO onboarding
+  validation_method: "Re-performance of the review engine's service-account checks on the updated register; inspection of EDR console user list (no shared logins)"
+  closure_evidence: [EVID-065, EVID-064]
+  validated_by: Lead assessor
+  closure_date: 2026-09-12
+  residual_risk: "Low (RISK-017 residual L1 x I4 = 4)"
+  notes: ""
+- id: POAM-006
+  finding: FIND-006
+  weakness: Contractor access not bound to engagement term and scope
+  root_cause: Contract end dates not enforced in Okta; access requests not checked against SOW scope
+  corrective_action: Okta account expiry = SOW end date for all contractors; SOW scope required on contractor access requests; monthly contractor roster to sponsors
+  owner: Sofia Ricci (Engineering Manager)
+  resources: "IAM Engineer (about 8h); Vendor Mgmt (about 4h)"
+  open_date: 2026-08-07
+  original_target: 2026-09-10
+  current_target: 2026-09-10
+  status: Closed
+  milestones:
+  - {id: M1, desc: "Execute SOW amendment for awu; revoke out-of-scope PHI access (AR-EX-15/16)", due: 2026-07-24, status: Done, completed: 2026-07-22}
+  - {id: M2, desc: "Set Okta expiry for all contractor accounts; add SOW-scope field to access request form", due: 2026-08-28, status: Done, completed: 2026-08-24}
+  - {id: M3, desc: "Assessor validation: expiry report vs SOW register", due: 2026-09-10, status: Done, completed: 2026-09-08}
+  dependencies: ""
+  validation_method: "Inspection: Okta expiry dates reconciled to SOW register for all active contractors (29 of 29)"
+  closure_evidence: [EVID-066]
+  validated_by: Lead assessor
+  closure_date: 2026-09-10
+  residual_risk: "Moderate (RISK-002 residual)"
+  notes: ""
+- id: POAM-007
+  finding: FIND-007
+  weakness: SoD conflict (vendor master + payment approval)
+  root_cause: Finance team reduced to 3 after AP departure
+  corrective_action: "Formal risk acceptance (RACC-001) with compensating monthly independent review; split roles when AP role is backfilled"
+  owner: Laura Brenneman (Controller)
+  resources: "Controller (2h/month for compensating review)"
+  open_date: 2026-08-07
+  original_target: 2027-03-31
+  current_target: 2027-03-31
+  status: Risk Accepted
+  milestones:
+  - {id: M1, desc: "Sign RACC-001 (CFO as risk owner; CISO concurrence)", due: 2026-08-14, status: Done, completed: 2026-08-12}
+  - {id: M2, desc: "Continue monthly compensating review (evidence each month to GRC)", due: 2027-03-31, status: In Progress, completed: ""}
+  - {id: M3, desc: "Split roles at AP backfill (requisition open)", due: 2027-03-31, status: Not Started, completed: ""}
+  dependencies: AP Specialist hire
+  validation_method: "Monthly: GRC inspects signed vendor-master change report; at expiry: re-test role assignments"
+  closure_evidence: [EVID-060, EVID-015]
+  validated_by: ""
+  closure_date: ""
+  residual_risk: "Moderate, accepted (RISK-013 residual L2 x I3 = 6)"
+  notes: "Accepted risks stay on the POA&M until expiry so they are re-decided, not forgotten."
+- id: POAM-008
+  finding: FIND-008
+  weakness: Audit log retention below 12-month requirement
+  root_cause: 2022 cost-driven retention settings never revisited after contractual requirements emerged
+  corrective_action: "400-day lifecycle with tiering (hot 90d searchable); archive application audit logs to log-archive; quarterly oldest-record check"
+  owner: Owen Castillo (Security Engineer)
+  resources: "Security Engineer (about 16h); storage cost about $180/month"
+  open_date: 2026-08-07
+  original_target: 2026-09-15
+  current_target: 2026-09-15
+  status: Closed
+  milestones:
+  - {id: M1, desc: "Change S3 lifecycle to 400-day expiry with Glacier IR after 90d (CHG-2026-0702)", due: 2026-08-21, status: Done, completed: 2026-08-19}
+  - {id: M2, desc: "Subscribe app-audit CloudWatch logs to log-archive (Firehose)", due: 2026-08-28, status: Done, completed: 2026-08-27}
+  - {id: M3, desc: "Assessor validation: config inspection + oldest-object query", due: 2026-09-15, status: Done, completed: 2026-09-12}
+  dependencies: ""
+  validation_method: "Inspection of lifecycle/subscription config; test: oldest CloudTrail object (2026-03-20, 182 days) still present after old 180-day rule would have expired it"
+  closure_evidence: [EVID-067]
+  validated_by: Lead assessor
+  closure_date: 2026-09-15
+  residual_risk: "Moderate (RISK-005 residual after POAM-009)"
+  notes: "Full 12-month retention can only be demonstrated over time; FY27 assessment re-tests."
+- id: POAM-009
+  finding: FIND-009
+  weakness: Weekly privileged-activity review missed 7 of 26 weeks; 2 incomplete
+  root_cause: Single reviewer; no escalation; scope excluded local IAM users
+  corrective_action: Backup reviewer (MDR under SOW change); auto-created weekly ticket with 5-day escalation; expand scope to all privileged principals; disposition required per flag
+  owner: Owen Castillo (Security Engineer)
+  resources: "MDR SOW change (about $1,500/month); Security Engineer (about 12h)"
+  open_date: 2026-08-07
+  original_target: 2026-09-15
+  current_target: 2026-09-15
+  status: In Progress
+  milestones:
+  - {id: M1, desc: "Expand SIEM report scope to all privileged principals incl. IAM users", due: 2026-08-21, status: Done, completed: 2026-08-14}
+  - {id: M2, desc: "Auto-create weekly review ticket with escalation to CISO at 5 business days", due: 2026-08-28, status: Done, completed: 2026-08-28}
+  - {id: M3, desc: "Execute MDR SOW change for backup reviewer", due: 2026-09-11, status: Delayed, completed: ""}
+  - {id: M4, desc: "Assessor validation: W27–W37 reviews (EVID-072)", due: 2026-09-15, status: Not Started, completed: ""}
+  dependencies: Procurement approval of MDR SOW change (pending CFO signature)
+  validation_method: "Test: all weeks since change performed within 5 days with dispositions; inspect escalation config"
+  closure_evidence: [EVID-072]
+  validated_by: ""
+  closure_date: ""
+  residual_risk: "Moderate (RISK-005 residual L2 x I3 = 6)"
+  notes: "Overdue since 2026-09-15; escalated to CISO 2026-09-16."
+- id: POAM-010
+  finding: FIND-010
+  weakness: 23% of Critical/High vulnerabilities exceeded SLA; exception process unused
+  root_cause: End-of-life runtimes block patching; no exception discipline; SLA not visible in engineering planning; 7% untagged assets
+  corrective_action: Upgrade notify-worker runtime; file exceptions with reachability analysis where justified; SLA dashboard in sprint planning; tag-policy SCP
+  owner: Grace Lindqvist (VP Engineering)
+  resources: "Engineering (about 3 sprint-weeks); Security Engineer (about 16h)"
+  open_date: 2026-08-07
+  original_target: 2026-11-05
+  current_target: 2026-11-05
+  status: In Progress
+  milestones:
+  - {id: M1, desc: "Submit VM-003 §7 exception for 2 notify-worker criticals with reachability analysis (CISO decision)", due: 2026-08-21, status: Done, completed: 2026-08-20}
+  - {id: M2, desc: "Upgrade notify-worker to supported Node.js LTS + current base image", due: 2026-09-30, status: In Progress, completed: ""}
+  - {id: M3, desc: "SLA-breach dashboard reviewed in weekly engineering leads meeting", due: 2026-09-15, status: Done, completed: 2026-09-09}
+  - {id: M4, desc: "Tag-policy SCP denying untagged EC2/EKS launches (OBS-02)", due: 2026-10-15, status: Not Started, completed: ""}
+  - {id: M5, desc: "Assessor validation: re-run SLA test on Q3 population", due: 2026-11-05, status: Not Started, completed: ""}
+  dependencies: FIND-011 (4 open breaches resolve only when legacy hosts are decommissioned)
+  validation_method: "Re-performance: tools/assessment_tests.py vulnsla on Q3 export (target: >= 95% within SLA, 0 open Critical past SLA without exception)"
+  closure_evidence: []
+  validated_by: ""
+  closure_date: ""
+  residual_risk: "Moderate (RISK-006 residual L2 x I4 = 8)"
+  notes: "CISO approved a 30-day exception for the 2 criticals (expires 2026-09-30) contingent on M2; consider SI-2(7) root cause analysis (OBS-04)."
+- id: POAM-011
+  finding: FIND-011
+  weakness: Unsupported components (Windows 2012 R2 SFTP host, PostgreSQL 11, Node.js 16) in PHI path
+  root_cause: Legacy integrations excluded from modernization; no lifecycle review for non-IaC assets
+  corrective_action: "Avoid: replace wf-sftp-01 with managed transfer (IaC, PGP + SFTP, vendor/customer keys); migrate legacy-reports to supported Aurora replica; upgrade notify-worker (with POAM-010); maintain compensating controls until then"
+  owner: Tomasz Wierzbicki (Director, Platform Engineering)
+  resources: "SRE (about 120h); Customer Ops coordination with 4 customers + Quarrystone; managed transfer service about $400/month"
+  open_date: 2026-08-07
+  original_target: 2026-11-05
+  current_target: 2026-12-15
+  target_change_reason: "M2 slipped: 2 of 4 customers have not completed partner key exchange. SLA extension approved by CTO and CISO 2026-09-12 with compensating controls (EDR, allowlist, SSM-only admin, weekly scans); still ahead of SHCA go-live 2027-01-11."
+  status: Delayed
+  milestones:
+  - {id: M1, desc: "Stand up managed transfer service (IaC) and test with Quarrystone", due: 2026-08-28, status: Done, completed: 2026-08-26}
+  - {id: M2, desc: "Cut over Quarrystone + 4 customers; decommission wf-sftp-01", due: 2026-09-15, status: Delayed, completed: ""}
+  - {id: M3, desc: "Migrate legacy-reports to Aurora read replica; decommission EC2 host", due: 2026-10-30, status: In Progress, completed: ""}
+  - {id: M4, desc: "Assessor validation: inventory shows 0 unsupported components; hosts terminated", due: 2026-12-15, status: Not Started, completed: ""}
+  dependencies: Customer partner-side key exchange (2 of 4 pending); POAM-010 M2 for notify-worker
+  validation_method: "Inspection of EOL inventory and AWS Config (instances terminated); re-run vulnsla to confirm legacy-host findings closed"
+  closure_evidence: []
+  validated_by: ""
+  closure_date: ""
+  residual_risk: "Low target (RISK-007 residual L1 x I4 = 4); currently High"
+  notes: "Treatment is Avoid (decommission) rather than patching, which is not possible."
+- id: POAM-012
+  finding: FIND-012
+  weakness: RDP open to 0.0.0.0/0 on wf-sftp-01; CSPM High finding untriaged 43 days
+  root_cause: Console change path bypasses IaC/approval; Security Hub findings not routed to on-call
+  corrective_action: Remove rule; route Security Hub High findings to on-call with 7-day SLA; SCP guardrail blocking 0.0.0.0/0 on admin ports
+  owner: Tomasz Wierzbicki (Director, Platform Engineering)
+  resources: "SRE (about 12h)"
+  open_date: 2026-07-02
+  original_target: 2026-07-10
+  current_target: 2026-07-10
+  status: Closed
+  milestones:
+  - {id: M1, desc: "Remove 3389 ingress rule; confirm SSM-only admin (CHG-2026-0521); review Windows 4624 type-10 logons", due: 2026-07-03, status: Done, completed: 2026-07-03}
+  - {id: M2, desc: "Route Security Hub High findings to SRE on-call queue", due: 2026-07-08, status: Done, completed: 2026-07-07}
+  - {id: M3, desc: "Deploy SCP guardrail for admin ports from 0.0.0.0/0", due: 2026-07-10, status: Done, completed: 2026-07-09}
+  - {id: M4, desc: "Assessor validation: SG export, Security Hub PASSED, guardrail test", due: 2026-07-10, status: Done, completed: 2026-07-10}
+  dependencies: ""
+  validation_method: "Inspection of SG and Security Hub status; re-performance: attempted to add 0.0.0.0/0:3389 rule in a sandbox OU account (denied by SCP)"
+  closure_evidence: [EVID-068, EVID-053]
+  validated_by: Lead assessor
+  closure_date: 2026-07-10
+  residual_risk: "Moderate (RISK-012 residual L2 x I4 = 8)"
+  notes: "Remediated during fieldwork. Still reported as a finding because the control failed during the period."
+- id: POAM-013
+  finding: FIND-013
+  weakness: Backup restoration never tested
+  root_cause: Recoverability assumed from job success; no scheduled restore test
+  corrective_action: Documented restore from DR vault into isolated account with timing and integrity checks; semi-annual schedule in BCP-003
+  owner: Tomasz Wierzbicki (Director, Platform Engineering)
+  resources: "SRE (about 16h); isolated recovery account"
+  open_date: 2026-08-07
+  original_target: 2026-09-01
+  current_target: 2026-09-01
+  status: Closed
+  milestones:
+  - {id: M1, desc: "Write restore runbook and integrity-check queries", due: 2026-08-21, status: Done, completed: 2026-08-19}
+  - {id: M2, desc: "Perform restore test (assessor observes)", due: 2026-08-28, status: Done, completed: 2026-08-27}
+  - {id: M3, desc: "Add semi-annual restore test to BCP-003 calendar; assessor validation", due: 2026-09-01, status: Done, completed: 2026-09-01}
+  dependencies: ""
+  validation_method: "Observation of restore test; inspection of timings vs RTO/RPO and integrity check output"
+  closure_evidence: [EVID-069]
+  validated_by: Lead assessor
+  closure_date: 2026-09-01
+  residual_risk: "Moderate (RISK-008 residual L2 x I4 = 8, pending POAM-014)"
+  notes: ""
+- id: POAM-014
+  finding: FIND-014
+  weakness: IR and contingency plans not tested in 12+ months; SHCA 24h path unrehearsed
+  root_cause: Exercises deferred twice without escalation
+  corrective_action: Combined ransomware tabletop (IR + CP) with MDR, Legal/Privacy, Customer Ops, execs; update IRP-005 (SHCA 24h step, roster); track after-action items
+  owner: Owen Castillo (Security Engineer)
+  resources: "Facilitator (MDR-provided, in contract); 3h of 12 participants"
+  open_date: 2026-08-07
+  original_target: 2026-11-15
+  current_target: 2026-11-15
+  status: In Progress
+  milestones:
+  - {id: M1, desc: "Update IRP-005: SHCA 24h notification step + current roster (OBS-03)", due: 2026-09-15, status: Done, completed: 2026-09-11}
+  - {id: M2, desc: "Conduct ransomware tabletop (IR + CP)", due: 2026-10-14, status: Not Started, completed: ""}
+  - {id: M3, desc: "Publish after-action report; add corrective actions to POA&M", due: 2026-10-30, status: Not Started, completed: ""}
+  - {id: M4, desc: "Assessor validation", due: 2026-11-15, status: Not Started, completed: ""}
+  dependencies: Executive calendar availability
+  validation_method: "Inspection of exercise materials, attendance, after-action report; verify corrective actions are tracked"
+  closure_evidence: []
+  validated_by: ""
+  closure_date: ""
+  residual_risk: "Moderate (RISK-009 residual L2 x I3 = 6)"
+  notes: ""
+- id: POAM-015
+  finding: FIND-015
+  weakness: 5 of 14 Tier 1–2 vendors overdue; no fourth-party inventory; no C-SCRM plan
+  root_cause: Under-resourced vendor program; spreadsheet tracking without reminders
+  corrective_action: Clear overdue assessments (Tier 1 first); build fourth-party inventory; approve C-SCRM plan aligned to SP 800-161r1-upd1 / SP 800-18r2; renewal triggers
+  owner: Beth Kowalski (Vendor Management Lead)
+  resources: "Vendor Mgmt (about 0.5 FTE for 4 months); GRC Manager support"
+  open_date: 2026-08-07
+  original_target: 2027-02-03
+  current_target: 2027-02-03
+  status: In Progress
+  milestones:
+  - {id: M1, desc: "Assess Tier 1 overdue vendors (Pulsewire, Ironpeak)", due: 2026-11-30, status: In Progress, completed: ""}
+  - {id: M2, desc: "Fourth-party inventory from updated questionnaires (all Tier 1)", due: 2026-12-15, status: Not Started, completed: ""}
+  - {id: M3, desc: "Approve C-SCRM plan", due: 2027-01-15, status: Not Started, completed: ""}
+  - {id: M4, desc: "Assess remaining Tier 2 overdue vendors; assessor validation", due: 2027-02-03, status: Not Started, completed: ""}
+  dependencies: Vendor responsiveness
+  validation_method: "Inspection of vendor register (100% Tier 1–2 within frequency) and approved C-SCRM plan"
+  closure_evidence: []
+  validated_by: ""
+  closure_date: ""
+  residual_risk: "Moderate (RISK-011 residual L2 x I4 = 8)"
+  notes: ""
+- id: POAM-016
+  finding: FIND-016
+  weakness: "Quarrystone: offshore PHI access, 30-day breach notice, excessive data fields, stale pentest"
+  root_cause: 2023 contract on vendor paper before TPRM-007; self-attestation relied on; extract not designed for minimum necessary
+  corrective_action: "Contract amendment (US-only + technical enforcement, 24h notice, subcontractor approval, data return/destruction 30 days with certificate, log cooperation); minimize extract to scoring-required fields with tokenized IDs; obtain current pentest + retest; SHCA data blocked until conditions met"
+  owner: Dr. Miriam Castell (VP Clinical Analytics)
+  resources: "General Counsel (about 20h); Data Engineering (about 60h for extract redesign); Vendor Mgmt"
+  open_date: 2026-08-07
+  original_target: 2026-11-05
+  current_target: 2026-11-05
+  status: In Progress
+  milestones:
+  - {id: M1, desc: "Interim: vendor suspends offshore access to Wrenfield data (letter)", due: 2026-07-24, status: Done, completed: 2026-07-24}
+  - {id: M2, desc: "Execute contract amendment (redline v3 in negotiation)", due: 2026-09-30, status: In Progress, completed: ""}
+  - {id: M3, desc: "Deploy minimized, tokenized extract (drop address, phone, email, free text)", due: 2026-10-16, status: In Progress, completed: ""}
+  - {id: M4, desc: "Receive current pentest report + retest letter (EVID-051)", due: 2026-10-30, status: Not Started, completed: ""}
+  - {id: M5, desc: "Assessor validation + vendor risk re-score", due: 2026-11-05, status: Not Started, completed: ""}
+  dependencies: Vendor negotiation; Quarrystone model retraining on minimized fields
+  validation_method: "Inspection of executed amendment; test: sample extract file schema vs approved minimum field list; inspection of pentest/retest; vendor attestation of US-only access with access-log sample"
+  closure_evidence: [EVID-073, EVID-051]
+  validated_by: ""
+  closure_date: ""
+  residual_risk: "Moderate target (RISK-010 residual L2 x I4 = 8); currently High"
+  notes: "VR-001 (Critical) escalated to CEO 2026-07-17 per risk appetite; CEO approved conditional continuation 2026-07-22."
+- id: POAM-017
+  finding: FIND-017
+  weakness: SSP outdated; overstates implementation of 27 of 61 controls
+  root_cause: SSP maintained as SOC 2 narrative; no update trigger on architecture change
+  corrective_action: Rewrite SSP control-by-control from the validated matrix (SP 800-18 Rev. 2 structure); add architecture-change trigger in CMP-006
+  owner: Priya Raman (Security Compliance Manager)
+  resources: "GRC Manager (about 80h); control owner reviews"
+  open_date: 2026-08-07
+  original_target: 2026-12-15
+  current_target: 2026-12-15
+  status: In Progress
+  milestones:
+  - {id: M1, desc: "SSP outline on SP 800-18r2 structure; boundary + data flows updated", due: 2026-09-30, status: In Progress, completed: ""}
+  - {id: M2, desc: "Control implementation statements (61 controls) reviewed by owners", due: 2026-11-30, status: Not Started, completed: ""}
+  - {id: M3, desc: "Approval by CTO (system owner); assessor validation", due: 2026-12-15, status: Not Started, completed: ""}
+  dependencies: Control owners' review time
+  validation_method: "Inspection: SSP statements traced to matrix determinations (sample 15 controls)"
+  closure_evidence: []
+  validated_by: ""
+  closure_date: ""
+  residual_risk: "Low (RISK-016 residual)"
+  notes: ""
+- id: POAM-018
+  finding: FIND-018
+  weakness: Emergency and console changes bypass approval (3 of 25 sampled)
+  root_cause: Console/emergency paths rely on memory; no retro-approval tracking
+  corrective_action: Auto-open retro-approval task on every emergency change with 2-day escalation; CloudTrail/EventBridge alerts on console changes to security groups and IAM; approval gate before deploy job
+  owner: Tomasz Wierzbicki (Director, Platform Engineering)
+  resources: "SRE (about 24h)"
+  open_date: 2026-08-07
+  original_target: 2026-09-11
+  current_target: 2026-09-11
+  status: In Progress
+  milestones:
+  - {id: M1, desc: "Retro-approval task automation for emergency changes", due: 2026-08-28, status: Done, completed: 2026-08-28}
+  - {id: M2, desc: "EventBridge alerts on console SG/IAM changes to on-call", due: 2026-09-04, status: Not Started, completed: ""}
+  - {id: M3, desc: "Assessor validation: sample of emergency changes since M1 + alert test", due: 2026-09-11, status: Not Started, completed: ""}
+  dependencies: SRE backlog capacity (competing with POAM-011)
+  validation_method: "Test: all emergency changes since 2026-08-28 retro-approved within 2 business days; trigger a test SG change and confirm alert"
+  closure_evidence: []
+  validated_by: ""
+  closure_date: ""
+  residual_risk: "Moderate (RISK-014 residual L2 x I3 = 6)"
+  notes: "Overdue since 2026-09-11; needs CTO prioritization decision against POAM-011 (same SRE team)."
+- id: POAM-019
+  finding: FIND-019
+  weakness: Security awareness training completion 91%; suspension not enforced
+  root_cause: Reminders to users only; no manager escalation or enforcement
+  corrective_action: Okta group rule enforcing suspension at 30 days overdue; manager escalation at 14 days; monthly completion reporting
+  owner: Denise Yamamoto (Director of People)
+  resources: "People Ops (about 8h); IAM Engineer (about 4h)"
+  open_date: 2026-08-07
+  original_target: 2026-09-30
+  current_target: 2026-09-30
+  status: Completed – Pending Validation
+  milestones:
+  - {id: M1, desc: "Manager escalation at 14 days; enforcement group rule live", due: 2026-08-21, status: Done, completed: 2026-08-20}
+  - {id: M2, desc: "Reach >= 99% (documented leave exceptions)", due: 2026-09-15, status: Done, completed: 2026-09-12}
+  - {id: M3, desc: "Assessor validation of EVID-070 (leave records for 3 exceptions)", due: 2026-09-30, status: In Progress, completed: ""}
+  dependencies: ""
+  validation_method: "Inspection: LMS roster reconciled to Okta active population; leave exceptions verified in PeopleHub"
+  closure_evidence: [EVID-070]
+  validated_by: ""
+  closure_date: ""
+  residual_risk: "Moderate, accepted (RISK-015 residual L3 x I3 = 9)"
+  notes: ""

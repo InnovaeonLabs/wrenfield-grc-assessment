@@ -1,0 +1,47 @@
+role_code,system,access_level,notes
+*,Okta,SSO account (standard user),All active workforce
+R-CISO,AWS wcp-prod,SecurityAudit,
+R-CISO,Security tooling (SIEM),SIEM Read-only,
+R-IAM,Okta,Super Administrator,Separate admin account required
+R-IAM,Security tooling (SIEM),SIEM Analyst,
+R-SECENG,AWS wcp-prod,SecurityAudit,
+R-SECENG,AWS wcp-prod,IR-Responder,Approval-gated elevation
+R-SECENG,Security tooling (SIEM),SIEM Administrator,
+R-SECENG,Security tooling (EDR),EDR Administrator,
+R-GRC,Okta,Read-Only Administrator,
+R-GRC,AWS wcp-prod,SecurityAudit,
+R-CTO,AWS wcp-prod,ViewOnlyAccess,
+R-CTO,GitHub,Organization Owner,Max 3 org owners (CTO + platform)
+R-VPENG,GitHub,Maintainer,
+R-SRE-LEAD,AWS wcp-prod,AdministratorAccess,Separate admin account required
+R-SRE-LEAD,GitHub,Organization Owner,Max 3 org owners (CTO + platform)
+R-SRE-LEAD,wcp-core-db,dba_admin,
+R-SRE,AWS wcp-prod,AdministratorAccess,Separate admin account required
+R-SRE,GitHub,Organization Owner,Max 3 org owners (CTO + platform)
+R-SRE,wcp-core-db,dba_admin,
+R-ENG-MGR,AWS wcp-prod,ViewOnlyAccess,
+R-ENG-MGR,GitHub,Repository Admin (prod-deploy environment approver),
+R-SWE,GitHub,Write (wcp-platform repositories),
+R-QA-CONTRACT,GitHub,Write (wcp-platform repositories),QA uses staging (synthetic data only)
+R-DATA-MGR,AWS wcp-prod,ViewOnlyAccess,
+R-DATA-MGR,wcp-core-db,analytics_readonly (replica),
+R-DATA-MGR,Quarrystone portal,Portal Administrator,
+R-DATA-ENG,wcp-core-db,analytics_readonly (replica),
+R-DATA-ENG,Quarrystone portal,Analyst,
+R-SUPPORT-ENG,wcp-core-db,support_readonly (primary),
+R-IT-MGR,Okta,Organization Administrator,Super Administrator is NOT part of this role
+R-IT-MGR,Ledgerline,System Administrator (no transactional roles),
+R-IT-MGR,Security tooling (EDR),EDR Administrator,
+R-IT-SUPPORT,Okta,Help Desk Administrator,
+R-CFO,Ledgerline,Payment Approver (> $25k),
+R-CONTROLLER,Ledgerline,Controller,
+R-ACCOUNTANT,Ledgerline,Vendor Master Maintain,Conflicts with Payment Approver (SOD-01)
+R-ACCOUNTANT,Ledgerline,Payment Approver (<= $25k),Conflicts with Vendor Master Maintain (SOD-01)
+R-AP,Ledgerline,AP Clerk,
+R-VENDOR-MGR,Ledgerline,Vendor Master View,
+R-HR-DIR,PeopleHub,HR Administrator,
+R-PM,AWS wcp-prod,ViewOnlyAccess,
+R-VP-ANALYTICS,Quarrystone portal,Viewer,
+R-ANALYTICS,Quarrystone portal,Analyst,
+R-ASSESSOR,Okta,Read-Only Administrator,Time-bound to engagement
+R-ASSESSOR,AWS wcp-prod,SecurityAudit,Time-bound to engagement

@@ -1,0 +1,20 @@
+worker_id,full_name,worker_type,department,termination_date,termination_effective_time,termination_reason,final_pay_or_invoice_ref
+E1188,Aaron Pike,Employee,Customer Operations,2026-01-09,17:00,Voluntary,PAY-2026-0109-01
+E1102,Bianca Torres,Employee,Engineering,2026-01-16,17:00,Voluntary,PAY-2026-0116-01
+C2011,Colin Ashby,Contractor,Engineering,2026-01-30,17:00,Engagement ended,INV-NGT-26-0131
+E1120,Deepa Iyer,Employee,Clinical Operations,2026-02-06,17:00,Voluntary,PAY-2026-0206-01
+E1133,Ethan Walsh,Employee,Sales,2026-02-13,17:00,Involuntary,PAY-2026-0213-01
+E1142,Fatima Qureshi,Employee,Clinical Operations,2026-02-20,17:00,Voluntary,PAY-2026-0220-01
+E1151,Gavin Moss,Employee,Customer Operations,2026-03-06,17:00,Voluntary,PAY-2026-0306-01
+E1015,Marcus Feld,Employee,Platform Engineering,2026-03-27,17:00,Voluntary,PAY-2026-0327-01
+E1160,Hannah Cho,Employee,Marketing,2026-04-03,17:00,Voluntary,PAY-2026-0403-01
+E1167,Isaac Romero,Employee,Engineering,2026-04-10,17:00,Involuntary,PAY-2026-0410-01
+C2015,Julia Mertens,Contractor,Data Engineering,2026-04-17,17:00,Engagement ended,INV-NGT-26-0418
+E1172,Kyle Benton,Employee,Sales,2026-04-24,17:00,Voluntary,PAY-2026-0424-01
+E1178,Leah Ferris,Employee,Clinical Operations,2026-05-01,17:00,Voluntary,PAY-2026-0501-01
+E1183,Mason Ruiz,Employee,Customer Operations,2026-05-08,17:00,Voluntary,PAY-2026-0508-01
+E1053,Dana Whitlock,Employee,Finance,2026-05-22,17:00,Voluntary,PAY-2026-0522-01
+E1190,Nina Patel,Employee,People,2026-05-29,17:00,Voluntary,PAY-2026-0529-01
+C2001,Victor Osei,Contractor,Engineering,2026-06-05,17:00,Engagement ended,INV-NGT-26-0606
+E1195,Oscar Lindgren,Employee,Engineering,2026-06-12,17:00,Voluntary,PAY-2026-0612-01
+E1199,Paula Szabo,Employee,Clinical Operations,2026-06-26,17:00,Voluntary,PAY-2026-0626-01

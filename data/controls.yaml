@@ -1,0 +1,1655 @@
+# NIST SP 800-53 Rev. 5 (Release 5.2.0) control matrix: single source of truth.
+# Requirement summaries are the assessor's paraphrases; the NIST catalog is authoritative.
+# status_owner = what the control owner / SSP claimed; status_validated = assessor's determination.
+# result uses SP 800-53A terms. Dates are the simulated engagement calendar.
+defaults: &d
+  baseline: Moderate
+  applicability: Applicable
+  last_reviewed: 2026-07-17
+  next_review: 2027-07-15
+
+controls:
+# ------------------------------------------------------------------ AC
+- id: AC-1
+  <<: *d
+  family: AC
+  name: Policy and Procedures
+  requirement: Develop, document, and disseminate an access control policy and procedures; designate an official to manage them; review and update them at a defined frequency and after defined events.
+  origination: Common (organization-wide)
+  systems: All in-scope systems
+  owner: Alicia Moreno (CISO)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: Access Control Policy ACP-002 v3.1 (approved 2025-01-15 by the CISO) covers account types, approvals, least privilege, separate admin accounts (§5.4), 24h de-provisioning (§5.3), inactivity (§5.6), and quarterly privileged recertification. It is published on the intranet and acknowledged at onboarding. JML procedure SOP-IAM-02 v2.0 implements it.
+  requirements: [REQ-001, REQ-014, REQ-024]
+  evidence_required: Current approved policy and procedures, approval record, review history, dissemination evidence
+  evidence: [EVID-001, EVID-002]
+  methods: [Examine, Interview]
+  test_summary: "Examined ACP-002 v3.1 and SOP-IAM-02 v2.0 against the AC family requirements, and interviewed the CISO. Expected: policy reviewed within the 12-month cycle. Actual: the last approved review was 2025-01-15, so it is 5 months overdue. Draft v3.2 has been in review since 2026-05. Content is adequate, and policy statements are specific enough to test (they drove several findings)."
+  result: Satisfied
+  evidence_level: Design
+  gap: "Annual review overdue by about 5 months (below the finding threshold: the content is current and the draft is in approval)."
+  risk_rating: Low
+  risks: []
+  findings: []
+  obs: [OBS-01]
+  poams: []
+  notes: A policy existing does not prove the controls operate. AC-2/AC-6 test results show several ACP-002 requirements not operating.
+  csf: PR
+
+- id: AC-2
+  <<: *d
+  family: AC
+  name: Account Management
+  requirement: Define allowed account types; assign account managers; require approvals for account creation; create, modify, disable, and remove accounts per defined conditions; monitor account use; notify account managers when accounts are no longer needed; review accounts for compliance at a defined frequency.
+  origination: Hybrid (Okta common control + system-specific accounts)
+  systems: SYS-01, SYS-02, SYS-03, SYS-04, SYS-05, SYS-06, SYS-07, SYS-08, SYS-09
+  owner: Nadia Rahman (IAM Engineer)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: Okta is the identity source for SSO apps. Access requests go through Jira service desk tickets approved by the manager and the system owner. Termination tickets are raised manually by IT from HR emails. Local accounts exist outside Okta on AWS (legacy IAM users), wf-sftp-01, and the Quarrystone portal, and are managed ad hoc. There is a service-account register, but it lacked owner and rotation fields until 2026-07.
+  requirements: [REQ-001, REQ-004, REQ-013, REQ-014, REQ-023]
+  evidence_required: Account-management procedure; user and entitlement populations from each system; HR roster; service-account register; recertification records
+  evidence: [EVID-002, EVID-005, EVID-006, EVID-007, EVID-013, EVID-061, EVID-065]
+  methods: [Examine, Interview, Test]
+  test_summary: "Full reconciliation of 106 entitlements on 9 systems against HR, the role baseline, the SoD rules, and the service register (tools/review_engine.py). Expected: every account is authorized, owned, and current. Actual: 20 exceptions across 28 entitlement rows. They include terminated users (4), a duplicate identity, inactive access, contractor term drift, service accounts without owners or rotation, and a shared vendor login."
+  result: Other Than Satisfied
+  evidence_level: Operating Effectiveness
+  gap: Account lifecycle is not enforced for local (non-SSO) accounts, contractors, transfers, or service accounts. Account reviews did not catch these.
+  risk_rating: High
+  risks: [RISK-002, RISK-004, RISK-017]
+  findings: [FIND-001, FIND-004, FIND-005, FIND-006]
+  obs: []
+  poams: [POAM-001, POAM-004, POAM-005, POAM-006]
+  next_review: 2026-12-15
+  notes: Anchor control for the access review. Individual exceptions roll up into 4 findings by root cause.
+  csf: PR
+
+- id: AC-2(1)
+  <<: *d
+  family: AC
+  name: Automated System Account Management
+  requirement: Support management of system accounts with automated mechanisms.
+  origination: Common (Okta)
+  systems: SYS-02, SYS-06
+  owner: Nadia Rahman (IAM Engineer)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: Okta provisions users to GitHub and AWS IAM Identity Center with SCIM and group push. The PeopleHub-to-Okta integration syncs attributes only. Terminations and contract end dates did not trigger de-provisioning before 2026-08, and contractor accounts had no expiry dates.
+  requirements: [REQ-004, REQ-013]
+  evidence_required: Integration configuration; provisioning and de-provisioning logs; evidence that HR events trigger account actions
+  evidence: [EVID-004, EVID-005, EVID-062]
+  methods: [Examine, Interview]
+  test_summary: "Examined the Okta-PeopleHub integration settings and interviewed the IAM Engineer. Expected: HR termination events automatically trigger de-provisioning. Actual: sync was attribute-only, so de-provisioning was a manual ticket. This design gap is the root cause of FIND-001. Post-remediation: a daily reconciliation job with auto-ticketing (live 2026-08-03) and Okta account-expiry dates for contractors were verified in EVID-062."
+  result: Other Than Satisfied
+  evidence_level: Implementation
+  gap: No automated de-provisioning from the authoritative HR source (fixed with compensating automation; full lifecycle-management licensing is planned for FY27).
+  risk_rating: High
+  risks: [RISK-002]
+  findings: [FIND-001]
+  obs: []
+  poams: [POAM-001]
+  next_review: 2027-07-15
+  notes: The reconciliation job is a detective and ticketing automation, not true HR-driven de-provisioning. The status stays Partially Implemented until lifecycle automation is licensed.
+  csf: PR
+
+- id: AC-2(3)
+  <<: *d
+  family: AC
+  name: Disable Accounts
+  requirement: Disable accounts within a defined period when they have expired, are no longer associated with a user or function, violate policy, or have been inactive for a defined period.
+  origination: Hybrid
+  systems: SYS-01, SYS-02, SYS-03, SYS-07, SYS-09
+  owner: Nadia Rahman (IAM Engineer)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: ACP-002 §5.3 requires disabling within 24 hours of termination, and §5.6 requires disabling after 90 days of inactivity. IT deactivates Okta accounts from manual tickets. There was no inactivity automation and no process for local accounts.
+  requirements: [REQ-004, REQ-013]
+  evidence_required: Complete population of terminations in the period; de-provisioning logs for every system; inactivity report
+  evidence: [EVID-003, EVID-004, EVID-007, EVID-061, EVID-062, EVID-064]
+  methods: [Examine, Test]
+  test_summary: "Re-performed the 24h test on all 19 H1 terminations (docs/assessment/test-results/termination-deprovisioning.md). Expected: 19 of 19 within 24h, including non-SSO accounts. Actual: 16 of 19 within SLA, 1 late (209h), 2 never deactivated (one with a post-termination sign-in, which became INC-2026-0117), plus 1 active local AWS IAM user and 1 Quarrystone portal account belonging to leavers. Validation re-test (2026-09-10): 7 of 7 within SLA, and the reconciliation job reported 0 exceptions."
+  result: Other Than Satisfied
+  evidence_level: Operating Effectiveness
+  gap: De-provisioning depended on manual tickets and missed local accounts.
+  risk_rating: High
+  risks: [RISK-002]
+  findings: [FIND-001]
+  obs: []
+  poams: [POAM-001]
+  last_reviewed: 2026-09-10
+  next_review: 2027-07-15
+  notes: Remediation validated 2026-09-10. Full re-test at the FY27 assessment because the post-fix operating sample is small (7).
+  csf: PR
+
+- id: AC-5
+  <<: *d
+  family: AC
+  name: Separation of Duties
+  requirement: Identify and document duties that require separation, and define system access authorizations that support that separation.
+  origination: System-specific (Ledgerline)
+  systems: SYS-07
+  owner: Laura Brenneman (Controller)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: Ledgerline has an SoD ruleset (SOD-01 vendor master vs payment approval; SOD-02 AP entry vs approval). After the AP Specialist left in 2026-05, the Senior Accountant held both Vendor Master Maintain and Payment Approver (<= $25k). The compensating control is a monthly vendor-master change report that the Controller reviews and signs.
+  requirements: [REQ-023, REQ-024]
+  evidence_required: SoD matrix; role assignments; evidence of the compensating review for each month
+  evidence: [EVID-014, EVID-015, EVID-060]
+  methods: [Examine, Interview, Test]
+  test_summary: "Tested role assignments against the SoD rules (review engine) and inspected 6 of 6 monthly compensating reviews (Jan–Jun). Expected: no user holds conflicting roles, or a documented and operating compensating control exists. Actual: 1 conflict (jmercer, SOD-01). The compensating review operated 6 of 6 months (signed, dated, 2 bank-detail changes independently verified by callback). The conflict was not formally risk-accepted until RACC-001 (2026-08-12)."
+  result: Other Than Satisfied
+  evidence_level: Operating Effectiveness
+  gap: Conflicting duties held by one user. The compensating control operates, but it was undocumented as a risk decision.
+  risk_rating: Moderate
+  risks: [RISK-013]
+  findings: [FIND-007]
+  obs: []
+  poams: [POAM-007]
+  next_review: 2027-03-31
+  notes: Formally accepted (RACC-001, CFO, expires 2027-03-31). This is the project's worked example of a compensating control plus risk acceptance.
+  csf: PR
+
+- id: AC-6
+  <<: *d
+  family: AC
+  name: Least Privilege
+  requirement: Employ the principle of least privilege, allowing only authorized accesses necessary to accomplish assigned tasks.
+  origination: Hybrid
+  systems: SYS-01, SYS-02, SYS-03, SYS-04
+  owner: Tomasz Wierzbicki (Director, Platform Engineering)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: A role-based access baseline exists (role_access_matrix). AWS permission sets are assigned through Okta groups. Temporary grants (for migrations and troubleshooting) have no expiry mechanism.
+  requirements: [REQ-001, REQ-014, REQ-023]
+  evidence_required: Role baseline; entitlement exports; justification for privileged grants
+  evidence: [EVID-006, EVID-016, EVID-017, EVID-075, EVID-076]
+  methods: [Examine, Test]
+  test_summary: "Compared every privileged and PHI entitlement to the role baseline. Expected: 0 grants outside the baseline without approved justification. Actual: 8 rows outside the baseline (F-BASELINE), all confirmed on review. 6 are excessive privileged grants (2 prod AdministratorAccess, 2 GitHub owners, 1 Okta Super Admin, 1 PHI database write) under FIND-003. The other 2 are PHI read access kept after a transfer (FIND-004) and PHI access outside a contractor's SOW (FIND-006)."
+  result: Other Than Satisfied
+  evidence_level: Operating Effectiveness
+  gap: Temporary privileged grants never expire; access is not re-baselined when roles change.
+  risk_rating: High
+  risks: [RISK-001, RISK-004]
+  findings: [FIND-003]
+  obs: []
+  poams: [POAM-003]
+  next_review: 2026-11-05
+  csf: PR
+
+- id: AC-6(2)
+  <<: *d
+  family: AC
+  name: Non-privileged Access for Nonsecurity Functions
+  requirement: Require users of privileged accounts or roles to use non-privileged accounts or roles when accessing nonsecurity functions.
+  origination: Hybrid
+  systems: SYS-01, SYS-02
+  owner: Nadia Rahman (IAM Engineer)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: ACP-002 §5.4 (since 2025-07) requires separate -adm accounts for AWS prod AdministratorAccess and Okta Super Administrator. Two admins (jkim-adm, nrahman-adm) follow it. Others still hold admin roles on email and browsing accounts.
+  requirements: [REQ-003, REQ-014]
+  evidence_required: List of privileged role holders with account type
+  evidence: [EVID-005, EVID-016, EVID-075]
+  methods: [Examine, Test]
+  test_summary: "Tested account type for every holder of the two covered roles. Expected: all on -adm or break-glass accounts. Actual: 6 of 10 covered assignments were not on -adm or break-glass accounts (F-DAILYADMIN): 2 legitimate SRE holders (AR-EX-10), and 4 assignments that were also excessive or orphaned (AR-EX-03/05/06/09)."
+  result: Other Than Satisfied
+  evidence_level: Implementation
+  gap: Separate admin accounts are required by policy but not implemented for most admins.
+  risk_rating: High
+  risks: [RISK-001]
+  findings: [FIND-003]
+  obs: []
+  poams: [POAM-003]
+  next_review: 2026-11-05
+  csf: PR
+
+- id: AC-6(5)
+  <<: *d
+  family: AC
+  name: Privileged Accounts
+  requirement: Restrict privileged accounts on the system to defined personnel or roles.
+  origination: Hybrid
+  systems: SYS-01, SYS-02, SYS-03
+  owner: Tomasz Wierzbicki (Director, Platform Engineering)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: Defined privileged roles are SRE (AWS admin), IAM Engineer (Okta Super Admin), and CTO plus platform (up to 3 GitHub owners). Break-glass accounts are vaulted and tested quarterly.
+  requirements: [REQ-003, REQ-014, REQ-023]
+  evidence_required: Privileged role definitions; complete privileged-account population per system
+  evidence: [EVID-016, EVID-017, EVID-075, EVID-076, EVID-077]
+  methods: [Examine, Test]
+  test_summary: "Enumerated all 37 privileged entitlements. Expected: every holder is in a defined privileged role. Actual: AWS prod AdministratorAccess had 6 human-linked holders (including a terminated employee's local IAM user) against 3 authorized SRE roles. GitHub owners were 5 against a maximum of 3. Okta Super Admin had 1 unauthorized holder. Break-glass accounts were well controlled (last tests 2026-04-15 and 2026-05-12)."
+  result: Other Than Satisfied
+  evidence_level: Operating Effectiveness
+  gap: More privileged holders than the defined roles allow.
+  risk_rating: High
+  risks: [RISK-001]
+  findings: [FIND-003]
+  obs: []
+  poams: [POAM-003]
+  next_review: 2026-11-05
+  csf: PR
+
+- id: AC-6(7)
+  <<: *d
+  family: AC
+  name: Review of User Privileges
+  requirement: Review the privileges assigned to defined roles or classes of users at a defined frequency to validate the need for them, and reassign or remove privileges as necessary.
+  origination: Hybrid
+  systems: SYS-01, SYS-02, SYS-03, SYS-04
+  owner: Alicia Moreno (CISO)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: Quarterly Okta manager certification campaigns cover app-assignment level access only. AWS permission sets, GitHub roles, database roles, and local accounts were never in scope. Before this assessment, no privileged-access review existed.
+  requirements: [REQ-004, REQ-014, REQ-023]
+  evidence_required: Review campaign exports showing population, reviewer, decision, date, and resulting changes
+  evidence: [EVID-008, EVID-009, EVID-074]
+  methods: [Examine, Interview, Test]
+  test_summary: "Examined the Q1 2026 campaign export (412 decisions by 23 reviewers). Expected: complete population, meaningful decisions, and removals actioned. Actual: 100% approved, and 17 of 23 reviewers finished in under 5 minutes. The campaign approved rgupta2 (duplicate) and cfernandes's pre-transfer access. Privileged systems were out of scope. The dashboard screenshot first provided (EVID-009) was insufficient: no population, no decisions."
+  result: Other Than Satisfied
+  evidence_level: Operating Effectiveness
+  gap: Recertification is incomplete in scope and ineffective in operation (rubber-stamping).
+  risk_rating: Moderate
+  risks: [RISK-004]
+  findings: [FIND-004]
+  obs: []
+  poams: [POAM-004]
+  next_review: 2026-10-31
+  notes: This assessment's access review (106 rows, 9 systems) is the first complete privileged review. The Q3 campaign (EVID-074) is the first under the new design.
+  csf: PR
+
+- id: AC-17
+  <<: *d
+  family: AC
+  name: Remote Access
+  requirement: Establish usage restrictions, configuration requirements, and implementation guidance for each type of remote access, and authorize each type before allowing connections.
+  origination: Hybrid
+  systems: SYS-01, SYS-10
+  owner: Tomasz Wierzbicki (Director, Platform Engineering)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: There is no network VPN into production. Administrative access uses AWS SSM Session Manager (sessions logged to log-archive) through IAM Identity Center, gated by Okta SSO+MFA from MDM-managed devices. No public bastions. wf-sftp-01 is administered through SSM only (except the RDP rule, reported under SC-7).
+  requirements: [REQ-003]
+  evidence_required: Remote-access standard; SSM configuration; session logging; network exposure review
+  evidence: [EVID-018, EVID-028]
+  methods: [Examine, Test]
+  test_summary: "Examined the SSM session preferences (logging to S3 and CloudWatch enabled, KMS-encrypted) and confirmed no security groups allow SSH from the internet except the documented SFTP allowlist. Expected: remote administration only through authenticated, logged channels. Actual: met. The RDP exposure on wf-sftp-01 is an unauthorized deviation, reported under SC-7 and CM-6, not a remote-access design flaw."
+  result: Satisfied
+  evidence_level: Implementation
+  gap: ""
+  risk_rating: ""
+  risks: []
+  findings: []
+  obs: []
+  poams: []
+  csf: PR
+
+- id: AC-18
+  <<: *d
+  family: AC
+  name: Wireless Access
+  requirement: Establish configuration and connection requirements for wireless access and authorize it before allowing connections.
+  applicability: Not Applicable
+  applicability_rationale: No wireless networking exists within the WCP-PROD boundary (AWS-hosted). Office Wi-Fi is outside the boundary and has no privileged path to production; production access from any network requires Okta SSO+MFA. Re-examine if the boundary changes.
+  origination: n/a
+  systems: n/a
+  owner: Tomasz Wierzbicki (Director, Platform Engineering)
+  status_owner: Not Applicable
+  status_validated: Not Applicable
+  implementation: n/a (see applicability rationale)
+  requirements: [REQ-001]
+  evidence_required: Boundary definition confirming no wireless components
+  evidence: [EVID-040]
+  methods: [Examine]
+  test_summary: Examined the boundary diagram and the AWS network inventory. No wireless components are inside the boundary. N/A determination recorded in the scope statement.
+  result: Not Assessed
+  evidence_level: Design
+  gap: ""
+  risk_rating: ""
+  risks: []
+  findings: []
+  obs: []
+  poams: []
+  csf: PR
+
+# ------------------------------------------------------------------ AT
+- id: AT-2
+  <<: *d
+  family: AT
+  name: Literacy Training and Awareness
+  requirement: Provide security and privacy literacy training to users at onboarding and at a defined frequency after that; include practical exercises (such as phishing simulations); update content after defined events.
+  origination: Common (organization-wide)
+  systems: All workforce
+  owner: Denise Yamamoto (Director of People)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: Annual HIPAA and security awareness module in the LMS, plus quarterly phishing simulations. Policy requires completion within 30 days of assignment and suspends access after 30 days overdue, but the suspension is not enforced.
+  requirements: [REQ-015]
+  evidence_required: LMS completion report for the full workforce; phishing simulation results; escalation records
+  evidence: [EVID-019]
+  methods: [Examine, Test]
+  test_summary: "Compared the LMS roster (347) to the Okta active population. Expected: 100% completion (or documented exceptions). Actual: 316 of 347 (91%); 31 overdue, 4 of them with PHI data-store access. Phishing simulations ran 2 of 2 quarters (click rate 6.1% to 4.3%). Post-remediation: 344 of 347 (3 on leave) is under review (EVID-070)."
+  result: Other Than Satisfied
+  evidence_level: Operating Effectiveness
+  gap: Completion enforcement not operating.
+  risk_rating: Low
+  risks: [RISK-015]
+  findings: [FIND-019]
+  obs: []
+  poams: [POAM-019]
+  next_review: 2026-10-15
+  csf: GV
+
+- id: AT-3
+  <<: *d
+  family: AT
+  name: Role-based Training
+  requirement: Provide role-based security and privacy training to personnel with assigned roles before authorizing access, and at a defined frequency after that.
+  origination: Common (organization-wide)
+  systems: Engineering, SRE, Clinical Ops, Security
+  owner: Denise Yamamoto (Director of People)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: Secure-coding training (annual) for engineers; privileged-user training for admins; HIPAA minimum-necessary training for clinical and support staff. Tracked in the LMS by role group.
+  requirements: [REQ-015]
+  evidence_required: Role-based curricula and completion by role group
+  evidence: [EVID-020]
+  methods: [Examine, Test]
+  test_summary: "Sampled 15 role holders (5 engineers, 5 admins, 5 support/clinical). Expected: role training complete before access, or within 30 days of the role change. Actual: 15 of 15 complete. One admin completed 9 days after receiving admin access, within the 30-day grace in the training standard."
+  result: Satisfied
+  evidence_level: Operating Effectiveness
+  gap: ""
+  risk_rating: ""
+  risks: []
+  findings: []
+  obs: []
+  poams: []
+  csf: GV
+
+# ------------------------------------------------------------------ AU
+- id: AU-2
+  <<: *d
+  family: AU
+  name: Event Logging
+  requirement: Identify the event types the system can log; coordinate logging with other entities; specify the event types to be logged; review and update the selection at a defined frequency.
+  origination: System-specific
+  systems: SYS-01, SYS-02, SYS-03, SYS-04
+  owner: Owen Castillo (Security Engineer)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: Logging & Monitoring Standard LMS-004 defines required events. Sources include the AWS Organizations CloudTrail trail (management and S3 data events for PHI buckets), EKS audit logs, Aurora database activity logging for PHI tables, the application audit catalog (PHI view/export/print events with user, patient ID, and timestamp), and Okta and GitHub audit logs forwarded to the SIEM.
+  requirements: [REQ-019, REQ-005]
+  evidence_required: Logging standard; trail configurations; sample events for each required type
+  evidence: [EVID-021]
+  methods: [Examine, Test]
+  test_summary: "Traced 10 required event types (for example, PHI record view, bulk export, IAM policy change, Okta admin role grant) from action to SIEM. Expected: each event recorded with who, what, when, and where. Actual: 10 of 10 found with required fields. The event catalog was last reviewed 2026-02."
+  result: Satisfied
+  evidence_level: Implementation
+  gap: ""
+  risk_rating: ""
+  risks: []
+  findings: []
+  obs: []
+  poams: []
+  csf: DE
+
+- id: AU-6
+  <<: *d
+  family: AU
+  name: Audit Record Review, Analysis, and Reporting
+  requirement: Review and analyze audit records at a defined frequency for signs of inappropriate or unusual activity; report findings to defined personnel; adjust review when risk changes.
+  origination: System-specific
+  systems: SYS-01, SYS-02, SYS-08
+  owner: Owen Castillo (Security Engineer)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: MDR monitors alerts 24x7 (SI-4). Separately, LMS-004 §6 requires a weekly human review of privileged activity (AWS admin actions, Okta admin changes, GitHub owner actions), documented in a SEC ticket. One primary reviewer, no designated backup.
+  requirements: [REQ-019, REQ-005]
+  evidence_required: Weekly review tickets for the whole period with dispositions
+  evidence: [EVID-022, EVID-072]
+  methods: [Examine, Test]
+  test_summary: "Tested all 26 weeks (test-results/au6-log-review.md). Expected: 26 of 26 performed within 5 days with every flag dispositioned. Actual: 19 performed and 17 fully effective (65%). 7 weeks were missed (migration, PTO) and 2 reviews were marked 'reviewed' with undispositioned flags. The review scope also excluded local IAM users."
+  result: Other Than Satisfied
+  evidence_level: Operating Effectiveness
+  gap: Key detective review has a single point of failure and incomplete scope.
+  risk_rating: Moderate
+  risks: [RISK-005]
+  findings: [FIND-009]
+  obs: []
+  poams: [POAM-009]
+  next_review: 2026-10-31
+  csf: DE
+
+- id: AU-9
+  <<: *d
+  family: AU
+  name: Protection of Audit Information
+  requirement: Protect audit information and logging tools from unauthorized access, modification, and deletion; alert on detected unauthorized access, modification, or deletion.
+  origination: System-specific
+  systems: SYS-01
+  owner: Owen Castillo (Security Engineer)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: CloudTrail and audit logs are delivered to a dedicated log-archive account. The S3 bucket uses Object Lock in compliance mode, a bucket policy denying deletes, and an SCP blocking StopLogging and DeleteTrail for all non-break-glass principals. The SIEM admin role is limited to 1 person, plus MDR read access.
+  requirements: [REQ-019]
+  evidence_required: Log bucket configuration; SCPs; access list for the log account
+  evidence: [EVID-023]
+  methods: [Examine, Test]
+  test_summary: "Examined Object Lock and the SCPs. Using the assessor's read-only role, confirmed an attempt to call cloudtrail:StopLogging returns AccessDenied (explicit SCP deny). Expected: logs are immutable to operational admins. Actual: met."
+  result: Satisfied
+  evidence_level: Implementation
+  gap: ""
+  risk_rating: ""
+  risks: []
+  findings: []
+  obs: []
+  poams: []
+  csf: DE
+
+- id: AU-11
+  <<: *d
+  family: AU
+  name: Audit Record Retention
+  requirement: Retain audit records for a defined period consistent with records-retention policy to support after-the-fact investigations and meet regulatory and organizational retention requirements.
+  origination: System-specific
+  systems: SYS-01, SYS-08
+  owner: Owen Castillo (Security Engineer)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: "At assessment: SIEM hot retention 90 days; the log-archive S3 lifecycle expired CloudTrail at 180 days; CloudWatch application-audit (PHI access) logs were kept 90 days with no archive. The CSA requires 12 months (90 days searchable)."
+  requirements: [REQ-005, REQ-019]
+  evidence_required: Retention settings for every audit source, and confirmation that the oldest available records match the setting
+  evidence: [EVID-024, EVID-067]
+  methods: [Examine, Test]
+  test_summary: "Examined the retention configuration for 5 sources and queried the oldest available record in each. Expected: 12 months or more for all. Actual: CloudTrail 180 days, app audit 90 days, SIEM 90 days (the oldest records matched the settings, so there was no hidden longer retention). Validation (2026-09-12): lifecycle changed to a 400-day expiry, app audit is archived to log-archive, and objects dated 2026-03-20 (182 days old) are still present, confirming the old rule no longer applies."
+  result: Other Than Satisfied
+  evidence_level: Implementation
+  gap: Retention below the contractual 12 months.
+  risk_rating: Moderate
+  risks: [RISK-005]
+  findings: [FIND-008]
+  obs: []
+  poams: [POAM-008]
+  last_reviewed: 2026-09-12
+  next_review: 2027-07-15
+  notes: Closure rests on configuration plus an early indicator. Full 12-month retention can only be demonstrated over time, so the FY27 assessment re-tests the oldest record date.
+  csf: DE
+
+# ------------------------------------------------------------------ CA
+- id: CA-2
+  <<: *d
+  family: CA
+  name: Control Assessments
+  requirement: Select an appropriate assessor or team; develop an assessment plan; assess controls at a defined frequency; produce an assessment report; provide results to defined individuals or roles.
+  origination: Common (organization-wide)
+  systems: WCP-PROD
+  owner: Priya Raman (Security Compliance Manager)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: Annual SOC 2 Type II examination by an independent CPA firm, an annual external penetration test (Lanternworks Security, fictional), and this SP 800-53 assessment (SAP ASMT-SAP-001). Results are reported to the CISO, CTO, and Audit & Risk Committee.
+  requirements: [REQ-002, REQ-012]
+  evidence_required: Assessment plan; prior assessment reports; distribution evidence
+  evidence: [EVID-025]
+  methods: [Examine, Interview]
+  test_summary: "Examined the SOC 2 report (unqualified; 1 exception noted in change management), the 2025 pentest summary (2 High findings, retest closed), and this engagement's SAP. Expected: independent assessments at a defined frequency with results reported. Actual: met. Note: SOC 2 does not test 800-53-specific requirements, which is why this engagement exists."
+  result: Satisfied
+  evidence_level: Operating Effectiveness
+  gap: ""
+  risk_rating: ""
+  risks: []
+  findings: []
+  obs: []
+  poams: []
+  csf: GV
+
+- id: CA-3
+  <<: *d
+  family: CA
+  name: Information Exchange
+  requirement: Approve and manage information exchanges using defined agreement types; document interface characteristics, security and privacy requirements, controls, and responsibilities in the agreements; review and update them at a defined frequency.
+  origination: System-specific
+  systems: SYS-01, SYS-05
+  owner: Liam Porter (Data Engineering Manager)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: Each interconnection has an agreement (BAA plus interface or data-sharing specification). The Quarrystone Data Sharing Specification v2 documents the fields, transfer method, schedule, encryption, and contacts. Customer EHR interfaces use per-customer interface specs.
+  requirements: [REQ-018, REQ-021]
+  evidence_required: Interconnection inventory and agreement for each exchange
+  evidence: [EVID-026]
+  methods: [Examine]
+  test_summary: "Examined agreements for Quarrystone and 3 sampled customer EHR interfaces. Expected: signed agreement with security requirements and responsibilities for each exchange. Actual: all 4 present and signed. The Quarrystone spec's contents (excess fields, no US-only clause) are covered as vendor-risk issues under SA-9 (FIND-016), not as a missing agreement."
+  result: Satisfied
+  evidence_level: Design
+  gap: ""
+  risk_rating: ""
+  risks: []
+  findings: []
+  obs: []
+  poams: []
+  notes: The determination separates having an exchange agreement (CA-3, met) from the adequacy of the vendor's terms (SA-9, not met).
+  csf: GV
+
+- id: CA-5
+  <<: *d
+  family: CA
+  name: Plan of Action and Milestones
+  requirement: Develop a plan of action and milestones documenting planned remediation of weaknesses found during control assessments; update it at a defined frequency based on assessment and monitoring results.
+  origination: Common (organization-wide)
+  systems: WCP-PROD
+  owner: Priya Raman (Security Compliance Manager)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: Before 2026-08, weaknesses were tracked in a Jira "SECISSUE" project with owners and due dates (SOC 2 remediation). Since 2026-08-07, the formal POA&M (poam/poam.xlsx) has been baselined, has milestones and SLAs, is reviewed biweekly, and is reported monthly to the CISO.
+  requirements: [REQ-002]
+  evidence_required: POA&M; update history; evidence that items come from assessments and monitoring
+  evidence: [EVID-027]
+  methods: [Examine]
+  test_summary: "Examined the prior Jira tracking (37 items, 100% with owner and due date; 4 overdue) and the new POA&M. Expected: all assessment weaknesses tracked with milestones. Actual: met. All 19 findings are in the POA&M, including the risk-accepted item."
+  result: Satisfied
+  evidence_level: Implementation
+  gap: ""
+  risk_rating: ""
+  risks: []
+  findings: []
+  obs: []
+  poams: []
+  csf: GV
+
+- id: CA-7
+  <<: *d
+  family: CA
+  name: Continuous Monitoring
+  requirement: Develop a system-level continuous monitoring strategy and implement monitoring with defined metrics, frequencies, ongoing assessments, correlation and analysis, response actions, and status reporting.
+  origination: Common (organization-wide)
+  systems: WCP-PROD
+  owner: Alicia Moreno (CISO)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: Operational monitoring is in place (Security Hub CIS checks, weekly vulnerability scans, GuardDuty and MDR, a monthly security metrics deck to the CTO). There is no formal written ISCM strategy document, and metrics were not tied to control objectives until the dashboard built in this engagement.
+  requirements: [REQ-002, REQ-012]
+  evidence_required: ISCM strategy; monitoring outputs; reporting to management
+  evidence: [EVID-028, EVID-058]
+  methods: [Examine, Interview]
+  test_summary: "Examined 6 monthly metric decks and the Security Hub history. Expected: defined metrics reported at a defined frequency with response actions. Actual: monitoring and reporting operate. The CSPM alert on wf-sftp-01 went untriaged for 43 days, and that failure is recorded under SC-7/FIND-012. The strategy document gap is recorded as OBS-05."
+  result: Satisfied
+  evidence_level: Operating Effectiveness
+  gap: No written ISCM strategy (observation).
+  risk_rating: Low
+  risks: [RISK-016]
+  findings: []
+  obs: [OBS-05]
+  poams: []
+  csf: GV
+
+# ------------------------------------------------------------------ CM
+- id: CM-2
+  <<: *d
+  family: CM
+  name: Baseline Configuration
+  requirement: Develop, document, and maintain a current baseline configuration under configuration control; review and update it at a defined frequency and when components are installed or upgraded.
+  origination: System-specific
+  systems: SYS-01
+  owner: Tomasz Wierzbicki (Director, Platform Engineering)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: Infrastructure is defined in Terraform (baseline repo, PR-reviewed). EKS nodes use a hardened AMI (CIS Level 1) rebuilt monthly. Container base images are pinned and rebuilt weekly. The legacy hosts (wf-sftp-01, legacy-reports) have no managed baseline, which is recorded under SA-22.
+  requirements: [REQ-001, REQ-023]
+  evidence_required: IaC baseline; AMI build specification; drift reports
+  evidence: [EVID-029]
+  methods: [Examine, Test]
+  test_summary: "Examined the Terraform baseline and the AMI pipeline. Ran a drift check on 3 sampled modules (VPC, EKS, RDS). Expected: live config matches IaC. Actual: no drift in the sampled modules. The legacy hosts are outside IaC and are covered under SA-22."
+  result: Satisfied
+  evidence_level: Implementation
+  gap: ""
+  risk_rating: ""
+  risks: []
+  findings: []
+  obs: []
+  poams: []
+  csf: PR
+
+- id: CM-3
+  <<: *d
+  family: CM
+  name: Configuration Change Control
+  requirement: Determine and document types of changes that are configuration-controlled; review, approve or disapprove, document, and implement changes; retain records; monitor and review activities.
+  origination: System-specific
+  systems: SYS-01, SYS-03, SYS-05
+  owner: Tomasz Wierzbicki (Director, Platform Engineering)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: Code and IaC changes go through GitHub PRs with required reviews and CI, then deploy through a protected environment with approvers. The change management procedure CMP-006 requires emergency changes to be retro-approved within 2 business days. Console changes have no preventive gate.
+  requirements: [REQ-023]
+  evidence_required: Change population for the period; sample tickets with approvals, reviews, tests, and deployment timestamps
+  evidence: [EVID-030]
+  methods: [Examine, Test]
+  test_summary: "Random sample of 25 of 212 changes (test-results/cm3-change-sample.md). Expected: 25 of 25 approved before deployment, or retro-approved within 2 business days for emergencies. Actual: 3 exceptions. CHG-2026-0412 (emergency RDP change, never approved or reverted), CHG-2026-0288 (retro approval after 9 days), and CHG-2026-0356 (deployed 5h38m before approval)."
+  result: Other Than Satisfied
+  evidence_level: Operating Effectiveness
+  gap: The emergency and console change paths bypass approval.
+  risk_rating: Moderate
+  risks: [RISK-014]
+  findings: [FIND-018]
+  obs: []
+  poams: [POAM-018]
+  next_review: 2026-12-31
+  csf: PR
+
+- id: CM-6
+  <<: *d
+  family: CM
+  name: Configuration Settings
+  requirement: Establish and document configuration settings using common secure configurations; implement them; identify, document, and approve deviations; monitor and control changes to settings.
+  origination: System-specific
+  systems: SYS-01, SYS-05
+  owner: Tomasz Wierzbicki (Director, Platform Engineering)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: AWS Security Hub runs the CIS AWS Foundations benchmark across accounts (97% of controls passing at 2026-06-30). Deviations are supposed to be triaged within 7 days (High) by SRE. The SRE on-call runbook did not include Security Hub findings, so triage depended on ad-hoc review.
+  requirements: [REQ-001]
+  evidence_required: Secure configuration baseline; CSPM results and history; deviation approvals
+  evidence: [EVID-028, EVID-053, EVID-068]
+  methods: [Examine, Test]
+  test_summary: "Examined the Security Hub finding history. Expected: High deviations triaged within 7 days, or approved as exceptions. Actual: 3 High findings were open more than 30 days without triage, including 'Security group allows ingress from 0.0.0.0/0 to port 3389' on wf-sftp-01 (open 43 days). Remediated 2026-07-03; the security group and Security Hub re-evaluation were validated 2026-07-10 (EVID-068)."
+  result: Other Than Satisfied
+  evidence_level: Operating Effectiveness
+  gap: Deviation detection works; deviation response did not.
+  risk_rating: High
+  risks: [RISK-012, RISK-007]
+  findings: [FIND-012]
+  obs: []
+  poams: [POAM-012]
+  last_reviewed: 2026-07-10
+  csf: PR
+
+- id: CM-8
+  <<: *d
+  family: CM
+  name: System Component Inventory
+  requirement: Develop and document an accurate inventory of system components at the granularity needed for tracking and reporting; review and update it at a defined frequency.
+  origination: System-specific
+  systems: SYS-01, SYS-10
+  owner: Tomasz Wierzbicki (Director, Platform Engineering)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: AWS Config aggregator (all accounts) plus the MDM inventory for endpoints. A tag policy requires owner, environment, and data-classification tags.
+  requirements: [REQ-001]
+  evidence_required: Inventory exports; tag compliance; reconciliation to billing and resource counts
+  evidence: [EVID-031]
+  methods: [Examine, Test]
+  test_summary: "Reconciled the AWS Config resource counts to Cost Explorer resource IDs for EC2, EKS, and RDS (100% present in inventory). Expected: complete inventory with ownership. Actual: inventory complete, but 7% of EC2/EKS resources lack an owner tag, which reduces scanner scoping accuracy (OBS-02)."
+  result: Satisfied
+  evidence_level: Implementation
+  gap: Owner-tag compliance at 93% (observation).
+  risk_rating: Low
+  risks: [RISK-006]
+  findings: []
+  obs: [OBS-02]
+  poams: []
+  csf: ID
+
+# ------------------------------------------------------------------ CP
+- id: CP-2
+  <<: *d
+  family: CP
+  name: Contingency Plan
+  requirement: Develop a contingency plan that identifies essential functions, recovery objectives, restoration priorities, roles, and contacts; distribute, review, update, and protect it.
+  origination: System-specific
+  systems: SYS-01
+  owner: Tomasz Wierzbicki (Director, Platform Engineering)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: BC/DR Plan BCP-003 v2.1 (2025-11). RTO 4h and RPO 1h for WCP-PROD. Restoration priorities are the auth, care-plan, and RPM ingestion services. Covers clinical downtime procedures coordinated with customers.
+  requirements: [REQ-011, REQ-017]
+  evidence_required: Approved current plan with defined RTO/RPO, roles, and distribution
+  evidence: [EVID-032]
+  methods: [Examine, Interview]
+  test_summary: "Examined BCP-003 v2.1 against CP-2 elements. Expected: current, approved, with objectives and roles. Actual: met. The plan is sound on paper; whether it works is tested under CP-4 and CP-9(1)."
+  result: Satisfied
+  evidence_level: Design
+  gap: ""
+  risk_rating: ""
+  risks: []
+  findings: []
+  obs: []
+  poams: []
+  csf: RC
+
+- id: CP-4
+  <<: *d
+  family: CP
+  name: Contingency Plan Testing
+  requirement: Test the contingency plan at a defined frequency using defined tests to determine effectiveness and readiness; review results and initiate corrective actions.
+  origination: System-specific
+  systems: SYS-01
+  owner: Tomasz Wierzbicki (Director, Platform Engineering)
+  status_owner: Implemented
+  status_validated: Not Implemented
+  implementation: The owner cited a 2024 AZ-failover exercise. BCP-003 requires an annual test (tabletop or functional). No plan-level test was performed in the 12 months before fieldwork.
+  requirements: [REQ-011, REQ-017]
+  evidence_required: Test plan, test records, after-action report, and corrective actions within the last 12 months
+  evidence: [EVID-033]
+  methods: [Examine, Interview]
+  test_summary: "Requested all CP test records for the past 24 months. Expected: at least 1 plan-level test in the last 12 months. Actual: only 2024-04 engineering notes on an AZ failover (not a plan-level test, with no after-action report). Evidence was marked Insufficient. A combined ransomware tabletop (IR + CP) is scheduled for 2026-10-14."
+  result: Other Than Satisfied
+  evidence_level: Design
+  gap: Contingency plan not tested.
+  risk_rating: Moderate
+  risks: [RISK-008]
+  findings: [FIND-014]
+  obs: []
+  poams: [POAM-014]
+  next_review: 2026-10-31
+  csf: RC
+
+- id: CP-9
+  <<: *d
+  family: CP
+  name: System Backup
+  requirement: Conduct backups of user-level, system-level, and security-related information at a defined frequency consistent with recovery objectives; protect the confidentiality, integrity, and availability of backups.
+  origination: System-specific
+  systems: SYS-01, SYS-04
+  owner: Tomasz Wierzbicki (Director, Platform Engineering)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: Aurora continuous backup (PITR, 35 days), plus daily AWS Backup copies to the wcp-dr account in us-west-2 in a vault with Vault Lock (compliance mode) and KMS encryption. S3 versioning plus cross-region replication for documents.
+  requirements: [REQ-011, REQ-017]
+  evidence_required: Backup plans; job history; vault protection settings; cross-region copies
+  evidence: [EVID-034]
+  methods: [Examine, Test]
+  test_summary: "Examined the backup plans and 30 days of job history (30 of 30 successful), and confirmed Vault Lock plus cross-account copy. Expected: backups taken per RPO and protected from deletion. Actual: met. Whether backups can actually be restored is tested separately under CP-9(1)."
+  result: Satisfied
+  evidence_level: Operating Effectiveness
+  gap: ""
+  risk_rating: ""
+  risks: []
+  findings: []
+  obs: []
+  poams: []
+  csf: PR
+
+- id: CP-9(1)
+  <<: *d
+  family: CP
+  name: Testing for Reliability and Integrity
+  requirement: Test backup information at a defined frequency to verify media reliability and information integrity.
+  origination: System-specific
+  systems: SYS-04
+  owner: Tomasz Wierzbicki (Director, Platform Engineering)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: The owner treated backup-job success notifications as testing. No restore of wcp-core-db from the DR vault had been performed or documented.
+  requirements: [REQ-011, REQ-017]
+  evidence_required: Restore test records showing restore steps, time taken, data-integrity checks, and results against RTO/RPO
+  evidence: [EVID-035, EVID-069]
+  methods: [Examine, Test]
+  test_summary: "Expected: an annual documented restore test with integrity validation. Actual: none; job-success logs only (EVID-035, Insufficient). Validation: the assessor observed a restore test on 2026-08-27 (EVID-069). wcp-core-db was restored from the wcp-dr vault into an isolated account in 3h41m (RTO 4h). Data loss was 11 minutes (RPO 1h). Row-count and checksum validation passed on 12 tables."
+  result: Other Than Satisfied
+  evidence_level: Operating Effectiveness
+  gap: Backup recoverability had never been demonstrated.
+  risk_rating: Moderate
+  risks: [RISK-008]
+  findings: [FIND-013]
+  obs: []
+  poams: [POAM-013]
+  last_reviewed: 2026-09-01
+  csf: RC
+
+# ------------------------------------------------------------------ IA
+- id: IA-2
+  <<: *d
+  family: IA
+  name: Identification and Authentication (Organizational Users)
+  requirement: Uniquely identify and authenticate organizational users and associate that identification with processes acting on their behalf.
+  origination: Common (Okta)
+  systems: SYS-02, and all SSO-integrated systems
+  owner: Nadia Rahman (IAM Engineer)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: Every workforce user has a unique Okta identity tied to an HR worker ID. Shared human accounts are prohibited (ACP-002 §4.2). The one shared vendor login found (ironpeak-soc) is reported under AC-2 and IA-5 as FIND-005.
+  requirements: [REQ-020]
+  evidence_required: User population with unique identifiers mapped to HR
+  evidence: [EVID-005]
+  methods: [Examine, Test]
+  test_summary: "Mapped the Okta population to HR worker IDs. Expected: unique identity per person. Actual: met for workforce identities (the duplicate rgupta2 is one person with two accounts, handled under AC-2 and FIND-004). The shared EDR vendor login is handled under FIND-005."
+  result: Satisfied
+  evidence_level: Implementation
+  gap: ""
+  risk_rating: ""
+  risks: []
+  findings: []
+  obs: []
+  poams: []
+  csf: PR
+
+- id: IA-2(1)
+  <<: *d
+  family: IA
+  name: Multi-factor Authentication to Privileged Accounts
+  requirement: Implement multi-factor authentication for access to privileged accounts.
+  origination: Hybrid (Okta + AWS IAM)
+  systems: SYS-01, SYS-02
+  owner: Nadia Rahman (IAM Engineer)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: The Okta global session policy requires MFA except for members of MFA-Exempt-Legacy (a 2023 policy). AWS Identity Center access inherits Okta MFA. Legacy IAM users authenticate directly to AWS.
+  requirements: [REQ-003, REQ-020]
+  evidence_required: Authentication policies; exemption groups; privileged-user MFA status; AWS credential report
+  evidence: [EVID-007, EVID-010, EVID-011, EVID-063, EVID-064]
+  methods: [Examine, Test]
+  test_summary: "Expected: 100% of privileged access requires MFA. Actual: 1 Okta Super Administrator (kbrandt) was in the exemption group, and the IAM user mfeld-admin (AdministratorAccess) had a console password without MFA. Validation (2026-09-04): the exemption policy and group were deleted, admin apps require phishing-resistant factors, and only aws-breakglass (hardware MFA) remains as an IAM user. A password-only sign-in was re-performed and denied."
+  result: Other Than Satisfied
+  evidence_level: Implementation
+  gap: MFA was bypassable for some privileged access.
+  risk_rating: High
+  risks: [RISK-003, RISK-001]
+  findings: [FIND-002]
+  obs: []
+  poams: [POAM-002]
+  last_reviewed: 2026-09-05
+  csf: PR
+
+- id: IA-2(2)
+  <<: *d
+  family: IA
+  name: Multi-factor Authentication to Non-privileged Accounts
+  requirement: Implement multi-factor authentication for access to non-privileged accounts.
+  origination: Common (Okta)
+  systems: SYS-02
+  owner: Nadia Rahman (IAM Engineer)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: As for IA-2(1). The exemption group held 11 accounts (9 human, 2 service), added 2023–2025 for lost phones, SMS problems, shared clinic workstations, and a scanner.
+  requirements: [REQ-003, REQ-020]
+  evidence_required: Authentication policy; exemption group membership with reasons and approvals
+  evidence: [EVID-010, EVID-011, EVID-063]
+  methods: [Examine, Test]
+  test_summary: "Expected: 100% MFA, or time-bound approved exceptions. Actual: 9 of 347 human accounts (2.6%) exempt, and 0 of 11 exemptions had approval or expiry (the oldest dated 2023-05). Validation: all 9 enrolled (1 with a hardware key as an accessibility accommodation), both service accounts converted to non-interactive integrations, and the group deleted."
+  result: Other Than Satisfied
+  evidence_level: Implementation
+  gap: Permanent, unapproved MFA exemptions.
+  risk_rating: High
+  risks: [RISK-003]
+  findings: [FIND-002]
+  obs: []
+  poams: [POAM-002]
+  last_reviewed: 2026-09-05
+  csf: PR
+
+- id: IA-2(8)
+  <<: *d
+  family: IA
+  name: Access to Accounts — Replay Resistant
+  requirement: Implement replay-resistant authentication mechanisms for access to privileged and non-privileged accounts.
+  origination: Common (Okta)
+  systems: SYS-02
+  owner: Nadia Rahman (IAM Engineer)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: All enabled authenticators are replay-resistant (Okta Verify push with number challenge, FastPass, FIDO2/WebAuthn, TOTP). SMS, voice, email, and security questions have been disabled org-wide since 2025.
+  requirements: [REQ-020]
+  evidence_required: Authenticator configuration
+  evidence: [EVID-012, EVID-010]
+  methods: [Examine]
+  test_summary: "Examined the enabled authenticators. Expected: only replay-resistant factors for users who authenticate with MFA. Actual: met. The exempt users under IA-2(1)/(2) did not use weak factors; they used no second factor at all."
+  result: Satisfied
+  evidence_level: Implementation
+  gap: ""
+  risk_rating: ""
+  risks: []
+  findings: []
+  obs: []
+  poams: []
+  csf: PR
+
+- id: IA-5
+  <<: *d
+  family: IA
+  name: Authenticator Management
+  requirement: Manage authenticators by verifying identity before distribution, establishing initial content, ensuring strength, managing lost or compromised authenticators, changing or refreshing them at defined frequencies, and protecting their content.
+  origination: Hybrid
+  systems: SYS-01, SYS-02, SYS-05, SYS-08
+  owner: Nadia Rahman (IAM Engineer)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: Human authenticators are strong (Okta password policy plus MFA; help-desk identity verification SOP). For service credentials, the standard requires rotation within 365 days or federation. Secrets Manager auto-rotates DB credentials, and CI/CD uses OIDC with no static keys. Some legacy service credentials are outside this.
+  requirements: [REQ-020]
+  evidence_required: Password and authenticator policies; service credential inventory with rotation dates; help-desk verification records
+  evidence: [EVID-007, EVID-013, EVID-064, EVID-065]
+  methods: [Examine, Test]
+  test_summary: "Tested credential age for all 13 registered non-human accounts. Expected: none older than 365 days unless federated. Actual: 3 stale (svc-quarrystone-sftp SSH key 811 days; svc-reporting-etl access key 539 days; svc-vulnscan password since 2023), and 1 shared vendor password (ironpeak-soc). Sampled 5 help-desk MFA resets: 5 of 5 had identity verification recorded."
+  result: Other Than Satisfied
+  evidence_level: Operating Effectiveness
+  gap: Long-lived static service credentials, and a shared credential.
+  risk_rating: Moderate
+  risks: [RISK-017]
+  findings: [FIND-005]
+  obs: []
+  poams: [POAM-005]
+  last_reviewed: 2026-09-12
+  csf: PR
+
+# ------------------------------------------------------------------ IR
+- id: IR-3
+  <<: *d
+  family: IR
+  name: Incident Response Testing
+  requirement: Test the effectiveness of the incident response capability at a defined frequency using defined tests.
+  origination: Common (organization-wide)
+  systems: WCP-PROD
+  owner: Owen Castillo (Security Engineer)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: IRP-005 requires an annual tabletop exercise that includes the MDR, Legal/Privacy, and Customer Ops. The last tabletop was 2024-09-18 (phishing-to-BEC scenario). The 2025 exercise was deferred twice.
+  requirements: [REQ-006, REQ-016]
+  evidence_required: Exercise plan, attendance, after-action report, and corrective actions within 12 months
+  evidence: [EVID-037]
+  methods: [Examine, Interview]
+  test_summary: "Expected: an IR exercise within the last 12 months with tracked corrective actions. Actual: the most recent was 21 months before fieldwork (EVID-037, Insufficient for the period). The 24-hour SHCA reporting path has never been exercised. Mitigating factor: real incidents in H1 were handled well (IR-4), which lowers but does not remove the risk."
+  result: Other Than Satisfied
+  evidence_level: Design
+  gap: IR capability not tested in the required period; SHCA-specific reporting path not rehearsed.
+  risk_rating: Moderate
+  risks: [RISK-009]
+  findings: [FIND-014]
+  obs: []
+  poams: [POAM-014]
+  next_review: 2026-10-31
+  csf: RS
+
+- id: IR-4
+  <<: *d
+  family: IR
+  name: Incident Handling
+  requirement: Implement an incident-handling capability covering preparation, detection and analysis, containment, eradication, and recovery; coordinate with contingency planning; incorporate lessons learned.
+  origination: Common (organization-wide)
+  systems: WCP-PROD
+  owner: Owen Castillo (Security Engineer)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: 24x7 MDR triage with escalation to the on-call security engineer. IRP-005 playbooks for phishing, lost device, cloud credential misuse, privacy incidents, and malware. The Privacy Officer runs the HIPAA breach risk assessment.
+  requirements: [REQ-016]
+  evidence_required: Incident records for the period with timeline, actions, and lessons learned
+  evidence: [EVID-038, EVID-078]
+  methods: [Examine, Test]
+  test_summary: "Tested all 6 incidents in H1 plus INC-2026-0117 (raised during the assessment). Expected: triage within SLA, containment, documentation, and a privacy assessment where PHI was involved. Actual: 7 of 7 met. INC-2026-0117 (a post-termination sign-in) was contained the same day, and a 4-factor assessment concluded low probability of compromise."
+  result: Satisfied
+  evidence_level: Operating Effectiveness
+  gap: ""
+  risk_rating: ""
+  risks: []
+  findings: []
+  obs: []
+  poams: []
+  csf: RS
+
+- id: IR-6
+  <<: *d
+  family: IR
+  name: Incident Reporting
+  requirement: Require personnel to report suspected incidents within a defined time; report incident information to defined authorities.
+  origination: Common (organization-wide)
+  systems: WCP-PROD
+  owner: Rachel Stein (HIPAA Privacy Officer)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: "Workforce reporting through the #security-report Slack channel, the phone line, or MDR. External notification matrix covers customers (BAA, 5 business days), HHS (via covered entities), and SHCA (24h, from go-live)."
+  requirements: [REQ-006, REQ-016, REQ-022]
+  evidence_required: Reporting procedures; notification records for reportable incidents
+  evidence: [EVID-038]
+  methods: [Examine, Test]
+  test_summary: "Expected: every incident requiring notification is notified within its contractual window. Actual: 1 notifiable privacy incident (INC-2026-0077), with the customer notified in 2 business days (the BAA allows 5). The SHCA 24h path is documented but untested (see IR-3)."
+  result: Satisfied
+  evidence_level: Operating Effectiveness
+  gap: ""
+  risk_rating: ""
+  risks: []
+  findings: []
+  obs: []
+  poams: []
+  csf: RS
+
+- id: IR-8
+  <<: *d
+  family: IR
+  name: Incident Response Plan
+  requirement: Develop an incident response plan that provides a roadmap, structure, metrics, and roles; distribute, review, and update it; protect it from unauthorized disclosure.
+  origination: Common (organization-wide)
+  systems: WCP-PROD
+  owner: Owen Castillo (Security Engineer)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: IRP-005 v4.0 was reviewed 2025-11 and approved by the CISO. It defines severity levels, roles, the MDR interface, communications, and breach assessment. The contact roster lists 2 departed staff (mfeld, a former Privacy Analyst).
+  requirements: [REQ-006, REQ-016]
+  evidence_required: Current approved plan; review history; distribution
+  evidence: [EVID-036]
+  methods: [Examine]
+  test_summary: "Expected: a plan reviewed within 12 months with current contacts. Actual: reviewed 2025-11 (current), but the contact roster is stale (OBS-03), which the tabletop in POAM-014 will fix. The plan does not yet include the SHCA-specific 24h notification step; that is added in POAM-014 milestone 1."
+  result: Satisfied
+  evidence_level: Design
+  gap: Stale contact roster (observation).
+  risk_rating: Low
+  risks: [RISK-009]
+  findings: []
+  obs: [OBS-03]
+  poams: []
+  csf: RS
+
+# ------------------------------------------------------------------ MP / PE
+- id: MP-6
+  <<: *d
+  family: MP
+  name: Media Sanitization
+  requirement: Sanitize system media before disposal, release, or reuse using defined techniques; use mechanisms with strength and integrity matching the information's classification.
+  origination: Hybrid (AWS-managed storage media inherited; endpoints Wrenfield)
+  systems: SYS-10 (endpoints); AWS storage inherited
+  owner: Kevin Brandt (IT Manager)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: Laptops are FDE-encrypted. At retirement, the MDM wipe is followed by physical destruction by Coldwater Secure Destruction (fictional ITAD), with certificates of destruction by serial number. Cloud storage media sanitization is inherited from AWS under the shared-responsibility model.
+  requirements: [REQ-021]
+  evidence_required: Disposal records reconciled to the asset inventory; certificates of destruction
+  evidence: [EVID-039, EVID-040]
+  methods: [Examine, Test]
+  test_summary: "Reconciled 14 laptops retired in H1 (MDM status: Retired) to Coldwater certificates by serial number. Expected: 14 of 14 certificates. Actual: 14 of 14."
+  result: Satisfied
+  evidence_level: Operating Effectiveness
+  gap: ""
+  risk_rating: ""
+  risks: [RISK-018]
+  findings: []
+  obs: []
+  poams: []
+  csf: PR
+
+- id: PE-3
+  <<: *d
+  family: PE
+  name: Physical Access Control
+  requirement: Enforce physical access authorizations at entry and exit points to facilities where the system resides; maintain audit logs; control visitor access; secure keys and combinations.
+  origination: Common (inherited from AWS)
+  systems: AWS data centers (inherited)
+  owner: Priya Raman (Security Compliance Manager), who verifies the inheritance
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: Inherited. WCP-PROD runs entirely in AWS data centers, and physical security is the provider's responsibility under the shared-responsibility model. Wrenfield's responsibility is to keep the inheritance record current and review the provider's attestations annually. The HQ office holds no system components.
+  requirements: [REQ-001]
+  evidence_required: Inheritance record; evidence of annual review of the provider's attestation documentation
+  evidence: [EVID-040]
+  methods: [Examine]
+  test_summary: "Examined the inheritance record and confirmed the provider attestation review was logged in 2026-03 by the GRC Manager. Expected: current inheritance record and annual review. Actual: met. The provider's own controls were not tested (out of scope). No statement is made about any real provider's controls."
+  result: Satisfied
+  evidence_level: Design
+  gap: ""
+  risk_rating: ""
+  risks: []
+  findings: []
+  obs: []
+  poams: []
+  csf: PR
+
+# ------------------------------------------------------------------ PL / PM
+- id: PL-2
+  <<: *d
+  family: PL
+  name: System Security and Privacy Plans
+  requirement: Develop security and privacy plans that describe the system, boundary, categorization, threats, controls, and relationships; distribute, review, update, and protect them.
+  origination: System-specific
+  systems: WCP-PROD
+  owner: Priya Raman (Security Compliance Manager)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: SSP v1.3 dated 2025-02. It predates the EKS migration (2025-Q3), the Quarrystone SFTP data flow, and the log-archive account, and states a higher implementation status than testing supports for 27 of the 61 in-scope controls (the 'owner-stated' column in the matrix). It was written for SOC 2 narrative purposes and is not organized by 800-53 control.
+  requirements: [REQ-001, REQ-002]
+  evidence_required: Current SSP reflecting the boundary, inventory, data flows, and control implementations
+  evidence: [EVID-041]
+  methods: [Examine]
+  test_summary: "Compared the SSP to the as-found environment (system profile). Expected: SSP current within 12 months and accurate. Actual: 19 months old, 3 major architecture changes missing, and 27 of 61 controls described at a higher implementation status than testing supports."
+  result: Other Than Satisfied
+  evidence_level: Design
+  gap: Outdated SSP that overstates controls.
+  risk_rating: Low
+  risks: [RISK-016]
+  findings: [FIND-017]
+  obs: []
+  poams: [POAM-017]
+  next_review: 2026-12-15
+  notes: The SSP rewrite is scoped to SP 800-18 Rev. 2 (June 2026), which covers security, privacy, and C-SCRM plans together.
+  csf: GV
+
+- id: PM-9
+  <<: *d
+  baseline: Org-level (PM family is not allocated to baselines)
+  family: PM
+  name: Risk Management Strategy
+  requirement: Develop an organization-wide strategy for managing security and privacy risk, including risk tolerance; implement it consistently; review and update it at a defined frequency.
+  origination: Common (organization-wide)
+  systems: Organization-wide
+  owner: Alicia Moreno (CISO)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: Risk Management Strategy RMS-001 and a Board-approved Risk Appetite Statement (2025-10-21) define appetite by rating, acceptance authority, and escalation. The risk-scoring methodology (RSK-MTH-001) operationalizes them.
+  requirements: [REQ-024, REQ-012]
+  evidence_required: Approved strategy and appetite; evidence of use in decisions
+  evidence: [EVID-042, EVID-060]
+  methods: [Examine, Interview]
+  test_summary: "Expected: an approved strategy with defined tolerance, applied in decisions. Actual: met. RACC-001 followed the acceptance authority matrix, and VR-001 (Critical) was escalated to the CEO within 5 business days as the strategy requires."
+  result: Satisfied
+  evidence_level: Operating Effectiveness
+  gap: ""
+  risk_rating: ""
+  risks: []
+  findings: []
+  obs: [OBS-06]
+  poams: []
+  csf: GV
+
+# ------------------------------------------------------------------ PS
+- id: PS-3
+  <<: *d
+  family: PS
+  name: Personnel Screening
+  requirement: Screen individuals before authorizing access to the system; rescreen according to defined conditions and frequency.
+  origination: Hybrid (employees Wrenfield; contractors screened by staffing firm under contract)
+  systems: All workforce
+  owner: Denise Yamamoto (Director of People)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: Background checks are required before system access for all employees. Contractors are screened by Northgate under MSA §8 (attestation per placement).
+  requirements: [REQ-014]
+  evidence_required: Screening completion before the access-grant date for a sample of new hires and contractors
+  evidence: [EVID-043]
+  methods: [Examine, Test]
+  test_summary: "Sampled 15 H1 new hires and contractors, comparing screening completion dates to the Okta account creation date. Expected: 15 of 15 screened before access. Actual: 15 of 15 (contractors by Northgate attestation)."
+  result: Satisfied
+  evidence_level: Operating Effectiveness
+  gap: ""
+  risk_rating: ""
+  risks: []
+  findings: []
+  obs: []
+  poams: []
+  csf: GV
+
+- id: PS-4
+  <<: *d
+  family: PS
+  name: Personnel Termination
+  requirement: Upon termination, disable system access within a defined period, terminate or revoke authenticators, conduct exit interviews as needed, retrieve organizational property, and retain access to organizational information.
+  origination: Hybrid (HR + IT)
+  systems: All workforce
+  owner: Denise Yamamoto (Director of People)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: HR processes terminations in PeopleHub and emails IT. Asset return is tracked by IT. Access removal depends on IT creating a ticket (see AC-2(3)).
+  requirements: [REQ-004, REQ-013]
+  evidence_required: Termination population; access removal timing; asset-return records
+  evidence: [EVID-003, EVID-004, EVID-061]
+  methods: [Examine, Test]
+  test_summary: "Same population as AC-2(3). Asset return: 19 of 19 laptops recovered or wiped. Access removal: 16 of 19 within 24h. The HR-to-IT handoff failed for 2 of 19 terminations (the AP team turnover and a staffing-vendor end date)."
+  result: Other Than Satisfied
+  evidence_level: Operating Effectiveness
+  gap: The HR-to-IT handoff is unreliable.
+  risk_rating: High
+  risks: [RISK-002]
+  findings: [FIND-001]
+  obs: []
+  poams: [POAM-001]
+  last_reviewed: 2026-09-10
+  csf: GV
+
+- id: PS-5
+  <<: *d
+  family: PS
+  name: Personnel Transfer
+  requirement: Review and confirm the ongoing operational need for current access when individuals are reassigned or transferred; initiate defined transfer actions within a defined period.
+  origination: Hybrid (HR + IT)
+  systems: All workforce
+  owner: Denise Yamamoto (Director of People)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: Transfers are updated in PeopleHub. New access is requested through tickets. There is no step to remove the prior role's access.
+  requirements: [REQ-014]
+  evidence_required: Transfer population; access before and after transfer
+  evidence: [EVID-044]
+  methods: [Examine, Test]
+  test_summary: "Tested all 6 H1 transfers. Expected: prior-role access removed within 5 business days of the transfer. Actual: 5 of 6 transfers had no prior-role privileged or PHI access to remove. In 1 of 6 (cfernandes), PHI support access was retained for 5 months and used after the transfer."
+  result: Other Than Satisfied
+  evidence_level: Operating Effectiveness
+  gap: No access re-baselining on transfer.
+  risk_rating: Moderate
+  risks: [RISK-004]
+  findings: [FIND-004]
+  obs: []
+  poams: [POAM-004]
+  next_review: 2026-12-15
+  csf: GV
+
+- id: PS-7
+  <<: *d
+  family: PS
+  name: External Personnel Security
+  requirement: Establish personnel security requirements for external providers; require them to comply with policies; document the requirements; require notification of transfers and terminations within a defined time; monitor compliance.
+  origination: Hybrid
+  systems: Contractors (Northgate), vendor personnel (Ironpeak)
+  owner: Sofia Ricci (Engineering Manager, contractor sponsor)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: The Northgate MSA requires screening and 2-business-day notice of contractor departures. Contractor end dates are entered in PeopleHub but not enforced in Okta. Contractor access is approved by the sponsor with no link to the SOW scope.
+  requirements: [REQ-004, REQ-008, REQ-013]
+  evidence_required: Contractor roster with SOW dates; notices of departure; access vs SOW scope
+  evidence: [EVID-045, EVID-066]
+  methods: [Examine, Test]
+  test_summary: "Tested all 5 contractors active in H1 against SOW dates and scope. Expected: access ends at the contract end date and matches SOW scope. Actual: 1 contractor ended without de-provisioning (reported under FIND-001). 1 was active past the recorded end date with the extension undocumented (AR-EX-15). 1 had PHI production access outside the QA SOW scope (AR-EX-16)."
+  result: Other Than Satisfied
+  evidence_level: Operating Effectiveness
+  gap: Contractor access is not bound to the engagement term and scope.
+  risk_rating: Moderate
+  risks: [RISK-002, RISK-004]
+  findings: [FIND-006, FIND-001]
+  obs: []
+  poams: [POAM-006, POAM-001]
+  last_reviewed: 2026-09-10
+  csf: GV
+
+# ------------------------------------------------------------------ RA
+- id: RA-2
+  <<: *d
+  family: RA
+  name: Security Categorization
+  requirement: Categorize the system and information it processes, stores, and transmits; document results in the security plan; have the authorizing official or designee review and approve the categorization.
+  origination: System-specific
+  systems: WCP-PROD
+  owner: Samir Haddad (CTO, system owner)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: FIPS 199 categorization worksheet (2025-06) rates WCP-PROD Moderate. It was re-validated during this engagement (system profile §4), including a challenge on integrity for RPM data, with review triggers documented.
+  requirements: [REQ-001, REQ-012]
+  evidence_required: Categorization with rationale and approval
+  evidence: [EVID-046]
+  methods: [Examine, Interview]
+  test_summary: "Expected: a documented, approved categorization consistent with the data and mission. Actual: met. The assessor independently reached the same result (Moderate) and recorded a trigger to re-categorize if real-time clinical alerting is added."
+  result: Satisfied
+  evidence_level: Design
+  gap: ""
+  risk_rating: ""
+  risks: []
+  findings: []
+  obs: []
+  poams: []
+  csf: ID
+
+- id: RA-3
+  <<: *d
+  family: RA
+  name: Risk Assessment
+  requirement: Conduct risk assessments identifying threats, vulnerabilities, likelihood, and impact; integrate results with organization-level determinations; document, review, disseminate, and update them.
+  origination: Common (organization-wide)
+  systems: WCP-PROD
+  owner: Priya Raman (Security Compliance Manager)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: Annual HIPAA risk analysis (2025-09 report) using an SP 800-30-style method. As of 2026-08, it is superseded by the enterprise risk register in this engagement (18 risks, scored with RSK-MTH-001).
+  requirements: [REQ-012]
+  evidence_required: Current risk assessment; methodology; evidence of update and dissemination
+  evidence: [EVID-047]
+  methods: [Examine]
+  test_summary: "Expected: a risk assessment within 12 months covering threats, vulnerabilities, likelihood, and impact. Actual: 2025-09 analysis present and adequate. It did not identify the vendor offshore-access or retention gaps; the new register adds them."
+  result: Satisfied
+  evidence_level: Design
+  gap: ""
+  risk_rating: ""
+  risks: []
+  findings: []
+  obs: []
+  poams: []
+  csf: ID
+
+- id: RA-5
+  <<: *d
+  family: RA
+  name: Vulnerability Monitoring and Scanning
+  requirement: Monitor and scan for vulnerabilities at a defined frequency and when new vulnerabilities are reported; use interoperable tools; analyze reports; remediate per risk; share information; use tools that can update the vulnerabilities scanned.
+  origination: System-specific
+  systems: SYS-01, SYS-05
+  owner: Owen Castillo (Security Engineer)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: Weekly authenticated scanning of EC2 and EKS nodes (agent-based), container image scanning in CI and in the registry, and a weekly external scan of internet-facing endpoints. Scan scope is driven by owner tags.
+  requirements: [REQ-009]
+  evidence_required: Scan configuration and coverage; scan history; findings export
+  evidence: [EVID-048, EVID-031]
+  methods: [Examine, Test]
+  test_summary: "Compared scan coverage to the CM-8 inventory. Expected: all production assets scanned weekly. Actual: 100% of tagged assets scanned. Untagged resources (7%) were caught by the external and registry scans but missed by host scans for 1–3 weeks (OBS-02). Remediation timeliness is assessed under SI-2."
+  result: Satisfied
+  evidence_level: Operating Effectiveness
+  gap: Tag-driven scoping leaves a coverage lag for untagged resources (observation).
+  risk_rating: Low
+  risks: [RISK-006]
+  findings: []
+  obs: [OBS-02]
+  poams: []
+  csf: ID
+
+- id: RA-7
+  <<: *d
+  family: RA
+  name: Risk Response
+  requirement: Respond to findings from security and privacy assessments, monitoring, and audits in accordance with organizational risk tolerance.
+  origination: Common (organization-wide)
+  systems: WCP-PROD
+  owner: Alicia Moreno (CISO)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: Findings receive a treatment decision (mitigate, accept, transfer, or avoid) per RSK-MTH-001, with acceptance authority by rating. Decisions are recorded in the risk register and the POA&M. Formal acceptances use RACC forms.
+  requirements: [REQ-012, REQ-024]
+  evidence_required: Treatment decisions for findings; acceptance records signed by the correct authority
+  evidence: [EVID-027, EVID-060]
+  methods: [Examine]
+  test_summary: "Expected: every finding has a treatment consistent with appetite, and acceptances are signed at the right level. Actual: 19 of 19 findings have treatments. The 1 acceptance (RACC-001, Moderate) was signed by the CFO as risk owner with CISO concurrence, as the matrix requires."
+  result: Satisfied
+  evidence_level: Implementation
+  gap: ""
+  risk_rating: ""
+  risks: []
+  findings: []
+  obs: []
+  poams: []
+  csf: GV
+
+# ------------------------------------------------------------------ SA
+- id: SA-9
+  <<: *d
+  family: SA
+  name: External System Services
+  requirement: Require external service providers to comply with organizational security and privacy requirements and employ defined controls; define oversight roles and responsibilities; monitor provider compliance on an ongoing basis.
+  origination: Common (vendor-management program)
+  systems: Vendors (14 Tier 1–2)
+  owner: Beth Kowalski (Vendor Management Lead)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: The Third-Party Risk Management Standard TPRM-007 requires tiering, due diligence before contract, security terms (BAA, notification, data return), and reassessment (Tier 1 annually, Tier 2 every 2 years). Standard contract templates were updated in 2025 but not applied to older contracts.
+  requirements: [REQ-007, REQ-008, REQ-018]
+  evidence_required: Vendor inventory with tiers; assessment records; contract security terms for Tier 1–2 vendors
+  evidence: [EVID-049, EVID-026, EVID-050, EVID-051, EVID-073]
+  methods: [Examine, Interview, Test]
+  test_summary: "Tested all 14 Tier 1–2 vendors for a current assessment and adequate contract terms, plus a deep assessment of Quarrystone. Expected: 14 of 14 current, with notification and data-return terms. Actual: 9 of 14 current. Quarrystone's terms allow 30-day breach notice, include no US-only restriction, and do not define data return. Offshore subcontractor access to PHI was confirmed."
+  result: Other Than Satisfied
+  evidence_level: Operating Effectiveness
+  gap: Provider oversight is not operating consistently; the highest-risk vendor has material contractual and access gaps.
+  risk_rating: High
+  risks: [RISK-010, RISK-011]
+  findings: [FIND-015, FIND-016]
+  obs: []
+  poams: [POAM-015, POAM-016]
+  next_review: 2027-01-11
+  csf: GV
+
+- id: SA-22
+  <<: *d
+  family: SA
+  name: Unsupported System Components
+  requirement: Replace system components when support is no longer available from the developer, vendor, or manufacturer; or provide options for alternative sources of continued support.
+  origination: System-specific
+  systems: SYS-05, legacy-reports, notify-worker
+  owner: Tomasz Wierzbicki (Director, Platform Engineering)
+  status_owner: Partially Implemented
+  status_validated: Partially Implemented
+  implementation: "Most components are current. Three are unsupported: wf-sftp-01 (Windows Server 2012 R2; extended support ended 2023-10-10; no ESU enrollment), legacy-reports (PostgreSQL 11; community support ended 2023-11-09), and the notify-worker container (Node.js 16; end of life 2023-09-11). Compensating controls on wf-sftp-01 are EDR, an SFTP source allowlist, and weekly scanning."
+  requirements: [REQ-010]
+  evidence_required: Software inventory with support status; replacement plans; compensating-control documentation
+  evidence: [EVID-052, EVID-048]
+  methods: [Examine, Test]
+  test_summary: "Compared the OS, database, and runtime inventory to vendor lifecycle dates. Expected: 0 unsupported components, or SHCA-approved compensating controls. Actual: 3 unsupported components, 2 of them handling PHI. They account for 4 of the 6 open past-SLA vulnerabilities. No SHCA-approved exception exists (CSA §7.4)."
+  result: Other Than Satisfied
+  evidence_level: Implementation
+  gap: Unsupported components in the PHI data path.
+  risk_rating: High
+  risks: [RISK-007]
+  findings: [FIND-011]
+  obs: []
+  poams: [POAM-011]
+  next_review: 2026-11-30
+  csf: PR
+
+# ------------------------------------------------------------------ SC
+- id: SC-7
+  <<: *d
+  family: SC
+  name: Boundary Protection
+  requirement: Monitor and control communications at the external and key internal boundaries; implement subnetworks for publicly accessible components; connect to external networks only through managed interfaces.
+  origination: System-specific
+  systems: SYS-01, SYS-05
+  owner: Tomasz Wierzbicki (Director, Platform Engineering)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: Public traffic enters through CloudFront and WAF to internal ALBs. Workloads sit in private subnets with VPC endpoints for AWS services. There is an egress allowlist for EKS. wf-sftp-01 sits in a public subnet with an SFTP (22) allowlist of 6 partner CIDRs.
+  requirements: [REQ-001, REQ-021]
+  evidence_required: Network architecture; security group and NACL exports; exposure scans
+  evidence: [EVID-053, EVID-028, EVID-068]
+  methods: [Examine, Test]
+  test_summary: "Enumerated all security groups with 0.0.0.0/0 ingress. Expected: only CloudFront/ALB listeners on 443. Actual: wf-sftp-01 allowed TCP 3389 (RDP) from 0.0.0.0/0, added under emergency change CHG-2026-0412 on 2026-05-19 and never reverted (43 days exposed at discovery). No evidence of successful RDP logons from external addresses (reviewed Windows Security log 4624 type 10 for the period). Fixed within 24h of discovery; validated 2026-07-10."
+  result: Other Than Satisfied
+  evidence_level: Implementation
+  gap: Internet-exposed administrative service on an unsupported host.
+  risk_rating: High
+  risks: [RISK-012, RISK-007]
+  findings: [FIND-012]
+  obs: []
+  poams: [POAM-012]
+  last_reviewed: 2026-07-10
+  csf: PR
+
+- id: SC-8
+  <<: *d
+  family: SC
+  name: Transmission Confidentiality and Integrity
+  requirement: Protect the confidentiality and integrity of transmitted information.
+  origination: System-specific
+  systems: SYS-01, SYS-04, SYS-05
+  owner: Tomasz Wierzbicki (Director, Platform Engineering)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: TLS 1.2+ only (the CloudFront and ALB security policies disable TLS 1.0/1.1). The database enforces SSL (rds.force_ssl=1). SFTP to partners uses SSH. HL7/FHIR interfaces run over TLS or VPN.
+  requirements: [REQ-021]
+  evidence_required: TLS policies; database SSL enforcement; external TLS scan
+  evidence: [EVID-054]
+  methods: [Examine, Test]
+  test_summary: "Scanned the 4 public endpoints with a TLS scanner (TLS 1.2/1.3 only, no weak ciphers) and confirmed rds.force_ssl=1 in the parameter group. Expected: encryption for all PHI in transit. Actual: met."
+  result: Satisfied
+  evidence_level: Implementation
+  gap: ""
+  risk_rating: ""
+  risks: []
+  findings: []
+  obs: []
+  poams: []
+  csf: PR
+
+- id: SC-12
+  <<: *d
+  family: SC
+  name: Cryptographic Key Establishment and Management
+  requirement: Establish and manage cryptographic keys when cryptography is employed, per defined requirements for key generation, distribution, storage, access, and destruction.
+  origination: Hybrid (cloud key-management service; Wrenfield key policies)
+  systems: SYS-01, SYS-04
+  owner: Tomasz Wierzbicki (Director, Platform Engineering)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: Customer-managed KMS keys for Aurora, S3 PHI buckets, EBS, and backups, with annual automatic rotation enabled. Key policies separate key administrators (SRE) from key users (service roles). No key material leaves KMS.
+  requirements: [REQ-021]
+  evidence_required: Key inventory; rotation settings; key policies
+  evidence: [EVID-055]
+  methods: [Examine]
+  test_summary: "Examined 9 customer-managed keys. Expected: rotation enabled and separation of admin and usage duties. Actual: 9 of 9 with rotation enabled; key policies separate administration from use."
+  result: Satisfied
+  evidence_level: Implementation
+  gap: ""
+  risk_rating: ""
+  risks: []
+  findings: []
+  obs: []
+  poams: []
+  csf: PR
+
+- id: SC-28
+  <<: *d
+  family: SC
+  name: Protection of Information at Rest
+  requirement: Protect the confidentiality and integrity of defined information at rest.
+  origination: Hybrid
+  systems: SYS-01, SYS-04, SYS-10
+  owner: Tomasz Wierzbicki (Director, Platform Engineering)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: Aurora storage encryption (KMS CMK), S3 default encryption with bucket keys, EBS encryption-by-default at the account level, and backup vault encryption. Laptops use FileVault or BitLocker, enforced by MDM.
+  requirements: [REQ-021]
+  evidence_required: Encryption settings for every PHI data store; endpoint encryption compliance
+  evidence: [EVID-056]
+  methods: [Examine, Test]
+  test_summary: "Queried the encryption status of every RDS, S3, and EBS resource in wcp-prod (100% encrypted) and the MDM encryption compliance (362 of 362 endpoints). Expected: all PHI at rest encrypted. Actual: met. wf-sftp-01 volumes are encrypted (EBS default)."
+  result: Satisfied
+  evidence_level: Implementation
+  gap: ""
+  risk_rating: ""
+  risks: [RISK-018]
+  findings: []
+  obs: []
+  poams: []
+  csf: PR
+
+# ------------------------------------------------------------------ SI
+- id: SI-2
+  <<: *d
+  family: SI
+  name: Flaw Remediation
+  requirement: Identify, report, and correct system flaws; test updates before installation; install security-relevant updates within a defined time; incorporate flaw remediation into configuration management.
+  origination: System-specific
+  systems: SYS-01, SYS-05
+  owner: Grace Lindqvist (VP Engineering)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: VM-003 sets SLAs of Critical 15 days, High 30, and Moderate 90. Findings are auto-ticketed to the owning team. Container fixes ship through base-image rebuilds. Risk exceptions require a CISO-approved form (VM-003 §7).
+  requirements: [REQ-009]
+  evidence_required: Complete population of Critical/High findings with detection and remediation dates; exception approvals
+  evidence: [EVID-048]
+  methods: [Examine, Test]
+  test_summary: "Full population test (test-results/si2-vuln-sla.md). Expected: 100% remediated within SLA, or approved exception. Actual: 14 of 61 (23%) breached SLA; 6 remain open past SLA (2 Critical), and 0 exceptions were filed. Engineering disputes the 2 Critical findings as unreachable. Assessor position: the SLA applies until an exception with reachability analysis is approved."
+  result: Other Than Satisfied
+  evidence_level: Operating Effectiveness
+  gap: Remediation timeliness below SLA; exception process unused.
+  risk_rating: High
+  risks: [RISK-006]
+  findings: [FIND-010]
+  obs: [OBS-04]
+  poams: [POAM-010]
+  next_review: 2026-11-05
+  csf: PR
+
+- id: SI-3
+  <<: *d
+  family: SI
+  name: Malicious Code Protection
+  requirement: Implement signature- and/or non-signature-based malicious code protection at entry and exit points; update it; scan periodically and in real time; take defined actions on detection.
+  origination: Hybrid
+  systems: SYS-01, SYS-05, SYS-10
+  owner: Owen Castillo (Security Engineer)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: EDR on endpoints and EC2 hosts (including wf-sftp-01), runtime protection on EKS nodes (DaemonSet), and email security filtering. Detections auto-contain and escalate to MDR.
+  requirements: [REQ-016]
+  evidence_required: Coverage report reconciled to inventory; policy settings; detection records
+  evidence: [EVID-057, EVID-038]
+  methods: [Examine, Test]
+  test_summary: "Reconciled EDR sensors to the MDM and AWS inventory: 358 of 362 endpoints (4 were new devices under 72h old, within the provisioning standard), 100% of EC2 hosts and EKS nodes. INC-2026-0095 shows detection and containment operating."
+  result: Satisfied
+  evidence_level: Operating Effectiveness
+  gap: ""
+  risk_rating: ""
+  risks: []
+  findings: []
+  obs: []
+  poams: []
+  csf: PR
+
+- id: SI-4
+  <<: *d
+  family: SI
+  name: System Monitoring
+  requirement: Monitor the system to detect attacks and indicators of attacks and unauthorized connections; identify unauthorized use; deploy monitoring devices strategically; analyze events; adjust monitoring when risk changes.
+  origination: Hybrid (MDR provider + Wrenfield)
+  systems: SYS-01, SYS-02, SYS-08
+  owner: Owen Castillo (Security Engineer)
+  status_owner: Implemented
+  status_validated: Implemented
+  implementation: GuardDuty (all accounts), SIEM correlation rules (Okta anomalies, impossible travel, privilege escalation), and 24x7 MDR triage with a 30-minute SLA for High alerts.
+  requirements: [REQ-019, REQ-016]
+  evidence_required: Detection inventory; alert triage metrics; sample alert records
+  evidence: [EVID-058]
+  methods: [Examine, Test]
+  test_summary: "Examined the detection inventory (41 rules) and MDR metrics for H1 (High alerts triaged within 30 minutes: 97%). Sampled 10 alerts, all dispositioned. Expected: continuous monitoring with timely triage. Actual: met. The weekly human privileged-activity review is a separate AU-6 control."
+  result: Satisfied
+  evidence_level: Operating Effectiveness
+  gap: ""
+  risk_rating: ""
+  risks: []
+  findings: []
+  obs: []
+  poams: []
+  csf: DE
+
+# ------------------------------------------------------------------ SR
+- id: SR-2
+  <<: *d
+  family: SR
+  name: Supply Chain Risk Management Plan
+  requirement: Develop a plan for managing supply chain risks associated with the research, development, design, manufacturing, acquisition, delivery, integration, operations, maintenance, and disposal of the system; review, update, and protect it.
+  origination: Common (organization-wide)
+  systems: Organization-wide
+  owner: Beth Kowalski (Vendor Management Lead)
+  status_owner: Planned
+  status_validated: Planned
+  implementation: No C-SCRM plan exists. TPRM-007 covers vendor due diligence but not software supply chain (dependencies, CI/CD, SBOM) or fourth-party mapping. A draft outline was produced in 2026-06.
+  requirements: [REQ-008, REQ-001]
+  evidence_required: Approved C-SCRM plan
+  evidence: [EVID-059]
+  methods: [Examine, Interview]
+  test_summary: "Expected: an approved C-SCRM plan. Actual: an outline only (EVID-059, Insufficient). The plan is scheduled for Q4 2026, aligned to SP 800-161 Rev. 1 Update 1 and the new SP 800-18 Rev. 2 C-SCRM plan structure."
+  result: Other Than Satisfied
+  evidence_level: Design
+  gap: No C-SCRM plan.
+  risk_rating: Moderate
+  risks: [RISK-011]
+  findings: [FIND-015]
+  obs: []
+  poams: [POAM-015]
+  next_review: 2027-02-03
+  csf: GV
+
+- id: SR-6
+  <<: *d
+  family: SR
+  name: Supplier Assessments and Reviews
+  requirement: Assess and review the supply chain-related risks associated with suppliers or contractors and the systems, components, or services they provide, at a defined frequency.
+  origination: Common (vendor-management program)
+  systems: Vendors (14 Tier 1–2)
+  owner: Beth Kowalski (Vendor Management Lead)
+  status_owner: Implemented
+  status_validated: Partially Implemented
+  implementation: Tier-based reassessment (Tier 1 annually) using a questionnaire plus attestation review (SOC 2 and pentest summaries). There is no fourth-party inventory. Assessments are tracked in a spreadsheet.
+  requirements: [REQ-008, REQ-018]
+  evidence_required: Assessment records per vendor, within the frequency for its tier
+  evidence: [EVID-049, EVID-050, EVID-051]
+  methods: [Examine, Test]
+  test_summary: "Expected: all Tier 1–2 vendors assessed within frequency. Actual: 5 of 14 overdue or never assessed (including Tier 1 Pulsewire and Ironpeak). The Quarrystone deep assessment found 12 vendor-risk issues (1 Critical, contained 2026-07-24). The vendor's pentest report and retest evidence are still outstanding (EVID-051)."
+  result: Other Than Satisfied
+  evidence_level: Operating Effectiveness
+  gap: Supplier reviews are overdue, and no fourth-party visibility exists.
+  risk_rating: High
+  risks: [RISK-010, RISK-011]
+  findings: [FIND-015, FIND-016]
+  obs: []
+  poams: [POAM-015, POAM-016]
+  next_review: 2027-01-11
+  csf: GV

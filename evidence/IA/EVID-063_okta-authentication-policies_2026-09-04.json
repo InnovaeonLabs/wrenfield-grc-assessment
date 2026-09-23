@@ -1,0 +1,38 @@
+{
+  "_evidence": {
+    "id": "EVID-063",
+    "description": "Okta authentication policy export after remediation (POAM-002 closure evidence; synthetic)",
+    "exported_by": "nrahman-adm",
+    "exported_at": "2026-09-04T10:41:00-04:00",
+    "assessor_note": "Re-performed: assessor queried group MFA-Exempt-Legacy (HTTP 404, group deleted 2026-08-28) and attempted a password-only sign-in with test account qa-mfa-check (denied; factor required)."
+  },
+  "global_session_policies": [
+    {
+      "name": "Default Workforce Session Policy",
+      "status": "ACTIVE",
+      "priority": 1,
+      "conditions": { "people": { "groups": { "include": ["Everyone"], "exclude": [] } } },
+      "rules": [
+        { "name": "Require MFA for all sign-ins", "actions": { "signon": { "access": "ALLOW", "requireFactor": true, "factorPromptMode": "SESSION", "maxSessionLifetimeMinutes": 720 } } }
+      ]
+    }
+  ],
+  "deleted_policies": [
+    { "name": "Legacy Exemption Policy", "deleted": "2026-08-28T15:02:00Z", "change": "CHG-2026-0731" }
+  ],
+  "deleted_groups": [
+    { "name": "MFA-Exempt-Legacy", "deleted": "2026-08-28T15:04:00Z", "members_at_deletion": 0 }
+  ],
+  "authentication_policies": [
+    { "name": "Okta Admin Console", "rules": [ { "name": "Admins", "phishing_resistant_required": true, "allowed": ["Okta FastPass", "FIDO2 (WebAuthn)"] } ] },
+    { "name": "AWS IAM Identity Center", "rules": [
+        { "name": "Admin permission sets", "phishing_resistant_required": true, "allowed": ["Okta FastPass", "FIDO2 (WebAuthn)"] },
+        { "name": "All other users", "constraints": { "possession": { "required": true } }, "phishing_resistant_required": false } ] },
+    { "name": "GitHub Enterprise Cloud", "rules": [ { "name": "All users", "constraints": { "possession": { "required": true } }, "phishing_resistant_required": false } ] }
+  ],
+  "service_integrations": [
+    { "name": "Vulnerability scanner (API service integration)", "grant": "client_credentials", "replaces": "svc-vulnscan person-type user", "created": "2026-08-26" },
+    { "name": "Conference-room displays (device-bound kiosk profile)", "replaces": "svc-confroom person-type user", "created": "2026-08-27" }
+  ],
+  "exemption_handling": "9 former group members enrolled in MFA between 2026-08-10 and 2026-08-27; 1 accessibility accommodation (isolberg) issued a FIDO2 hardware key 2026-08-19; shared clinic workstation users (2) moved to FastPass on managed devices."
+}

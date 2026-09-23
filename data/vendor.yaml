@@ -1,0 +1,139 @@
+# Third-party risk: tiering method, inventory, deep assessment of Quarrystone Analytics (fictional).
+tiering:
+  factors:
+    data_sensitivity: {0: None, 1: Internal, 2: "Confidential / PII / limited PHI", 3: "PHI / regulated"}
+    data_volume: {0: None, 1: "< 1,000 records", 2: "1,000 – 50,000", 3: "> 50,000"}
+    access: {0: None, 1: "SaaS user-level", 2: "API / file transfer", 3: "Privileged or network access into Wrenfield systems"}
+    criticality: {0: Low, 1: Moderate, 2: High, 3: "Critical (platform outage)"}
+    substitutability: {0: Easy, 1: Moderate, 2: "Hard (> 6 months to replace)"}
+  tiers:
+    - {tier: 1, min: 9, reassess: "Annual full assessment + continuous monitoring"}
+    - {tier: 2, min: 5, reassess: "Every 2 years + at renewal"}
+    - {tier: 3, min: 0, reassess: "At renewal (lightweight)"}
+inventory:
+# scores: [sensitivity, volume, access, criticality, substitutability]
+- {id: VEN-001, name: AWS, real_platform: true, service: "IaaS/PaaS hosting for WCP-PROD (BAA)", owner: Samir Haddad, scores: [3, 3, 3, 3, 2], last_assessed: 2026-03-12, method: "Review of provider's published compliance documentation (details out of scope)", breach_notice_term: "Per provider BAA", fourth_party_mapped: "n/a"}
+- {id: VEN-002, name: Okta, real_platform: true, service: Workforce identity (SSO/MFA), owner: Alicia Moreno, scores: [2, 2, 3, 3, 2], last_assessed: 2026-02-20, method: "Review of provider's published compliance documentation (details out of scope)", breach_notice_term: "Per provider terms", fourth_party_mapped: "n/a"}
+- {id: VEN-003, name: GitHub, real_platform: true, service: "Source code, CI/CD (Actions)", owner: Grace Lindqvist, scores: [2, 1, 3, 2, 1], last_assessed: 2026-01-28, method: "Review of provider's published compliance documentation (details out of scope)", breach_notice_term: "Per provider terms", fourth_party_mapped: "n/a"}
+- {id: VEN-004, name: "Quarrystone Analytics, LLC (fictional)", real_platform: false, service: "Population-health analytics; nightly full-PHI extract (about 410k patients)", owner: Miriam Castell, scores: [3, 3, 2, 2, 2], last_assessed: 2026-07-24, method: "Deep assessment (this engagement): questionnaire, SOC 2 review, interviews", breach_notice_term: "30 days (BAA 2023)", fourth_party_mapped: "Yes (4 subprocessors identified during this assessment)"}
+- {id: VEN-005, name: "Pulsewire Connect (fictional)", real_platform: false, service: RPM cellular hubs and device-data API, owner: Jorge Almeida, scores: [3, 3, 2, 3, 2], last_assessed: 2024-08-14, method: Questionnaire + SOC 2 review, breach_notice_term: "10 days", fourth_party_mapped: "No"}
+- {id: VEN-006, name: "Ironpeak MDR (fictional)", real_platform: false, service: "24x7 managed detection and response (SIEM/EDR access)", owner: Owen Castillo, scores: [2, 2, 3, 2, 1], last_assessed: 2024-12-09, method: "Onboarding due diligence only", breach_notice_term: "48 hours", fourth_party_mapped: "No"}
+- {id: VEN-007, name: Google Workspace, real_platform: true, service: "Email and documents (BAA)", owner: Kevin Brandt, scores: [3, 2, 1, 2, 2], last_assessed: 2026-04-09, method: "Review of provider's published compliance documentation (details out of scope)", breach_notice_term: "Per provider BAA", fourth_party_mapped: "n/a"}
+- {id: VEN-008, name: "Brightdesk (fictional)", real_platform: false, service: Customer-support ticketing (limited PHI), owner: Jorge Almeida, scores: [3, 1, 1, 1, 1], last_assessed: 2025-05-20, method: Questionnaire + SOC 2 review, breach_notice_term: "5 business days", fourth_party_mapped: "No"}
+- {id: VEN-009, name: "Clearpath Messaging (fictional)", real_platform: false, service: Patient SMS/voice reminders (name + phone + appointment time), owner: Jorge Almeida, scores: [2, 3, 2, 1, 0], last_assessed: 2024-05-06, method: Questionnaire, breach_notice_term: "Without unreasonable delay (no fixed period)", fourth_party_mapped: "No"}
+- {id: VEN-010, name: "PeopleHub (fictional)", real_platform: false, service: HRIS (authoritative source for JML), owner: Denise Yamamoto, scores: [2, 1, 1, 2, 1], last_assessed: 2025-03-18, method: Questionnaire + SOC 2 review, breach_notice_term: "72 hours", fourth_party_mapped: "No"}
+- {id: VEN-011, name: "Ledgerline (fictional)", real_platform: false, service: ERP / finance, owner: Laura Brenneman, scores: [2, 1, 1, 2, 1], last_assessed: 2025-09-02, method: Questionnaire + SOC 1/SOC 2 review, breach_notice_term: "72 hours", fourth_party_mapped: "No"}
+- {id: VEN-012, name: "Northgate Talent Partners (fictional)", real_platform: false, service: Contract engineering staff (contractors receive privileged access), owner: Sofia Ricci, scores: [1, 0, 3, 1, 0], last_assessed: "", method: "Never assessed (treated as staffing, not a data vendor)", breach_notice_term: "None in MSA", fourth_party_mapped: "No"}
+- {id: VEN-013, name: "Beaconline SIEM (fictional)", real_platform: false, service: Cloud SIEM, owner: Owen Castillo, scores: [2, 2, 1, 2, 1], last_assessed: 2025-02-11, method: Questionnaire + SOC 2 review, breach_notice_term: "72 hours", fourth_party_mapped: "No"}
+- {id: VEN-014, name: "Coldwater Secure Destruction (fictional)", real_platform: false, service: IT asset disposition, owner: Kevin Brandt, scores: [1, 1, 0, 0, 0], last_assessed: 2025-10-01, method: Certificate + NAID-style attestation review, breach_notice_term: "5 business days", fourth_party_mapped: "n/a"}
+- {id: VEN-015, name: "Lanternworks Security (fictional)", real_platform: false, service: Annual penetration testing, owner: Alicia Moreno, scores: [2, 0, 2, 0, 0], last_assessed: 2025-11-15, method: Engagement due diligence, breach_notice_term: "24 hours", fourth_party_mapped: "n/a"}
+- {id: VEN-016, name: "Tallis Print & Mail (fictional)", real_platform: false, service: "Patient letters (names, addresses, program info)", owner: Jorge Almeida, scores: [3, 2, 2, 1, 0], last_assessed: "", method: "Never assessed", breach_notice_term: "BAA executed 2023; no timeline", fourth_party_mapped: "No"}
+
+profile:
+  vendor: VEN-004
+  name: "Quarrystone Analytics, LLC (fictional)"
+  service: "Population-health risk stratification and care-gap analytics. Nightly scores rank patients for care-manager outreach."
+  business_owner: "Dr. Miriam Castell, VP Clinical Analytics"
+  technical_owner: "Liam Porter, Data Engineering Manager"
+  contract: "MSA + BAA signed 2023-02-15 on vendor paper; renewal 2027-01-31 (negotiation leverage); annual fee $410k"
+  data_accessed: "Full PHI extract of about 410,000 patients: name, DOB, address, phone, email, MRN, member ID, ICD-10 diagnoses, medications, vitals and RPM readings, care-plan events, free-text care notes (58 fields)"
+  data_sensitivity: "PHI (regulated). Adds Medicaid member data after SHCA go-live."
+  integration: "Outbound: nightly SFTP push from wf-sftp-01 (Windows 2012 R2, unsupported) to the vendor landing zone. Inbound: risk scores pulled over HTTPS by API key (svc-qs-api). Portal: 6 Wrenfield user accounts plus 1 API key, local authentication (no SSO)."
+  criticality: "High. Scores drive outreach prioritization. WCP has a rules-based fallback, so an outage degrades quality but does not stop care. Integrity matters: bad scores could mis-rank patients."
+  geography: "Vendor HQ Denver, CO. Storage in US (cloud region us-east-1). Access includes an offshore subcontractor in Pune, India."
+  fourth_parties:
+    - {name: "Glacierbase Data Cloud (fictional)", role: Cloud data warehouse (stores all Wrenfield data), location: "US region", in_soc2: "Carved out (subservice organization)", disclosed_initially: "Yes"}
+    - {name: "AWS (vendor's own hosting)", role: "Ingestion and model hosting", location: "US region", in_soc2: "Carved out", disclosed_initially: "Yes"}
+    - {name: "Meridian Offshore Data Services Pvt. Ltd. (fictional)", role: "Data-engineering support: pipeline troubleshooting with production access", location: "Pune, India", in_soc2: "Not listed", disclosed_initially: "No (found at interview 2026-07-14)"}
+    - {name: "Hollis Helpdesk (fictional)", role: "Support ticketing (tickets may contain PHI snippets)", location: US, in_soc2: "Not listed", disclosed_initially: "No"}
+  inherent_score: 12
+  inherent_rating: "Tier 1, Critical inherent risk"
+  assessment_window: "2026-06-22 to 2026-07-24"
+  assessor_contacts: "Quarrystone CISO (interview 2026-07-14), Head of Data Engineering"
+
+questionnaire:
+- {id: VQ-01, domain: Security governance, requirement: "Named security leader, approved policy set reviewed annually, executive oversight", response: "CISO in place since 2022; ISO 27001-aligned policy set reviewed 2026-01; quarterly board security update", evidence: "Policy index; org chart", evaluation: Satisfactory, vr: ""}
+- {id: VQ-02, domain: Risk management, requirement: "Annual risk assessment with tracked treatments", response: "Annual risk assessment (2026-02); risk register maintained", evidence: "Risk assessment summary (redacted)", evaluation: Satisfactory, vr: ""}
+- {id: VQ-03, domain: Certifications and attestations, requirement: "Current SOC 2 Type II (or ISO 27001) covering services used", response: "SOC 2 Type II 2024-10-01 to 2025-09-30; bridge letter to 2026-03-31; next report expected 2026-12", evidence: "EVID-050", evaluation: Partially Satisfactory, vr: "VR-006"}
+- {id: VQ-04, domain: Access control, requirement: "Timely provisioning/deprovisioning and periodic reviews of staff with customer-data access", response: "Quarterly reviews; SOC 2 notes 1 of 4 quarters missed (management response: automation added)", evidence: "SOC 2 section 4 exception", evaluation: Partially Satisfactory, vr: "VR-006"}
+- {id: VQ-05, domain: Access control, requirement: "Least privilege for production customer data", response: "Role-based; 14 US staff plus the subcontractor team have production read access", evidence: "Role list (counts only)", evaluation: Partially Satisfactory, vr: "VR-001"}
+- {id: VQ-06, domain: MFA, requirement: "MFA for all workforce and privileged access", response: "SSO with MFA for all staff; FIDO2 required for admins", evidence: "IdP policy screenshot (dated) + SOC 2 CC6.1 no exceptions", evaluation: Satisfactory, vr: ""}
+- {id: VQ-07, domain: MFA, requirement: "Customer portal supports SSO/MFA", response: "Portal uses local accounts with optional TOTP; SAML SSO available on Enterprise tier only", evidence: "Product documentation", evaluation: Unsatisfactory, vr: "VR-007"}
+- {id: VQ-08, domain: Encryption, requirement: "Encryption in transit (TLS 1.2+ / SFTP)", response: "SFTP (SSH) inbound; TLS 1.2+ API", evidence: "TLS scan by assessor (API endpoint)", evaluation: Satisfactory, vr: ""}
+- {id: VQ-09, domain: Encryption, requirement: "Encryption at rest with managed keys", response: "AES-256 at rest in warehouse and object storage; cloud KMS; annual rotation", evidence: "SOC 2 CC6.1/CC6.7 no exceptions", evaluation: Satisfactory, vr: ""}
+- {id: VQ-10, domain: Encryption, requirement: "Customer data segregation", response: "Schema-per-client logical separation; shared keys", evidence: "Architecture diagram", evaluation: Partially Satisfactory, vr: ""}
+- {id: VQ-11, domain: Vulnerability management, requirement: "Scanning with defined remediation SLAs", response: "Monthly authenticated scans; Critical 30 days, High 60", evidence: "Vulnerability management standard", evaluation: Satisfactory, vr: ""}
+- {id: VQ-12, domain: Penetration testing, requirement: "Annual independent penetration test with retest evidence", response: "Last external test 2025-03; 1 High finding 'remediated'; summary letter only", evidence: "Summary letter; full report requested (EVID-051)", evaluation: Unsatisfactory, vr: "VR-004"}
+- {id: VQ-13, domain: Secure development, requirement: "SAST, code review, dependency scanning", response: "SAST and dependency scanning in CI; 2-person review", evidence: "SDLC standard", evaluation: Satisfactory, vr: ""}
+- {id: VQ-14, domain: Supply-chain risk, requirement: "SBOM and third-party component governance", response: "No SBOM produced; dependency scanning only", evidence: "Interview", evaluation: Partially Satisfactory, vr: "VR-011"}
+- {id: VQ-15, domain: Incident response, requirement: "Documented IR plan tested annually", response: "IR plan; tabletop 2026-02", evidence: "After-action summary", evaluation: Satisfactory, vr: ""}
+- {id: VQ-16, domain: Breach notification, requirement: "Notify Wrenfield of security incidents affecting its data within 24 hours of discovery", response: "BAA: 'without unreasonable delay and no later than 30 days'", evidence: "BAA §4.2", evaluation: Unsatisfactory, vr: "VR-002"}
+- {id: VQ-17, domain: Incident response, requirement: "Cooperate with customer investigations, including log provision", response: "'Reasonable cooperation'; no commitment to provide logs", evidence: "MSA §9", evaluation: Partially Satisfactory, vr: "VR-009"}
+- {id: VQ-18, domain: Business continuity, requirement: "BC/DR plan with RTO/RPO appropriate to the service", response: "RTO 72h / RPO 24h; tested 2026-01", evidence: "BC/DR summary", evaluation: Satisfactory, vr: "", note: "Acceptable: WCP has a rules-based fallback for scores"}
+- {id: VQ-19, domain: Backups, requirement: "Backups with immutability and restore testing", response: "Daily backups, 30-day retention, immutable; restore tested 2026-01", evidence: "SOC 2 A1.2 no exceptions", evaluation: Satisfactory, vr: ""}
+- {id: VQ-20, domain: Logging, requirement: "Log access to customer data; retain at least 12 months", response: "Access logs retained 90 days", evidence: "Interview", evaluation: Partially Satisfactory, vr: "VR-009"}
+- {id: VQ-21, domain: Privacy, requirement: "Receive only data needed for the service (minimum necessary)", response: "Model uses 31 of 58 fields; address, phone, email, free-text notes unused but received", evidence: "Feature list from Head of Data Engineering", evaluation: Unsatisfactory, vr: "VR-003"}
+- {id: VQ-22, domain: Privacy, requirement: "No secondary use of Wrenfield data without written permission", response: "De-identified (Safe Harbor) pooled data used to improve cross-client models, per vendor MSA §12", evidence: "MSA §12; de-identification procedure", evaluation: Partially Satisfactory, vr: "VR-010"}
+- {id: VQ-23, domain: Data location, requirement: "US-only storage AND access (SHCA CSA §6.1; 2 customer BAAs)", response: "Storage in US region. Initially answered 'US staff only'; interview revealed offshore subcontractor production access", evidence: "Interview 2026-07-14; subcontractor agreement", evaluation: Unsatisfactory, vr: "VR-001"}
+- {id: VQ-24, domain: Privacy, requirement: "Documented de-identification method", response: "HIPAA Safe Harbor procedure, annual review", evidence: "Procedure document", evaluation: Satisfactory, vr: ""}
+- {id: VQ-25, domain: Data retention, requirement: "Defined retention for raw and derived data", response: "Raw extracts 90 days; derived features and models retained indefinitely", evidence: "Retention schedule", evaluation: Partially Satisfactory, vr: "VR-005"}
+- {id: VQ-26, domain: Termination and data return, requirement: "Return and destroy data within 30 days of termination with certificate", response: "'Upon request'; no timeframe or certificate", evidence: "MSA §15", evaluation: Unsatisfactory, vr: "VR-005"}
+- {id: VQ-27, domain: Subcontractors, requirement: "Complete list of subcontractors with access to Wrenfield data", response: "Initially listed 2 (cloud warehouse, cloud host); 4 identified after SOC 2 review and interview", evidence: "Questionnaire v1 vs interview notes", evaluation: Unsatisfactory, vr: "VR-008"}
+- {id: VQ-28, domain: Subcontractors, requirement: "BAA and security flow-down to every subcontractor", response: "BAAs with warehouse and offshore firm; offshore agreement lacks data-location restriction", evidence: "Subcontractor agreement excerpts", evaluation: Partially Satisfactory, vr: "VR-001"}
+- {id: VQ-29, domain: Subcontractors, requirement: "Advance notice and right to object to new subcontractors", response: "No notice provision", evidence: "MSA", evaluation: Unsatisfactory, vr: "VR-008"}
+- {id: VQ-30, domain: Personnel security, requirement: "Background checks for staff with data access", response: "US staff screened; subcontractor staff screened by subcontractor under local law", evidence: "HR policy; subcontractor attestation", evaluation: Partially Satisfactory, vr: "VR-001"}
+- {id: VQ-31, domain: Personnel security, requirement: "Annual security and HIPAA training", response: "Annual training; 98% completion", evidence: "LMS summary", evaluation: Satisfactory, vr: ""}
+- {id: VQ-32, domain: Risk transfer, requirement: "Cyber liability insurance adequate to data volume", response: "$5M cyber policy", evidence: "Certificate of insurance", evaluation: Satisfactory, vr: "", note: "$5M may be light for about 410k records; considered in the Transfer decision"}
+- {id: VQ-33, domain: Change management, requirement: "Changes approved and tested before production", response: "SOC 2 notes 2 of 40 changes lacked approval (remediated)", evidence: "SOC 2 CC8.1 exception", evaluation: Partially Satisfactory, vr: "VR-006"}
+- {id: VQ-34, domain: Physical security, requirement: "Physical security of facilities hosting data", response: "Inherited from cloud providers (SOC 2 carve-out)", evidence: "SOC 2 subservice section", evaluation: Satisfactory, vr: "", note: "Reliance on subservice organizations noted"}
+- {id: VQ-35, domain: Data transfer, requirement: "Secure, supported transfer mechanism from Wrenfield", response: "Vendor receives via SFTP from Wrenfield's wf-sftp-01 (Wrenfield-side, unsupported OS)", evidence: "Data Sharing Spec v2", evaluation: Unsatisfactory, vr: "VR-012"}
+- {id: VQ-36, domain: Assurance cooperation, requirement: "Right to assess; annual questionnaire; evidence on request", response: "Annual questionnaire; on-site with 30 days notice", evidence: "MSA §10", evaluation: Satisfactory, vr: ""}
+
+vendor_findings:
+- {id: VR-001, title: "Undisclosed offshore subcontractor with production access to Wrenfield PHI", severity: Critical, party: Vendor, questions: [VQ-05, VQ-23, VQ-28, VQ-30], description: "Meridian Offshore Data Services (Pune) performs pipeline troubleshooting with production read access to Wrenfield's full PHI dataset. Conflicts with SHCA CSA §6.1 (for SHCA data) and 2 current customer BAAs (incl. Lakemont) that prohibit offshore access.", recommendation: "Immediate suspension of offshore access to Wrenfield data; contract amendment requiring US-only access with technical enforcement (geo-restricted IdP policy, US-only support roster) and access-log attestation quarterly", owner: "Quarrystone CISO / Miriam Castell", status: "Interim contained (offshore access suspended 2026-07-24); contractual fix open", finding: FIND-016, escalated: "CEO notified 2026-07-17 (Critical = outside appetite; 5-business-day rule met)"}
+- {id: VR-002, title: "Breach notification term of 30 days", severity: High, party: Vendor, questions: [VQ-16], description: "BAA allows up to 30 days. Wrenfield must notify SHCA within 24h and customers within 5 business days, so a 30-day upstream delay makes compliance impossible.", recommendation: "Amend BAA to 24h notice of suspected or confirmed incidents affecting Wrenfield data, with defined content and updates", owner: "Theo Anand (General Counsel)", status: "In negotiation (redline v3)", finding: FIND-016}
+- {id: VR-003, title: "Extract exceeds minimum necessary (27 of 58 fields unused)", severity: High, party: Wrenfield, questions: [VQ-21], description: "Wrenfield sends address, phone, email, and free-text notes that the model does not use. Increases breach impact and conflicts with HIPAA minimum necessary (164.502(b)).", recommendation: "Redesign extract to 31 required fields; replace direct identifiers with tokenized IDs; re-validate model on minimized data", owner: "Liam Porter (Data Engineering)", status: "In progress (target 2026-10-16)", finding: FIND-016}
+- {id: VR-004, title: "Penetration test evidence stale and incomplete", severity: Moderate, party: Vendor, questions: [VQ-12], description: "Last external test 2025-03 (18 months). Summary letter only. Retest of the High finding not evidenced.", recommendation: "Provide full report (under NDA) or detailed executive summary with finding list and retest letter; annual testing clause in amendment", owner: "Quarrystone CISO", status: "Evidence requested (EVID-051, overdue)", finding: FIND-016}
+- {id: VR-005, title: "Data retention and return/destruction undefined", severity: Moderate, party: Vendor, questions: [VQ-25, VQ-26], description: "Return 'upon request' with no timeframe or certificate. Derived data kept indefinitely.", recommendation: "Return/destroy within 30 days of termination with certificate; derived features deleted or contractually de-identified; retention schedule appended to MSA", owner: "Theo Anand (General Counsel)", status: "In negotiation", finding: FIND-016}
+- {id: VR-006, title: "SOC 2 exceptions (access reviews, change approvals)", severity: Low, party: Vendor, questions: [VQ-03, VQ-04, VQ-33], description: "2 exceptions with adequate management responses. Report period ended 2025-09-30. Bridge letter covers to 2026-03-31.", recommendation: "Monitor: obtain next SOC 2 (expected 2026-12) and confirm exceptions resolved", owner: "Beth Kowalski", status: "Monitor", finding: ""}
+- {id: VR-007, title: "Wrenfield not performing SOC 2 CUEC for portal user management; no SSO", severity: Moderate, party: Wrenfield, questions: [VQ-07], description: "The SOC 2 lists 'user entities are responsible for managing and reviewing their users' portal access' as a complementary user-entity control. Wrenfield had never reviewed its 6 portal user accounts; 1 former employee was active (AR-EX-04).", recommendation: "Add portal to quarterly certification and JML checklist (done); budget SAML SSO at renewal", owner: "Liam Porter", status: "Partially remediated (review + JML done; SSO at 2027 renewal)", finding: FIND-001}
+- {id: VR-008, title: "Incomplete subcontractor disclosure; no notice of new subcontractors", severity: Moderate, party: Vendor, questions: [VQ-27, VQ-29], description: "Questionnaire listed 2 subcontractors; 4 exist. No contractual notice or approval for new subcontractors. SHCA CSA §6.3 requires approval before a subcontractor accesses agency data.", recommendation: "Complete subcontractor schedule in amendment; 30-day advance notice and right to object; SHCA approval workflow", owner: "Theo Anand (General Counsel)", status: "In negotiation", finding: FIND-016}
+- {id: VR-009, title: "Access logs kept 90 days; no commitment to support investigations", severity: Moderate, party: Vendor, questions: [VQ-17, VQ-20], description: "Wrenfield could not scope a breach at the vendor older than 90 days.", recommendation: "12-month log retention for access to Wrenfield data; contractual log provision within 5 business days of request", owner: "Theo Anand (General Counsel)", status: "In negotiation", finding: FIND-016}
+- {id: VR-010, title: "Secondary use of pooled de-identified data", severity: Moderate, party: "Both (legal review)", questions: [VQ-22], description: "Vendor de-identifies Wrenfield-supplied PHI and pools it for cross-client model training. Whether Wrenfield's customer BAAs permit its subcontractor to de-identify for this purpose is unresolved. Safe Harbor output is not PHI, but the act of de-identifying is a use of PHI that must be permitted.", recommendation: "General Counsel opinion; either opt Wrenfield data out of pooling or confirm customer BAAs permit it and disclose", owner: "Theo Anand (General Counsel)", status: "Legal review in progress", finding: FIND-016}
+- {id: VR-011, title: "No SBOM for vendor software", severity: Low, party: Vendor, questions: [VQ-14], description: "Limits Wrenfield's ability to assess exposure to newly disclosed component vulnerabilities.", recommendation: "Request SBOM availability on the roadmap; revisit at 2027 renewal", owner: "Beth Kowalski", status: "Monitor", finding: ""}
+- {id: VR-012, title: "Extract transferred from an unsupported Wrenfield host", severity: Moderate, party: Wrenfield, questions: [VQ-35], description: "The full-PHI extract leaves via wf-sftp-01 (Windows Server 2012 R2).", recommendation: "Managed transfer service (POAM-011) with PGP-encrypted files", owner: "Tomasz Wierzbicki", status: "In progress (delayed; POAM-011)", finding: FIND-011}
+
+decision:
+  inherent: "Critical (Tier 1 score 12/14): full PHI of about 410k patients, external processing, undisclosed offshore access, weak notification terms"
+  material_findings: [VR-001, VR-002, VR-003]
+  mitigating_controls: "SOC 2 Type II (unqualified), strong encryption and MFA, immutable backups, US storage, $5M cyber insurance, WCP rules-based fallback for scores, interim suspension of offshore access (2026-07-24)"
+  residual: "Moderate after conditions (RISK-010 residual L2 x I4 = 8); High until conditions are met"
+  treatment: "Mitigate (conditional continuation) + partial Transfer"
+  rationale: >-
+    Avoid (replace the vendor) was rejected: replacement takes 9 to 12 months, the rules-based fallback is materially less accurate, and the
+    vendor's core controls are mature. The problems are contractual and in data design, not a weak security program.
+    Accept was rejected: VR-001 is Critical and VR-002/VR-003 are High, all outside appetite (RSK-MTH-001 §7).
+    Transfer alone is insufficient: insurance and indemnity move money, not accountability or contractual compliance.
+    Mitigate works because the 2027-01-31 renewal gives leverage and the fixes are well-defined.
+    SHCA data will not flow to Quarrystone until the conditions precedent are met.
+  approved_by: "Elena Marsh (CEO) on recommendation of CISO and VP Clinical Analytics, 2026-07-22"
+  conditions_precedent_for_shca_data:
+    - "Executed amendment: US-only storage and access with technical enforcement; subcontractor schedule and approval rights (VR-001, VR-008)"
+    - "24-hour breach notification (VR-002)"
+    - "Minimized, tokenized extract live (VR-003)"
+  contract_requirements:
+    - "24h incident notification with defined content and updates"
+    - "US-only data storage and access, including subcontractors; quarterly access-log attestation"
+    - "Subcontractor schedule; 30-day advance notice; right to object; SHCA approval for agency data"
+    - "Data return/destruction within 30 days of termination with certificate; retention schedule"
+    - "12-month access-log retention; log provision within 5 business days"
+    - "Annual independent penetration test with retest evidence"
+    - "No secondary use of Wrenfield data without written consent (pending legal opinion, VR-010)"
+    - "Cyber insurance of at least $10M (raise from $5M) naming Wrenfield as additional insured; indemnity for breach costs"
+    - "SAML SSO for portal (Enterprise tier) at renewal"
+  monitoring:
+    - "Quarterly: US-only access attestation with access-log sample; subcontractor change notice check"
+    - "Semi-annual: SOC 2 report or bridge letter; open-issue review with vendor CISO"
+    - "Continuous: external attack-surface and breach-news monitoring; contract-renewal trigger"
+    - "Event-driven: reassess on incident, subcontractor change, or material service change"
+  reassessment: "Focused reassessment 2027-01 (before SHCA data flows), then annual full assessment (Tier 1)"

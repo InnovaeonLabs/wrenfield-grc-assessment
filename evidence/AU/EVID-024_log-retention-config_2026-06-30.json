@@ -1,0 +1,41 @@
+{
+  "_evidence": {
+    "id": "EVID-024",
+    "description": "Audit log retention settings and oldest-available-record checks (synthetic)",
+    "collected": "2026-06-25",
+    "requirement": "SHCA CSA 4.1: retain 12 months; 90 days immediately searchable"
+  },
+  "sources": [
+    {
+      "source": "CloudTrail organization trail -> s3://wcp-log-archive-cloudtrail",
+      "setting": "S3 lifecycle rule 'expire-ct' : Expiration Days = 180",
+      "oldest_object_found": "2025-12-28 (179 days before check)",
+      "meets_12_months": false
+    },
+    {
+      "source": "Application PHI-access audit events -> CloudWatch Logs /wcp/prod/audit",
+      "setting": "retentionInDays = 90; no subscription/export",
+      "oldest_event_found": "2026-03-28",
+      "meets_12_months": false
+    },
+    {
+      "source": "EKS control-plane audit logs -> CloudWatch Logs /aws/eks/wcp-prod/cluster",
+      "setting": "retentionInDays = 180",
+      "oldest_event_found": "2025-12-28",
+      "meets_12_months": false
+    },
+    {
+      "source": "SIEM (Beaconline) hot storage - Okta, GitHub, CloudTrail copies",
+      "setting": "Hot retention 90 days; cold archive not enabled",
+      "oldest_event_found": "2026-03-28",
+      "meets_12_months": false
+    },
+    {
+      "source": "Aurora database activity logging (PHI tables) -> CloudWatch",
+      "setting": "retentionInDays = 90",
+      "oldest_event_found": "2026-03-28",
+      "meets_12_months": false
+    }
+  ],
+  "assessor_conclusion": "Oldest records match configured settings exactly: no hidden longer retention. AU-11 Other Than Satisfied (FIND-008)."
+}

@@ -1,0 +1,27 @@
+iso_week,week_start,week_end,ticket,reviewer,review_completed,flagged_items,flagged_items_dispositioned,review_notes
+2026-W01,2025-12-29,2026-01-04,SEC-2026-0003,ocastillo,2026-01-06,4,4,"4 AWS console root-equivalent actions reviewed; all tied to CHG tickets"
+2026-W02,2026-01-05,2026-01-11,SEC-2026-0011,ocastillo,2026-01-13,2,2,"2 Okta admin role changes; approved requests"
+2026-W03,2026-01-12,2026-01-18,SEC-2026-0019,ocastillo,2026-01-20,3,3,"IAM policy edits by jkim-adm; matched CHG-2026-0034"
+2026-W04,2026-01-19,2026-01-25,SEC-2026-0026,nrahman,2026-01-27,1,1,"Break-glass unused; 1 GitHub owner change reviewed"
+2026-W05,2026-01-26,2026-02-01,SEC-2026-0034,ocastillo,2026-02-03,5,5,"Security group changes x5 all via Terraform pipeline"
+2026-W06,2026-02-02,2026-02-08,SEC-2026-0041,ocastillo,2026-02-10,2,2,"KMS key policy update reviewed (CHG-2026-0101)"
+2026-W07,2026-02-09,2026-02-15,,,,,,
+2026-W08,2026-02-16,2026-02-22,,,,,,
+2026-W09,2026-02-23,2026-03-01,SEC-2026-0066,ocastillo,2026-03-04,6,6,"Catch-up note: W07-W08 not reviewed during SIEM parser migration"
+2026-W10,2026-03-02,2026-03-08,SEC-2026-0073,ocastillo,2026-03-10,3,3,"IR-Responder elevation for INC-2026-0041 reviewed and approved"
+2026-W11,2026-03-09,2026-03-15,SEC-2026-0080,nrahman,2026-03-17,4,1,"Reviewed - see report"
+2026-W12,2026-03-16,2026-03-22,SEC-2026-0088,ocastillo,2026-03-24,2,2,"Okta Help Desk admin password resets x2; identity verification tickets attached"
+2026-W13,2026-03-23,2026-03-29,SEC-2026-0095,ocastillo,2026-03-31,3,3,"Offboarding of mfeld: Okta deactivation verified (IAM users not in report scope)"
+2026-W14,2026-03-30,2026-04-05,,,,,,
+2026-W15,2026-04-06,2026-04-12,,,,,,
+2026-W16,2026-04-13,2026-04-19,SEC-2026-0117,nrahman,2026-04-21,2,2,"Break-glass Okta test 2026-04-15 confirmed (CHG-2026-0344)"
+2026-W17,2026-04-20,2026-04-26,SEC-2026-0124,ocastillo,2026-04-28,1,1,"Single IAM policy attach reviewed"
+2026-W18,2026-04-27,2026-05-03,SEC-2026-0131,ocastillo,2026-05-05,3,3,"GitHub branch-protection bypass by owner (hotfix); retro-approved CHG-2026-0380"
+2026-W19,2026-05-04,2026-05-10,,,,,,
+2026-W20,2026-05-11,2026-05-17,SEC-2026-0145,ocastillo,2026-05-19,4,4,"aws-breakglass Q2 test 2026-05-12 reviewed"
+2026-W21,2026-05-18,2026-05-24,SEC-2026-0152,nrahman,2026-05-27,5,2,"Reviewed"
+2026-W22,2026-05-25,2026-05-31,SEC-2026-0160,ocastillo,2026-06-02,2,2,"Okta admin role assignment reviewed"
+2026-W23,2026-06-01,2026-06-07,,,,,,
+2026-W24,2026-06-08,2026-06-14,,,,,,
+2026-W25,2026-06-15,2026-06-21,SEC-2026-0181,ocastillo,2026-06-23,3,3,"Assessor read-only accounts created (expected)"
+2026-W26,2026-06-22,2026-06-28,SEC-2026-0188,ocastillo,2026-06-30,2,2,"KMS grant review; no anomalies"

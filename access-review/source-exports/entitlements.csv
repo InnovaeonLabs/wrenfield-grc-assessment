@@ -1,0 +1,107 @@
+ent_id,account,employee_id,account_type,system,access_level,privileged,phi,date_granted,last_used,justification_on_file,reviewer
+ENT-001,amoreno,E1001,Employee,Okta,SSO account (standard user),N,N,2021-03-01,2026-06-30,Workforce SSO,Samir Haddad
+ENT-002,nrahman,E1002,Employee,Okta,SSO account (standard user),N,N,2022-05-16,2026-06-30,Workforce SSO,Alicia Moreno
+ENT-003,ocastillo,E1003,Employee,Okta,SSO account (standard user),N,N,2022-09-06,2026-06-30,Workforce SSO,Alicia Moreno
+ENT-004,praman,E1004,Employee,Okta,SSO account (standard user),N,N,2023-01-09,2026-06-29,Workforce SSO,Alicia Moreno
+ENT-005,shaddad,E1010,Employee,Okta,SSO account (standard user),N,N,2017-02-01,2026-06-29,Workforce SSO,Elena Marsh
+ENT-006,glindqvist,E1011,Employee,Okta,SSO account (standard user),N,N,2020-06-15,2026-06-30,Workforce SSO,Samir Haddad
+ENT-007,twierzbicki,E1012,Employee,Okta,SSO account (standard user),N,N,2019-04-01,2026-06-30,Workforce SSO,Samir Haddad
+ENT-008,jkim,E1013,Employee,Okta,SSO account (standard user),N,N,2020-10-05,2026-06-30,Workforce SSO,Tomasz Wierzbicki
+ENT-009,lbaptiste,E1014,Employee,Okta,SSO account (standard user),N,N,2023-03-13,2026-06-30,Workforce SSO,Tomasz Wierzbicki
+ENT-010,sricci,E1020,Employee,Okta,SSO account (standard user),N,N,2021-01-11,2026-06-30,Workforce SSO,Grace Lindqvist
+ENT-011,dokonkwo,E1021,Employee,Okta,SSO account (standard user),N,N,2021-07-19,2026-06-30,Workforce SSO,Sofia Ricci
+ENT-012,hlarsen,E1022,Employee,Okta,SSO account (standard user),N,N,2022-11-07,2026-06-29,Workforce SSO,Sofia Ricci
+ENT-013,rgupta,E1023,Employee,Okta,SSO account (standard user),N,N,2025-04-01,2026-06-30,Workforce SSO,Sofia Ricci
+ENT-014,rgupta2,C2004,Contractor,Okta,SSO account (standard user),N,N,2024-06-03,2025-03-28,Contractor SSO (Northgate SOW 2024-117),Sofia Ricci
+ENT-015,vosei,C2001,Contractor,Okta,SSO account (standard user),N,N,2025-09-08,2026-06-09,Contractor SSO (Northgate SOW 2025-044),Sofia Ricci
+ENT-016,awu,C2002,Contractor,Okta,SSO account (standard user),N,N,2025-12-01,2026-06-30,Contractor SSO (Northgate SOW 2025-061),Sofia Ricci
+ENT-017,lporter,E1030,Employee,Okta,SSO account (standard user),N,N,2021-05-03,2026-06-30,Workforce SSO,Samir Haddad
+ENT-018,bnguyen,E1031,Employee,Okta,SSO account (standard user),N,N,2022-02-14,2026-06-30,Workforce SSO,Liam Porter
+ENT-019,cfernandes,E1032,Employee,Okta,SSO account (standard user),N,N,2023-06-05,2026-06-30,Workforce SSO,Liam Porter
+ENT-020,kbrandt,E1040,Employee,Okta,SSO account (standard user),N,N,2019-09-09,2026-06-30,Workforce SSO,Samir Haddad
+ENT-021,tjohnson,E1041,Employee,Okta,SSO account (standard user),N,N,2024-02-05,2026-06-30,Workforce SSO,Kevin Brandt
+ENT-022,rokafor,E1050,Employee,Okta,SSO account (standard user),N,N,2020-01-06,2026-06-26,Workforce SSO,Elena Marsh
+ENT-023,lbrenneman,E1051,Employee,Okta,SSO account (standard user),N,N,2021-10-04,2026-06-30,Workforce SSO,Raymond Okafor
+ENT-024,jmercer,E1052,Employee,Okta,SSO account (standard user),N,N,2022-08-22,2026-06-30,Workforce SSO,Laura Brenneman
+ENT-025,dwhitlock,E1053,Employee,Okta,SSO account (standard user),N,N,2023-04-17,2026-05-21,Workforce SSO,Laura Brenneman
+ENT-026,bkowalski,E1054,Employee,Okta,SSO account (standard user),N,N,2023-09-11,2026-06-29,Workforce SSO,Raymond Okafor
+ENT-027,dyamamoto,E1060,Employee,Okta,SSO account (standard user),N,N,2020-03-02,2026-06-30,Workforce SSO,Elena Marsh
+ENT-028,mcole,E1061,Employee,Okta,SSO account (standard user),N,N,2022-06-27,2026-06-30,Workforce SSO,Denise Yamamoto
+ENT-029,sparks,E1070,Employee,Okta,SSO account (standard user),N,N,2023-07-10,2026-06-30,Workforce SSO,Grace Lindqvist
+ENT-030,tmaddox,E1080,Employee,Okta,SSO account (standard user),N,N,2022-10-03,2026-06-30,Workforce SSO,Jorge Almeida
+ENT-031,ebrooks,E1081,Employee,Okta,SSO account (standard user),N,N,2024-05-20,2026-06-30,Workforce SSO,Jorge Almeida
+ENT-032,mcastell,E1090,Employee,Okta,SSO account (standard user),N,N,2019-11-04,2026-06-24,Workforce SSO,Elena Marsh
+ENT-033,gholloway,E1091,Employee,Okta,SSO account (standard user),N,N,2021-09-13,2026-06-30,Workforce SSO,Miriam Castell
+ENT-034,rdiaz,E1092,Employee,Okta,SSO account (standard user),N,N,2023-02-06,2026-06-30,Workforce SSO,Greg Holloway
+ENT-035,ext-assessor,X3001,External,Okta,SSO account (standard user),N,N,2026-06-15,2026-06-30,Assessment engagement GOV-CHR-001 (ends 2026-07-31),Alicia Moreno
+ENT-036,svc-vulnscan,,Service,Okta,SSO account (standard user),N,N,2023-05-22,2026-06-30,Authenticated vulnerability scanning,Alicia Moreno
+ENT-037,nrahman-adm,E1002,Admin (separate),Okta,Super Administrator,Y,N,2023-02-01,2026-06-26,Primary Okta administrator (IAM Engineer) using separate admin account,Alicia Moreno
+ENT-038,okta-breakglass,,Break-glass,Okta,Super Administrator,Y,N,2023-02-01,2026-04-15,Emergency access; FIDO2 key in safe; dual control; tested quarterly,Alicia Moreno
+ENT-039,kbrandt,E1040,Employee,Okta,Super Administrator,Y,N,2020-02-10,2026-06-22,Granted during 2020 Okta rollout,Alicia Moreno
+ENT-040,tjohnson,E1041,Employee,Okta,Help Desk Administrator,Y,N,2024-02-12,2026-06-30,Password/MFA resets under help-desk identity-verification SOP,Alicia Moreno
+ENT-041,praman,E1004,Employee,Okta,Read-Only Administrator,Y,N,2023-03-06,2026-06-29,GRC evidence collection,Alicia Moreno
+ENT-042,ext-assessor,X3001,External,Okta,Read-Only Administrator,Y,N,2026-06-15,2026-06-30,Assessment engagement (ends 2026-07-31),Alicia Moreno
+ENT-043,jkim-adm,E1013,Admin (separate),AWS wcp-prod,AdministratorAccess,Y,Y,2025-08-11,2026-06-27,SRE on-call administration (separate admin account),Tomasz Wierzbicki
+ENT-044,lbaptiste,E1014,Employee,AWS wcp-prod,AdministratorAccess,Y,Y,2023-04-03,2026-06-30,SRE on-call administration,Tomasz Wierzbicki
+ENT-045,twierzbicki,E1012,Employee,AWS wcp-prod,AdministratorAccess,Y,Y,2020-01-15,2026-06-25,Platform escalation,Samir Haddad
+ENT-046,dokonkwo,E1021,Employee,AWS wcp-prod,AdministratorAccess,Y,Y,2024-11-04,2026-06-19,Temporary grant for EKS migration (CHG-2024-0981),Tomasz Wierzbicki
+ENT-047,bnguyen,E1031,Employee,AWS wcp-prod,AdministratorAccess,Y,Y,2025-06-16,2026-06-11,Data pipeline troubleshooting,Tomasz Wierzbicki
+ENT-048,ocastillo,E1003,Employee,AWS wcp-prod,SecurityAudit,N,N,2022-09-12,2026-06-30,Security monitoring,Tomasz Wierzbicki
+ENT-049,ocastillo,E1003,Employee,AWS wcp-prod,IR-Responder,Y,Y,2025-09-01,2026-03-04,Incident response; elevation requires CISO approval; session recorded,Tomasz Wierzbicki
+ENT-050,amoreno,E1001,Employee,AWS wcp-prod,SecurityAudit,N,N,2021-03-08,2026-06-17,CISO oversight,Tomasz Wierzbicki
+ENT-051,praman,E1004,Employee,AWS wcp-prod,SecurityAudit,N,N,2023-01-16,2026-06-29,GRC evidence collection,Tomasz Wierzbicki
+ENT-052,shaddad,E1010,Employee,AWS wcp-prod,ViewOnlyAccess,N,N,2019-05-01,2026-06-02,Executive oversight of service health,Tomasz Wierzbicki
+ENT-053,sricci,E1020,Employee,AWS wcp-prod,ViewOnlyAccess,N,N,2021-02-01,2026-06-24,Service health for application teams,Tomasz Wierzbicki
+ENT-054,lporter,E1030,Employee,AWS wcp-prod,ViewOnlyAccess,N,N,2021-05-10,2026-06-15,Pipeline health,Tomasz Wierzbicki
+ENT-055,sparks,E1070,Employee,AWS wcp-prod,ViewOnlyAccess,N,N,2024-03-18,2025-11-02,Feature usage dashboards,Tomasz Wierzbicki
+ENT-056,ext-assessor,X3001,External,AWS wcp-prod,SecurityAudit,N,N,2026-06-15,2026-06-30,Assessment engagement (ends 2026-07-31),Tomasz Wierzbicki
+ENT-057,aws-breakglass,,Break-glass,AWS wcp-prod,AdministratorAccess,Y,Y,2022-01-10,2026-05-12,Emergency access; hardware MFA; no access keys; tested quarterly,Samir Haddad
+ENT-058,mfeld-admin,E1015,IAM user (local),AWS wcp-prod,AdministratorAccess,Y,Y,2021-09-20,2026-03-20,Legacy IAM user created before IAM Identity Center rollout,Tomasz Wierzbicki
+ENT-059,svc-reporting-etl,,Service,AWS wcp-prod,reporting-etl (custom: S3 extracts read; RDS describe),N,Y,2024-02-07,2026-06-30,Monthly outcome-report ETL to legacy-reports,Tomasz Wierzbicki
+ENT-060,svc-ci-deploy,,Service,AWS wcp-prod,deploy-eks (custom; GitHub OIDC federation),Y,N,2024-05-01,2026-06-30,CI/CD deployment role (no static credentials),Tomasz Wierzbicki
+ENT-061,shaddad,E1010,Employee,GitHub,Organization Owner,Y,N,2017-03-01,2026-06-18,CTO; org ownership,Grace Lindqvist
+ENT-062,twierzbicki,E1012,Employee,GitHub,Organization Owner,Y,N,2019-04-08,2026-06-30,Platform owner of Actions and runners,Grace Lindqvist
+ENT-063,jkim,E1013,Employee,GitHub,Organization Owner,Y,N,2021-03-15,2026-06-30,Backup platform owner,Grace Lindqvist
+ENT-064,glindqvist,E1011,Employee,GitHub,Organization Owner,Y,N,2020-06-22,2026-05-28,VP Engineering,Samir Haddad
+ENT-065,hlarsen,E1022,Employee,GitHub,Organization Owner,Y,N,2024-01-22,2026-04-30,Granted to configure self-hosted Actions runners,Grace Lindqvist
+ENT-066,vosei,C2001,Contractor,GitHub,Write (wcp-platform repositories),N,N,2025-09-10,2026-06-04,Contract engineering (Northgate SOW 2025-044),Grace Lindqvist
+ENT-067,rgupta2,C2004,Contractor,GitHub,Write (wcp-platform repositories),N,N,2024-06-05,2025-03-28,Contract engineering (Northgate SOW 2024-117),Grace Lindqvist
+ENT-068,sricci,E1020,Employee,GitHub,Repository Admin (prod-deploy environment approver),Y,N,2021-02-15,2026-06-30,Approves production deployments for application repos,Grace Lindqvist
+ENT-069,jkim-adm,E1013,Admin (separate),wcp-core-db,dba_admin,Y,Y,2025-08-11,2026-06-12,Database administration (separate admin account),Tomasz Wierzbicki
+ENT-070,twierzbicki,E1012,Employee,wcp-core-db,dba_admin,Y,Y,2020-01-15,2026-04-02,Database escalation,Samir Haddad
+ENT-071,svc-wcp-app,,Service,wcp-core-db,app_rw,Y,Y,2020-01-15,2026-06-30,Application service identity (secret auto-rotated),Tomasz Wierzbicki
+ENT-072,svc-quarrystone-extract,,Service,wcp-core-db,extract_reader (extract views),N,Y,2023-03-01,2026-06-30,Nightly Quarrystone extract,Tomasz Wierzbicki
+ENT-073,bnguyen,E1031,Employee,wcp-core-db,app_rw (primary),Y,Y,2025-06-16,2026-06-11,Pipeline backfill,Tomasz Wierzbicki
+ENT-074,bnguyen,E1031,Employee,wcp-core-db,analytics_readonly (replica),N,Y,2022-02-21,2026-06-30,Analytics pipelines,Tomasz Wierzbicki
+ENT-075,lporter,E1030,Employee,wcp-core-db,analytics_readonly (replica),N,Y,2021-05-10,2026-06-27,Analytics pipelines,Tomasz Wierzbicki
+ENT-076,cfernandes,E1032,Employee,wcp-core-db,analytics_readonly (replica),N,Y,2026-02-17,2026-06-30,Analytics pipelines (new role),Tomasz Wierzbicki
+ENT-077,cfernandes,E1032,Employee,wcp-core-db,support_readonly (primary),N,Y,2023-06-12,2026-05-14,Tier-2 support troubleshooting,Tomasz Wierzbicki
+ENT-078,tmaddox,E1080,Employee,wcp-core-db,support_readonly (primary),N,Y,2022-10-10,2026-06-30,Tier-2 support troubleshooting,Tomasz Wierzbicki
+ENT-079,ebrooks,E1081,Employee,wcp-core-db,support_readonly (primary),N,Y,2024-05-28,2026-06-29,Tier-2 support troubleshooting,Tomasz Wierzbicki
+ENT-080,awu,C2002,Contractor,wcp-core-db,support_readonly (primary),N,Y,2026-01-05,2026-06-23,QA test data verification,Tomasz Wierzbicki
+ENT-081,Administrator,,Break-glass,wf-sftp-01,Local Administrator,Y,Y,2019-06-03,2026-06-02,Local admin; password vaulted; access via SSM only,Tomasz Wierzbicki
+ENT-082,svc-quarrystone-sftp,,Service,wf-sftp-01,SFTP push (Quarrystone extract),N,Y,2023-03-01,2026-06-30,Nightly extract transfer,Tomasz Wierzbicki
+ENT-083,cust-lakemont-drop,,Service,wf-sftp-01,SFTP customer drop (Lakemont),N,Y,2022-04-18,2026-06-28,Customer file exchange,Tomasz Wierzbicki
+ENT-084,dyamamoto,E1060,Employee,PeopleHub,HR Administrator,Y,N,2020-03-02,2026-06-30,Director of People,Elena Marsh
+ENT-085,svc-hris-sync,,Service,PeopleHub,API integration (read worker records),N,N,2023-06-01,2026-06-30,HRIS-to-Okta attribute sync,Denise Yamamoto
+ENT-086,lbrenneman,E1051,Employee,Ledgerline,Controller,Y,N,2021-10-11,2026-06-30,Controller,Raymond Okafor
+ENT-087,rokafor,E1050,Employee,Ledgerline,Payment Approver (> $25k),Y,N,2020-01-13,2026-06-26,CFO approval authority,Elena Marsh
+ENT-088,jmercer,E1052,Employee,Ledgerline,Vendor Master Maintain,Y,N,2023-02-06,2026-06-24,Vendor onboarding backlog,Laura Brenneman
+ENT-089,jmercer,E1052,Employee,Ledgerline,Payment Approver (<= $25k),Y,N,2022-08-29,2026-06-30,Payment approvals,Laura Brenneman
+ENT-090,dwhitlock,E1053,Employee,Ledgerline,AP Clerk,N,N,2023-04-24,2026-05-21,Invoice entry and payment runs,Laura Brenneman
+ENT-091,kbrandt,E1040,Employee,Ledgerline,System Administrator (no transactional roles),Y,N,2021-10-01,2026-06-08,System configuration,Laura Brenneman
+ENT-092,bkowalski,E1054,Employee,Ledgerline,Vendor Master View,N,N,2023-09-18,2026-06-29,Vendor due diligence,Laura Brenneman
+ENT-093,ocastillo,E1003,Employee,Security tooling (SIEM),SIEM Administrator,Y,N,2022-09-12,2026-06-30,SIEM owner,Alicia Moreno
+ENT-094,nrahman,E1002,Employee,Security tooling (SIEM),SIEM Analyst,N,N,2022-06-01,2026-06-30,Identity threat investigations,Alicia Moreno
+ENT-095,amoreno,E1001,Employee,Security tooling (SIEM),SIEM Read-only,N,N,2021-03-08,2026-06-22,Oversight,Samir Haddad
+ENT-096,mdr-ironpeak,,Vendor group (named SSO),Security tooling (SIEM),SIEM Analyst (6 named MDR analysts via SAML),N,N,2025-01-06,2026-06-30,24x7 MDR monitoring (Ironpeak MSA 2025),Alicia Moreno
+ENT-097,ocastillo,E1003,Employee,Security tooling (EDR),EDR Administrator,Y,N,2022-09-12,2026-06-30,EDR owner,Alicia Moreno
+ENT-098,kbrandt,E1040,Employee,Security tooling (EDR),EDR Administrator,Y,N,2021-02-01,2026-06-29,Endpoint policy management,Alicia Moreno
+ENT-099,ironpeak-soc,,Shared,Security tooling (EDR),EDR Analyst (shared vendor login),Y,N,2025-01-06,2026-06-30,MDR containment actions,Alicia Moreno
+ENT-100,lporter,E1030,Employee,Quarrystone portal,Portal Administrator,Y,Y,2023-03-01,2026-06-26,Vendor relationship technical owner,Miriam Castell
+ENT-101,mcastell,E1090,Employee,Quarrystone portal,Viewer,N,Y,2023-03-01,2026-06-10,Business owner dashboards,Elena Marsh
+ENT-102,bnguyen,E1031,Employee,Quarrystone portal,Analyst,N,Y,2023-04-12,2026-06-24,Score validation,Miriam Castell
+ENT-103,gholloway,E1091,Employee,Quarrystone portal,Analyst,N,Y,2023-03-01,2026-06-30,Care-gap analysis,Miriam Castell
+ENT-104,rdiaz,E1092,Employee,Quarrystone portal,Analyst,N,Y,2023-02-13,2026-06-29,Care-gap analysis,Miriam Castell
+ENT-105,pbrennan,E0977,Employee,Quarrystone portal,Analyst,N,Y,2022-02-01,2025-11-10,Care-gap analysis,Miriam Castell
+ENT-106,svc-qs-api,,Service,Quarrystone portal,API key (score retrieval),N,Y,2023-03-01,2026-06-30,Nightly score pull into WCP,Miriam Castell

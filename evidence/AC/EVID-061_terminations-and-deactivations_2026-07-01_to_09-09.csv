@@ -1,0 +1,8 @@
+worker_id,full_name,worker_type,department,termination_date,termination_effective_time,okta_deactivated_at,aws_local_iam_user,quarrystone_portal_account,deprovision_ticket,ticket_source
+E1203,Quinn Harlow,Employee,Customer Operations,2026-07-10,17:00,2026-07-10T17:31:05-04:00,none,none,IT-2026-00731,Manual (pre-automation)
+C2019,Ravi Menon,Contractor,Engineering,2026-07-24,17:00,2026-07-24T17:12:48-04:00,none,none,IT-2026-00778,Manual (pre-automation)
+E1207,Sara Lindholm,Employee,Clinical Operations,2026-08-07,17:00,2026-08-07T17:04:19-04:00,none,none,IT-2026-00829,Auto-created by HR-to-Okta reconciliation job
+E1211,Tobias Grant,Employee,Sales,2026-08-14,17:00,2026-08-14T17:09:52-04:00,none,none,IT-2026-00851,Auto-created by HR-to-Okta reconciliation job
+E1094,Uma Reyes,Employee,Clinical Analytics,2026-08-21,17:00,2026-08-21T17:26:37-04:00,none,deactivated 2026-08-21T17:40,IT-2026-00870,Auto-created by HR-to-Okta reconciliation job
+C2021,Wes Adler,Contractor,Data Engineering,2026-08-28,17:00,2026-08-28T16:58:02-04:00,none,none,IT-2026-00893,Auto-created from contract end date (Okta account expiry)
+E1216,Yara Haddock,Employee,Marketing,2026-09-04,17:00,2026-09-04T17:15:33-04:00,none,none,IT-2026-00918,Auto-created by HR-to-Okta reconciliation job

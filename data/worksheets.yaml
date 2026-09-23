@@ -1,0 +1,178 @@
+# Control assessment worksheets (SP 800-53A-style). Objectives are paraphrased from the SP 800-53A
+# assessment objectives for each control; see the NIST publication for the authoritative determination statements.
+# Each step: TP id, method (Examine | Interview | Test), object/procedure, expected, actual, result (Pass | Fail | Info), evidence.
+worksheets:
+- control: AC-2
+  objective: "Account types are defined; account managers assigned; creation, modification, disabling, and removal follow approved conditions; accounts are monitored and reviewed; managers are notified when access is no longer needed."
+  interviewees: [Nadia Rahman (IAM Engineer), Denise Yamamoto (Director of People), Tomasz Wierzbicki (system owner)]
+  steps:
+  - {tp: TP-AC-2-01, method: Examine, procedure: "Review ACP-002 v3.1 and SOP-IAM-02 v2.0 for account types, approvals, conditions, and review frequency", expected: "All AC-2 elements defined, including non-SSO and service accounts", actual: "Elements defined for Okta SSO accounts; local accounts and service accounts not addressed in the procedure", result: Fail, evidence: "EVID-001, EVID-002"}
+  - {tp: TP-AC-2-02, method: Interview, procedure: "Walk through the joiner/mover/leaver process with IAM and HR; ask how HR events reach IT and how local accounts are found", expected: "Automated or reliably triggered handoff covering all account stores", actual: "HR emails IT; IT raises a ticket manually; no one owns local-account discovery; transfers do not trigger review", result: Fail, evidence: "Interview notes 2026-06-16"}
+  - {tp: TP-AC-2-03, method: Test, procedure: "Reconcile 106 entitlements on 9 systems against HR status, role baseline, SoD rules, and service register (tools/review_engine.py)", expected: "0 unauthorized, orphaned, or unowned accounts", actual: "20 confirmed exceptions across 28 rows (4 terminated, 1 duplicate, 1 transfer, 1 inactive, 2 contractor, 3 service or shared, plus privilege exceptions under AC-6)", result: Fail, evidence: "EVID-005, EVID-006, EVID-013; access-review/access-review.csv"}
+  - {tp: TP-AC-2-04, method: Test, procedure: "Verify every non-human account has an owner and a credential within rotation policy", expected: "13 of 13 owned and current", actual: "11 of 13 owned; 3 stale credentials; 1 shared vendor login", result: Fail, evidence: "EVID-013"}
+  conclusion: Other Than Satisfied
+  deficiency: "Account lifecycle not enforced for local, contractor, transferred, and service accounts."
+  findings: [FIND-001, FIND-004, FIND-005, FIND-006]
+  owner_response: "Agree (Nadia Rahman, 2026-08-07)"
+- control: AC-2(3)
+  objective: "Accounts are disabled within the defined period when expired, no longer associated with a user or function, in violation of policy, or inactive for the defined period."
+  interviewees: [Nadia Rahman (IAM Engineer), Tyler Johnson (IT Support)]
+  steps:
+  - {tp: TP-AC-2(3)-01, method: Examine, procedure: "Confirm the defined periods in policy (24h termination; 90 days inactivity)", expected: "Periods defined", actual: "Defined in ACP-002 §5.3 and §5.6", result: Pass, evidence: "EVID-001"}
+  - {tp: TP-AC-2(3)-02, method: Test, procedure: "For all 19 H1 terminations, compare HR effective time to Okta deactivation time", expected: "19 of 19 within 24h", actual: "16 of 19 within 24h; 1 late (209h); 2 never deactivated", result: Fail, evidence: "EVID-003, EVID-004; test-results/termination-deprovisioning.md"}
+  - {tp: TP-AC-2(3)-03, method: Test, procedure: "Search non-SSO stores (AWS IAM credential report, wf-sftp-01, vendor portal) for accounts of terminated workers", expected: "None active", actual: "mfeld-admin (AWS AdministratorAccess) active 95 days post-termination; pbrennan active in Quarrystone portal", result: Fail, evidence: "EVID-007, EVID-006"}
+  - {tp: TP-AC-2(3)-04, method: Test, procedure: "Identify accounts inactive > 90 days", expected: "None, or disabled automatically", actual: "sparks (240 days), rgupta2 (459 days); no automation", result: Fail, evidence: "EVID-006"}
+  - {tp: TP-AC-2(3)-05, method: Test, procedure: "VALIDATION (2026-09-10): re-perform on all terminations since 2026-07-01 and inspect 5 reconciliation job runs", expected: "100% within 24h; 0 job exceptions", actual: "7 of 7 within 24h (max 0.5h); 0 exceptions; only break-glass IAM user remains", result: Pass, evidence: "EVID-061, EVID-062, EVID-064"}
+  conclusion: Other Than Satisfied (remediation validated 2026-09-10)
+  deficiency: "Manual, Okta-only de-provisioning."
+  findings: [FIND-001]
+  owner_response: "Agree"
+- control: AC-5
+  objective: "Duties requiring separation are identified and documented; access authorizations support separation of duties."
+  interviewees: [Laura Brenneman (Controller), Raymond Okafor (CFO)]
+  steps:
+  - {tp: TP-AC-5-01, method: Examine, procedure: "Review Ledgerline SoD ruleset", expected: "Conflicting duties defined for vendor, AP, and payment functions", actual: "SOD-01 and SOD-02 defined and appropriate", result: Pass, evidence: "EVID-014"}
+  - {tp: TP-AC-5-02, method: Test, procedure: "Apply SoD rules to all Ledgerline role assignments", expected: "No user holds conflicting roles", actual: "1 conflict: jmercer holds Vendor Master Maintain and Payment Approver (<= $25k)", result: Fail, evidence: "EVID-006; review engine F-SOD"}
+  - {tp: TP-AC-5-03, method: Test, procedure: "Inspect all 6 monthly compensating reviews (Jan–Jun): signed, dated, independent reviewer, exceptions followed up", expected: "6 of 6 operating", actual: "6 of 6 signed by Controller within 10 days; 2 bank changes independently verified by callback", result: Pass, evidence: "EVID-015"}
+  - {tp: TP-AC-5-04, method: Examine, procedure: "Check for a documented risk decision on the conflict", expected: "Approved acceptance at the correct authority", actual: "None at fieldwork; RACC-001 signed 2026-08-12", result: Fail, evidence: "EVID-060"}
+  conclusion: Other Than Satisfied
+  deficiency: "Conflict existed without a documented risk decision; compensating control operates."
+  findings: [FIND-007]
+  owner_response: "Agree; accepted via RACC-001"
+- control: AC-6(5)
+  objective: "Privileged accounts are restricted to defined personnel or roles."
+  interviewees: [Tomasz Wierzbicki (Director, Platform Engineering), Alicia Moreno (CISO), Grace Lindqvist (VP Engineering)]
+  steps:
+  - {tp: TP-AC-6(5)-01, method: Examine, procedure: "Obtain the definition of privileged roles per system", expected: "Defined roles and caps", actual: "Defined in role_access_matrix (SRE for AWS admin; IAM Engineer for Okta SA; at most 3 GitHub owners)", result: Pass, evidence: "role_access_matrix.csv"}
+  - {tp: TP-AC-6(5)-02, method: Test, procedure: "Enumerate all 37 privileged entitlements and compare holders to defined roles", expected: "All holders in defined roles", actual: "AWS admin 6 human-linked holders vs 3 roles; GitHub owners 5 vs 3; Okta SA 1 unauthorized", result: Fail, evidence: "EVID-016, EVID-017"}
+  - {tp: TP-AC-6(5)-03, method: Test, procedure: "Verify break-glass accounts are vaulted, MFA-protected, and tested", expected: "Controlled and tested quarterly", actual: "Both break-glass accounts vaulted with hardware MFA; last tests 2026-04-15 and 2026-05-12", result: Pass, evidence: "EVID-007, CHG-2026-0133"}
+  - {tp: TP-AC-6(5)-04, method: Test, procedure: "PROGRESS CHECK (2026-09-03): post-change assignment exports", expected: "Holders equal defined roles", actual: "Excess grants removed; twierzbicki still on daily account; JIT evidence design-only (EVID-071 returned)", result: Fail, evidence: "EVID-075, EVID-076, EVID-077, EVID-071"}
+  conclusion: Other Than Satisfied
+  deficiency: "Privileged holders exceed defined roles; separate admin accounts not in place."
+  findings: [FIND-003]
+  owner_response: "Agree; the Data Engineer grant was initially disputed and resolved with time-boxed elevation"
+- control: AC-6(7)
+  objective: "Privileges assigned to defined roles or classes of users are reviewed at the defined frequency to validate need; privileges are reassigned or removed as necessary."
+  interviewees: [Alicia Moreno (CISO), 3 sampled Q1 reviewers]
+  steps:
+  - {tp: TP-AC-6(7)-01, method: Examine, procedure: "Inspect evidence of the Q1 review", expected: "Population, reviewer, decision, timestamp, resulting changes", actual: "First submission was a completion screenshot (EVID-009): Insufficient. Export obtained (EVID-008)", result: Info, evidence: "EVID-009, EVID-008"}
+  - {tp: TP-AC-6(7)-02, method: Test, procedure: "Compare campaign scope to the privileged entitlement population", expected: "All privileged and PHI entitlements in scope", actual: "Only Okta app assignments; AWS, GitHub, DB, and local accounts excluded", result: Fail, evidence: "EVID-008 vs EVID-006"}
+  - {tp: TP-AC-6(7)-03, method: Test, procedure: "Analyze decision patterns (approval rate, time per reviewer) and re-test 2 approved items", expected: "Evidence of meaningful review; approved items valid", actual: "412 of 412 approved; 17 of 23 reviewers < 5 min; approved rgupta2 (duplicate) and cfernandes support access (post-transfer)", result: Fail, evidence: "EVID-008"}
+  - {tp: TP-AC-6(7)-04, method: Interview, procedure: "Ask 3 reviewers what they checked", expected: "Reviewers check need against role", actual: "'I approved my team's list; I assumed IT knew what they needed'", result: Fail, evidence: "Interview notes 2026-06-25"}
+  conclusion: Other Than Satisfied
+  deficiency: "Scope incomplete; reviews not effective."
+  findings: [FIND-004]
+  owner_response: "Agree"
+- control: IA-2(1)
+  objective: "Multi-factor authentication is implemented for access to privileged accounts."
+  interviewees: [Nadia Rahman (IAM Engineer)]
+  steps:
+  - {tp: TP-IA-2(1)-01, method: Examine, procedure: "Inspect Okta global session and app policies for exclusions", expected: "MFA required with no unapproved exclusions", actual: "Everyone except MFA-Exempt-Legacy (11 members; 0 approvals)", result: Fail, evidence: "EVID-010, EVID-011"}
+  - {tp: TP-IA-2(1)-02, method: Test, procedure: "Cross-reference exempt members with privileged role holders", expected: "No privileged user exempt", actual: "kbrandt (Okta Super Administrator) exempt", result: Fail, evidence: "EVID-011, EVID-006"}
+  - {tp: TP-IA-2(1)-03, method: Test, procedure: "Inspect AWS credential report for console users without MFA", expected: "None", actual: "mfeld-admin: password enabled, mfa_active=false, AdministratorAccess", result: Fail, evidence: "EVID-007"}
+  - {tp: TP-IA-2(1)-04, method: Test, procedure: "VALIDATION: policy export, group lookup, password-only sign-in attempt with test account, credential report", expected: "No exemption path; attempt denied; only break-glass IAM user", actual: "Group and policy deleted; attempt denied; only aws-breakglass (hardware MFA)", result: Pass, evidence: "EVID-063, EVID-064"}
+  conclusion: Other Than Satisfied (remediation validated 2026-09-05)
+  deficiency: "Bypassable MFA for privileged access."
+  findings: [FIND-002]
+  owner_response: "Agree"
+- control: AU-6
+  objective: "Audit records are reviewed and analyzed at the defined frequency for inappropriate or unusual activity; findings reported to defined personnel."
+  interviewees: [Owen Castillo (Security Engineer)]
+  steps:
+  - {tp: TP-AU-6-01, method: Examine, procedure: "Review LMS-004 §6 review requirements and the SIEM report definition", expected: "Weekly review of all privileged principals", actual: "Weekly defined; report scope excluded local AWS IAM users", result: Fail, evidence: "EVID-021"}
+  - {tp: TP-AU-6-02, method: Test, procedure: "Test all 26 weeks for existence, timeliness (5 days), and disposition of flagged items", expected: "26 of 26 effective", actual: "19 performed; 17 effective (65%); 7 missed; 2 incomplete", result: Fail, evidence: "EVID-022; test-results/au6-log-review.md"}
+  - {tp: TP-AU-6-03, method: Interview, procedure: "Ask about backup coverage and escalation", expected: "Backup reviewer and escalation defined", actual: "No backup; missed weeks not escalated", result: Fail, evidence: "Interview notes 2026-06-23"}
+  conclusion: Other Than Satisfied
+  deficiency: "Single point of failure in a key detective control."
+  findings: [FIND-009]
+  owner_response: "Agree; MDR backup pending SOW change"
+- control: AU-11
+  objective: "Audit records are retained for the defined period to support after-the-fact investigations and meet retention requirements."
+  interviewees: [Owen Castillo (Security Engineer)]
+  steps:
+  - {tp: TP-AU-11-01, method: Examine, procedure: "Identify required retention", expected: "Requirement defined", actual: "12 months (SHCA CSA §4.1); internal standard said 180 days", result: Info, evidence: "REQ-005"}
+  - {tp: TP-AU-11-02, method: Examine, procedure: "Inspect retention settings for all 5 audit sources", expected: ">= 12 months", actual: "CloudTrail 180d; app audit 90d; SIEM 90d; EKS audit 180d; Okta via SIEM 90d", result: Fail, evidence: "EVID-024"}
+  - {tp: TP-AU-11-03, method: Test, procedure: "Query oldest available record per source (detects hidden longer retention)", expected: "Oldest record age >= 12 months", actual: "Oldest records matched settings exactly", result: Fail, evidence: "EVID-024"}
+  - {tp: TP-AU-11-04, method: Test, procedure: "VALIDATION: inspect new config; confirm a 182-day-old object survives past the old 180-day rule", expected: "400-day policy active; object present", actual: "Policy active; 2026-03-20 object present on 2026-09-17", result: Pass, evidence: "EVID-067"}
+  conclusion: Other Than Satisfied (remediation validated 2026-09-12)
+  deficiency: "Retention below contractual requirement."
+  findings: [FIND-008]
+  owner_response: "Agree"
+- control: CM-3
+  objective: "Configuration-controlled changes are reviewed, approved or disapproved, documented, implemented, and retained; activities are monitored."
+  interviewees: [Tomasz Wierzbicki (Director, Platform Engineering), Sofia Ricci (Engineering Manager)]
+  steps:
+  - {tp: TP-CM-3-01, method: Examine, procedure: "Review CMP-006 change types and emergency rules", expected: "Defined", actual: "Standard, Normal, Emergency defined; emergency retro-approval within 2 business days", result: Pass, evidence: "CMP-006"}
+  - {tp: TP-CM-3-02, method: Test, procedure: "Random sample 25 of 212 production changes (seed 20260618); verify approval before deploy, peer review, test evidence", expected: "25 of 25 compliant", actual: "22 of 25; exceptions CHG-2026-0412, -0288, -0356", result: Fail, evidence: "EVID-030; test-results/cm3-change-sample.md"}
+  - {tp: TP-CM-3-03, method: Interview, procedure: "Ask how console changes are captured", expected: "Console changes detected and routed to change process", actual: "No detection; relies on engineers raising tickets", result: Fail, evidence: "Interview notes 2026-06-24"}
+  conclusion: Other Than Satisfied
+  deficiency: "Emergency and console change paths bypass approval."
+  findings: [FIND-018]
+  owner_response: "Agree"
+- control: CP-9(1)
+  objective: "Backup information is tested at the defined frequency to verify media reliability and information integrity."
+  interviewees: [Tomasz Wierzbicki (Director, Platform Engineering), Jae-won Kim (Senior SRE)]
+  steps:
+  - {tp: TP-CP-9(1)-01, method: Examine, procedure: "Request restore test records for the last 12 months", expected: "At least 1 documented restore with integrity checks", actual: "Only backup-job success notifications (EVID-035: Insufficient)", result: Fail, evidence: "EVID-035"}
+  - {tp: TP-CP-9(1)-02, method: Interview, procedure: "Ask when a restore was last performed", expected: "Within 12 months", actual: "'We've never needed to restore the main DB; the jobs always succeed'", result: Fail, evidence: "Interview notes 2026-06-30"}
+  - {tp: TP-CP-9(1)-03, method: Test, procedure: "VALIDATION: observe restore of wcp-core-db from wcp-dr vault into isolated account; time it; run row-count and checksum validation on 12 tables", expected: "Restore within RTO 4h; data loss within RPO 1h; integrity checks pass", actual: "3h41m; 11 min data loss; 12 of 12 tables validated", result: Pass, evidence: "EVID-069"}
+  conclusion: Other Than Satisfied (remediation validated 2026-09-01)
+  deficiency: "Recoverability never demonstrated."
+  findings: [FIND-013]
+  owner_response: "Agree"
+- control: IR-3
+  objective: "Incident response capability is tested at the defined frequency using defined tests."
+  interviewees: [Owen Castillo (Security Engineer), Rachel Stein (HIPAA Privacy Officer)]
+  steps:
+  - {tp: TP-IR-3-01, method: Examine, procedure: "Request exercise records for 24 months", expected: "Exercise within 12 months with after-action items", actual: "Last exercise 2024-09-18 (21 months)", result: Fail, evidence: "EVID-037"}
+  - {tp: TP-IR-3-02, method: Interview, procedure: "Ask the Privacy Officer to walk the SHCA 24h notification path", expected: "Rehearsed, documented path", actual: "Path known conceptually; not documented in IRP-005; never rehearsed", result: Fail, evidence: "Interview notes 2026-07-15"}
+  - {tp: TP-IR-3-03, method: Test, procedure: "Cross-check real incident handling (IR-4) as a mitigating factor", expected: "Info only", actual: "7 of 7 incidents handled per plan; mitigating but not a substitute for testing major-incident paths", result: Info, evidence: "EVID-038, EVID-078"}
+  conclusion: Other Than Satisfied
+  deficiency: "IR capability not tested in the period."
+  findings: [FIND-014]
+  owner_response: "Agree; tabletop scheduled 2026-10-14"
+- control: SI-2
+  objective: "Flaws are identified, reported, and corrected; security-relevant updates installed within the defined time; remediation is part of configuration management."
+  interviewees: [Grace Lindqvist (VP Engineering), Owen Castillo (Security Engineer)]
+  steps:
+  - {tp: TP-SI-2-01, method: Examine, procedure: "Review VM-003 SLAs and exception process", expected: "SLAs match CSA §7.1; exception process defined", actual: "Matches; exception process in §7", result: Pass, evidence: "VM-003"}
+  - {tp: TP-SI-2-02, method: Test, procedure: "Compute SLA adherence for all 61 Critical/High findings in H1", expected: "100% within SLA or with approved exception", actual: "47 of 61 (77%) within SLA; 14 breached; 0 exceptions filed", result: Fail, evidence: "EVID-048; test-results/si2-vuln-sla.md"}
+  - {tp: TP-SI-2-03, method: Interview, procedure: "Discuss the 2 open Critical findings with Engineering", expected: "Remediation plan or approved exception", actual: "Engineering asserts no reachable path; no analysis documented; no exception filed", result: Fail, evidence: "Interview notes 2026-06-29"}
+  conclusion: Other Than Satisfied
+  deficiency: "Remediation timeliness below SLA; exception process unused."
+  findings: [FIND-010]
+  owner_response: "Partially agree: disputes severity of 2 Critical findings; agrees to use the exception process"
+- control: SA-22
+  objective: "System components are replaced when support is no longer available, or alternative support is provided."
+  interviewees: [Tomasz Wierzbicki (Director, Platform Engineering)]
+  steps:
+  - {tp: TP-SA-22-01, method: Test, procedure: "Compare the OS/DB/runtime inventory to vendor lifecycle dates", expected: "0 unsupported components", actual: "3 unsupported (Windows 2012 R2, PostgreSQL 11, Node.js 16)", result: Fail, evidence: "EVID-052"}
+  - {tp: TP-SA-22-02, method: Examine, procedure: "Look for alternative support (extended security updates) or SHCA-approved exceptions", expected: "Documented alternative or exception", actual: "None", result: Fail, evidence: "EVID-052"}
+  - {tp: TP-SA-22-03, method: Examine, procedure: "Assess compensating controls on wf-sftp-01", expected: "Info only", actual: "EDR, allowlist, weekly scans; RDP exposure found (FIND-012) then closed", result: Info, evidence: "EVID-053, EVID-068"}
+  conclusion: Other Than Satisfied
+  deficiency: "Unsupported components in the PHI path."
+  findings: [FIND-011]
+  owner_response: "Agree; migration delayed by customer dependencies"
+- control: SR-6
+  objective: "Supply chain-related risks of suppliers and the services they provide are assessed and reviewed at the defined frequency."
+  interviewees: [Beth Kowalski (Vendor Management Lead), Dr. Miriam Castell (VP Clinical Analytics), Quarrystone CISO]
+  steps:
+  - {tp: TP-SR-6-01, method: Test, procedure: "Compare last-assessed dates for all 14 Tier 1–2 vendors to their tier frequency", expected: "14 of 14 current", actual: "9 of 14 current; 5 overdue or never assessed", result: Fail, evidence: "EVID-049"}
+  - {tp: TP-SR-6-02, method: Examine, procedure: "Review Quarrystone SOC 2: opinion, exceptions, carve-outs, CUECs", expected: "Info", actual: "Unqualified; 2 exceptions; 2 carve-outs; CUEC for portal user review not performed by Wrenfield", result: Info, evidence: "EVID-050"}
+  - {tp: TP-SR-6-03, method: Interview, procedure: "Interview Quarrystone CISO on subcontractors and data location", expected: "Answers consistent with questionnaire", actual: "Revealed undisclosed offshore subcontractor with production access (contradicts questionnaire)", result: Fail, evidence: "Interview notes 2026-07-14"}
+  - {tp: TP-SR-6-04, method: Examine, procedure: "Request the pentest report and retest", expected: "Current test with retest", actual: "Summary letter only; still outstanding", result: Fail, evidence: "EVID-051"}
+  conclusion: Other Than Satisfied
+  deficiency: "Supplier reviews overdue; self-attestation missed a Critical issue."
+  findings: [FIND-015, FIND-016]
+  owner_response: "Agree"
+- control: SC-28
+  objective: "The confidentiality and integrity of defined information at rest are protected."
+  interviewees: [Tomasz Wierzbicki (Director, Platform Engineering), Kevin Brandt (IT Manager)]
+  steps:
+  - {tp: TP-SC-28-01, method: Examine, procedure: "Identify PHI data stores from the boundary and inventory", expected: "Complete list", actual: "Aurora, 6 S3 buckets, EBS, backup vault, wf-sftp-01 volume, legacy-reports volume, laptops", result: Pass, evidence: "EVID-031"}
+  - {tp: TP-SC-28-02, method: Test, procedure: "Query encryption status of every RDS, S3, and EBS resource (AWS Config rules)", expected: "100% encrypted with KMS", actual: "100% (encryption by default enforced at account level)", result: Pass, evidence: "EVID-056"}
+  - {tp: TP-SC-28-03, method: Test, procedure: "Reconcile MDM encryption compliance to endpoint inventory", expected: "100% of 362", actual: "362 of 362 FileVault/BitLocker enabled", result: Pass, evidence: "EVID-056"}
+  conclusion: Satisfied
+  deficiency: ""
+  findings: []
+  owner_response: "n/a"
