@@ -20,10 +20,9 @@ pytest -q                 # 7 regression tests
 
 ## Decisions made
 - Fictional vendors for everything assessed; real platforms (AWS/Okta/GitHub/Google Workspace) named only as stack, with no claims about them.
-- Standards verified 2026-09-23 via NIST CSRC/OSCAL (see docs/assessment/nist-800-53-strategy.md §1). Control titles were not machine-verified against the full OSCAL catalog (download not performed); `tools/verify_catalog.py` does it when given the JSON.
+- Standards verified 2026-09-23 via NIST CSRC/OSCAL (see docs/assessment/nist-800-53-strategy.md §1). **All 61 control IDs and titles match NIST's official OSCAL catalog v5.2.0 exactly** (docs/assessment/catalog-verification.md; catalog JSON kept out of the repo, re-run `tools/verify_catalog.py <json>`).
 - CSVs are written with UTF-8 BOM (Excel-friendly). `.gitattributes` enforces LF.
 
 ## Possible next steps
 - Push to GitHub as `InnovaeonLabs/wrenfield-grc-assessment` (README badge and resume bullets already use this name).
-- Run `tools/verify_catalog.py` against the official OSCAL catalog JSON.
 - Optional v2: OSCAL-format SSP/POA&M export; a second vendor deep-dive; a Q4 "continuous monitoring" status update.

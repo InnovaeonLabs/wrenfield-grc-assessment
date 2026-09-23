@@ -99,7 +99,7 @@ IDENTIFY REQUIREMENTS → IMPLEMENT CONTROLS → COLLECT EVIDENCE → TEST EFFEC
 | 15 | Executive dashboard | [dashboard/dashboard.md](dashboard/dashboard.md) · [interactive HTML](dashboard/index.html) · [metric definitions](dashboard/metric-definitions.md) · [screenshot](screenshots/) · Excel **Dashboard** sheet in [workbook/wrenfield-grc-workbook.xlsx](workbook/wrenfield-grc-workbook.xlsx) |
 | 16 | Lessons learned | [docs/lessons-learned.md](docs/lessons-learned.md) · [quality-review log](docs/quality-review.md) |
 
-Also: [ID scheme](docs/id-scheme.md) · [traceability matrix](docs/assessment/traceability-matrix.md) · [integrity check (43 rules)](docs/assessment/integrity-check.md) · [assessment plan](docs/assessment/assessment-plan.md) · [policies](docs/policies/) · [templates](templates/) · [phase-by-phase roadmap](docs/project-roadmap.md)
+Also: [ID scheme](docs/id-scheme.md) · [traceability matrix](docs/assessment/traceability-matrix.md) · [integrity check (43 rules)](docs/assessment/integrity-check.md) · [catalog verification (61/61)](docs/assessment/catalog-verification.md) · [assessment plan](docs/assessment/assessment-plan.md) · [policies](docs/policies/) · [templates](templates/) · [phase-by-phase roadmap](docs/project-roadmap.md)
 
 ### Cross-artifact ID scheme (one governance system, not six spreadsheets)
 `REQ-004` → **AC-2(3)** → `TP-AC-2(3)-02` on `EVID-003/004` → *Other Than Satisfied* → `AR-EX-01…04` → **`FIND-001`** → `RISK-002` → **`POAM-001`** → validated on `EVID-061/062` → closed 2026-09-10. Every reference resolves; [`tools/validate.py`](tools/validate.py) fails CI if one doesn't. → [id-scheme.md](docs/id-scheme.md)
@@ -110,7 +110,7 @@ python -m venv .venv && .venv/Scripts/pip install -r requirements.txt   # (Linux
 python tools/run_all.py    # engine → tests → build xlsx/csv/md → metrics → verify 1,232 formulas → 43 integrity rules
 pytest -q                  # 7 regression tests: reported numbers must match the evidence
 ```
-`data/*.yaml` is the single source of truth; spreadsheets and tables are generated. Optional: `python tools/verify_catalog.py <NIST OSCAL catalog.json>` checks every control title against NIST's official catalog.
+`data/*.yaml` is the single source of truth; spreadsheets and tables are generated. Control titles: `python tools/verify_catalog.py <NIST OSCAL catalog.json>` found **61 of 61 exact matches** with NIST's official catalog v5.2.0 ([catalog-verification.md](docs/assessment/catalog-verification.md)).
 
 ---
 

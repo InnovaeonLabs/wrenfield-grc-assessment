@@ -19,7 +19,7 @@ The spec required the current official SP 800-53 revision to be verified from au
 | **Assessment procedures** | **SP 800-53A Rev. 5** (Jan 2022), updated with Release 5.2.0 procedures on Aug 27, 2025 | [SP 800-53A Rev. 5](https://csrc.nist.gov/pubs/sp/800/53/a/r5/final) |
 | **Baselines** | **SP 800-53B**. A 5.2.0 release was issued for consistency with no baseline changes. The Moderate baseline was verified from NIST's OSCAL profile *"…Revision 5.2.0 MODERATE IMPACT BASELINE"* (v5.2.0) | [OSCAL Moderate profile](https://github.com/usnistgov/oscal-content/blob/main/nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_MODERATE-baseline_profile.json) |
 
-**Verification limits.** Baseline membership of all 61 selected controls was checked against the official OSCAL Moderate profile. Control *titles* follow SP 800-53 Rev. 5. A full programmatic title check against the OSCAL catalog is provided as [`tools/verify_catalog.py`](../../tools/verify_catalog.py). It needs a local copy of the official catalog JSON, which the build does not download automatically.
+**Verification results.** Baseline membership of all 61 selected controls was checked against the official OSCAL Moderate profile (integrity rule CTL-01). **Every control ID and title was then checked programmatically against NIST's official OSCAL catalog (version 5.2.0, last-modified 2026-05-11): 61 of 61 match exactly** ([catalog-verification.md](catalog-verification.md), produced by [`tools/verify_catalog.py`](../../tools/verify_catalog.py)). The catalog file is not committed; re-run the script against a fresh download to repeat the check.
 
 ### Related NIST publications used (and how)
 
